@@ -1,0 +1,107 @@
+{% extends "conteneur.html" %}
+
+{% block titre %}| Formulaire Lettre{%endblock%}
+
+{% block corps %}
+    <div class="col-md-12 text-center">
+    <a href="{{url_for('formulaire')}}"name="singlebutton" class="btn btn-primary" type="button">Formulaire d'ajout général</a>
+    </div>
+
+    <nav class=" navbar navbar-light bg-light">
+    <form class="form-inline">
+        <a href="{{url_for('formulaire_lettre')}}" class="btn btn-sm btn-outline-secondary" type="button">Formulaire Lettre</a>
+        <a href="{{url_for('formulaire_date')}}"  class="btn btn-sm btn-outline-secondary" type="button">Formulaire Date</a>
+        <a href="{{url_for('formulaire_destinataire')}}" class="btn btn-sm btn-outline-secondary" type="button">Formulaire Destinataire</a>
+        <a href="{{url_for('formulaire_contresignataire')}}" class="btn btn-sm btn-outline-secondary" type="button">Formulaire Contresignataire</a>
+        <a href="{{url_for('formulaire_institution')}}" class="btn btn-sm btn-outline-secondary" type="button">Formulaire Institution</a>
+    </form>
+    </nav>
+
+<h1>Formulaire Lettre</h1>
+<form class="form dropdown " method="POST" action="{{url_for('formulaire_lettre')}}">
+    <div class="panel panel-info">
+
+            <div class="col-md-12">
+                <h4>Lettre</h4>
+            </div>
+            <div class="form-group row flex-v-center">
+                <div class="col-md-6 col-xs-12">
+                    <strong>Date* :</strong>
+                    <input type="text" name="Date" list="listedatelettre" class="form-control" value="" />
+                    <datalist id="listedatelettre">
+                {% for lettre in listedatelettre %}
+                    <option data-value="test" value="{{lettre.Date}}">
+                {% endfor %}
+                     </datalist>
+                </div>
+                <div class="span1"></div>
+                <div class="col-md-6 col-xs-12">
+                    <strong>Lieu* :</strong>
+                    <input type="text" name="Lieu" list="listelieulettre" class="form-control" value="" />
+                    <datalist id="listelieulettre">
+                {% for lieu in listelieulettre %}
+                    <option data-value="test" value="{{lettre.Lieu}}">
+                {% endfor %}
+                     </datalist>
+                </div>
+            </div>
+            <div class="form-group row flex-v-center">
+                <div class="col-md-6 col-xs-12">
+                    <strong>Contresignataire* :</strong>
+                    <input type="text" name="Contresignataire" list="listecontresignataire" class="form-control" value="" />
+                    <datalist id="listecontresignataire">
+                {% for contresignataire in listecontresignataire %}
+                    <option data-value="test" value="{{lettre.Contresignataire}}">
+                {% endfor %}
+                     </datalist>
+                </div>
+                <div class="span1"></div>
+                <div class="col-md-6 col-xs-12">
+                    <strong>Langue* :</strong>
+                    <input type="text" name="Langue" list="listelangue" class="form-control" value="" />
+                    <datalist id="listelangue">
+                {% for langue in listelangue %}
+                    <option data-value="test" value="{{lettre.Langue}}">
+                {% endfor %}
+                     </datalist>
+                </div>
+            </div>
+            <div class="form-group row flex-v-center">
+                <div class="col-md-6 col-xs-12">
+                    <strong>Pronom* :</strong>
+                    <input type="text" name="Pronom" list="listepronom" class="form-control" value="" />
+                    <datalist id="listepronom">
+                {% for pronom in listepronom %}
+                    <option data-value="test" value="{{lettre.Pronom}}">
+                {% endfor %}
+                     </datalist>
+                </div>
+                <div class="span1"></div>
+                <div class="col-md-6 col-xs-12">
+                    <strong>Cote* :</strong>
+                    <input type="text" name="Cote" list="listecote" class="form-control" value="" />
+                    <datalist id="listecote">
+                {% for cote in listecote %}
+                    <option data-value="test" value="{{lettre.Cote}}">
+                {% endfor %}
+                     </datalist>
+                </div>
+            </div>
+            <div class="form-group row flex-v-center">
+                <div class="col-md-6 col-xs-12">
+                    <strong>Statut* :</strong>
+                    <input type="text" name="Statut" list="listestatut" class="form-control" value="" />
+                    <datalist id="listestatut">
+                {% for statut in listestatut %}
+                    <option data-value="test" value="{{lettre.Statut}}">
+                {% endfor %}
+                     </datalist>
+                </div>
+
+    </div>
+    <div>
+        <button type="submit" class="btn btn-primary">Ajouter</button>
+    </div>
+</form>
+
+{% endblock %}

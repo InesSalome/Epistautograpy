@@ -1,0 +1,65 @@
+{% extends "conteneur.html" %}
+
+{% block titre %}| Formulaire Destinataire{%endblock%}
+
+{% block corps %}
+    <div class="col-md-12 text-center">
+    <a href="{{url_for('formulaire')}}"name="singlebutton" class="btn btn-primary" type="button">Formulaire d'ajout général</a>
+    </div>
+
+    <nav class=" navbar navbar-light bg-light">
+    <form class="form-inline">
+        <a href="{{url_for('formulaire_lettre')}}" class="btn btn-sm btn-outline-secondary" type="button">Formulaire Lettre</a>
+        <a href="{{url_for('formulaire_date')}}"  class="btn btn-sm btn-outline-secondary" type="button">Formulaire Date</a>
+        <a href="{{url_for('formulaire_destinataire')}}" class="btn btn-sm btn-outline-secondary" type="button">Formulaire Destinataire</a>
+        <a href="{{url_for('formulaire_contresignataire')}}" class="btn btn-sm btn-outline-secondary" type="button">Formulaire Contresignataire</a>
+        <a href="{{url_for('formulaire_institution')}}" class="btn btn-sm btn-outline-secondary" type="button">Formulaire Institution</a>
+    </form>
+    </nav>
+
+<h1>Formulaire Destinataire</h1>
+<form class="form dropdown " method="POST" action="{{url_for('formulaire_destinataire')}}">
+    <div class="panel panel-info">
+
+            <div class="col-md-12">
+                <h4>Destinataire</h4>
+            </div>
+            <div class="form-group row flex-v-center">
+                <div class="col-md-6 col-xs-12">
+                    <strong>Type de destinataire* :</strong>
+                    <input type="text" name="type_destinataire" list="listetypedestinataire" class="form-control" value="" />
+                    <datalist id="listetypedestinataire">
+                {% for destinataire in listetypedestinataire %}
+                    <option data-value="test" value="{{destinataire.type_destinataire}}">
+                {% endfor %}
+                     </datalist>
+                </div>
+                <div class="span1"></div>
+                <div class="col-md-6 col-xs-12">
+                    <strong>Titre destinataire* :</strong>
+                    <input type="text" name="titre_destinataire" list="listetitredestinataire" class="form-control" value="" />
+                    <datalist id="listetitredestinataire">
+                {% for destinataire in listetitredestinataire %}
+                    <option data-value="test" value="{{destinataire.titre_destinataire}}">
+                {% endfor %}
+                     </datalist>
+                </div>
+            </div>
+            <div class="form-group row flex-v-center">
+                <div class="col-md-6 col-xs-12">
+                    <strong>Identite* :</strong>
+                    <input type="text" name="Identite" list="listeidentitedestinataire" class="form-control" value="" />
+                    <datalist id="llisteidentitedestinataire">
+                {% for destinataire in listeidentitedestinataire %}
+                    <option data-value="test" value="{{destinataire.Identite}}">
+                {% endfor %}
+                     </datalist>
+                </div>
+               
+    </div>
+    <div>
+        <button type="submit" class="btn btn-primary">Ajouter</button>
+    </div>
+</form>
+
+{% endblock %}

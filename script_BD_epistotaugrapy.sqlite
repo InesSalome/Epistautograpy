@@ -1,0 +1,98 @@
+PRAGMA encoding = 'UTF-8';
+-- Base sqlite pour l'application epistotaugrapy
+
+-- -----------------------------------------------------
+-- Données relatives aux utilisateurs
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS USER (
+  id_user INTEGER PRIMARY KEY AUTOINCREMENT,
+  nom_user TINYTEXT NOT NULL,
+  login_user VARCHAR(45) NOT NULL,
+  email_user TINYTEXT  NULL,
+  password_user VARCHAR(64) NULL
+  );
+
+-- -----------------------------------------------------
+-- Données relatives aux destinataires des lettres
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS DESTINATAIRE (
+  id_destinataire INTEGER PRIMARY KEY AUTOINCREMENT,
+  type_destinataire VARCHAR(45) NOT NULL,                       -- Institution ou personne, et si c'est une personne de quelle catégore sociale 
+                                                                -- elle est issue. 
+  titre_destinataire TINYTEXT,                                  -- Valeur complétée uniquement s'il s'agit d'une personne. Il s'agit du titre de noblesse
+                                                                -- ou des fonctions exercées. 
+  identite_destinataire TINYTEXT NOT NULL,                      -- nom de la personne ou de l'institution à qui est adressée la lettre
+  date_naissance TINYTEXT,                                          -- Valeur complétée uniquement s'il s'agit d'une personne
+  date_deces TINYTEXT                                              -- Valeur complétée uniquement s'il s'agit d'une personne
+  );                                          
+
+-- -------------------------------------------------------------------------------------------------------
+-- Données relatives à l'institution de conservation de la lettre considérée comme un document d'archives
+-- -------------------------------------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS INSTITUTION_CONSERVATION (
+  id_institution_conservation INTEGER PRIMARY KEY AUTOINCREMENT,
+  nom_institution_conservation VARCHAR(45) NOT NULL,
+  latitude_institution_conservation FLOAT NOT NULL,
+  longitude_institution_conservation FLOAT NOT NULL)
+;
+
+-- --------------------------------------------------------
+-- Données relatives à la lettre en tant qu'objet d'étude
+-- --------------------------------------------------------
+CREATE TABLE IF NOT EXISTS LETTRE (
+  id_lettre INTEGER PRIMARY KEY AUTOINCREMENT,
+  date_envoie_lettre TINYTEXT NOT NULL,
+  lieu_ecriture_lettre VARCHAR(45) NOT NULL,
+  objet_lettre TINYTEXT NULL,                                  -- Sujet de la lettre et résumé du contenu
+  contresignataire_lettre VARCHAR(45) NULL,
+  langue_lettre VARCHAR(45) NOT NULL,
+  pronom_personnel_employe_lettre VARCHAR(45) NULL,
+  cote_lettre VARCHAR(45) NOT NULL,
+  statut_lettre VARCHAR(45) NOT NULL,                          -- Pour savoir s'il s'agit d'un original ou d'une copie.
+  institution_id INTEGER NOT NULL,
+  lien_image_lettre TEXT NOT NULL,
+  FOREIGN KEY(institution_id) REFERENCES INSTITUTION_CONSERVATION(id_institution_conservation)
+  ON DELETE CASCADE ON UPDATE CASCADE
+  );
+
+-- ------------------------------------------------------------------------
+-- Table pour relier une lettre à la version numérisée de sa transcription
+-- ------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS IMAGE_NUMERISEE (
+  id_image_numerisee INTEGER PRIMARY KEY AUTOINCREMENT,
+  url_image_numerisee TEXT NOT NULL,
+  reference_bibliographique_image_numerisee TEXT NOT NULL,
+  lettre_id  INTEGER NOT NULL,
+  FOREIGN KEY(lettre_id) REFERENCES LETTRE(id_lettre)
+  ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+-- ------------------------------------------------------------------------------------------------------------------------------------------
+-- Table de relation pour relier l'enrichissement de données et leur recherche à un utilisateur, dont l'administrateur du site
+-- ------------------------------------------------------------------------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS AUTHORSHIP (
+  id_authorship INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER NOT NULL,
+  lettre_id INTEGER NOT NULL,
+  date_authorship DATETIME NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES USER(id_user)
+  ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (lettre_id) REFERENCES LETTRE(id_lettre)
+  ON DELETE CASCADE ON UPDATE CASCADE
+  );
+
+-- ------------------------------------------------------------------
+-- Table de relation entre des lettres et son ou ses destinataire(s)
+-- ------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS CORRESPONDANCE (
+  destinataire_id,
+  lettre_id,
+  PRIMARY KEY (destinataire_id, lettre_id),
+  FOREIGN KEY (destinataire_id) REFERENCES DESTINATAIRE(id_destinataire)
+  ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (lettre_id) REFERENCES LETTRE(id_lettre)
+  ON DELETE CASCADE ON UPDATE CASCADE
+  );
+
+
+

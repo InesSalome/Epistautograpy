@@ -1,0 +1,34 @@
+{% extends "conteneur.html" %}
+
+
+        {% block titre %}
+            {%if lettre %}| Lettre : {{lettre.objet}} {% endif %}
+        {% endblock %}
+ 
+    {% block corps %}
+        {% if lettre %}
+            <h1>Lettre n°{{lettre.id_lettre}}</h1>
+            <h3>{{lettre.objet_lettre}}</h3>
+            <dl>
+                <dt>Date</dt><dd>{{lettre.date_envoie_lettre}}</dd>
+                <dt>Lieu</dt><dd>{{lettre.lieu_ecriture_lettre}}</dd>
+                <dt>Destinataire</dt><dd><a href="{{url_for('index_destinataires', index_destinataires=destinataire.identite_destinataire)}}">{{destinataire.identite_destinataire}}</dd>
+                <dt>Contresignataire</dt><dd><a href="{{url_for('index_contresignataires', nom_contresignataire=contresignataire.contresignataire_lettre)}}">{{lettre.contresignataire_lettre}}</a></dd>
+                <dt>Langue</dt><dd>{{lettre.langue_lettre}}</dd>
+                <dt>Pronom personnel employé</dt><dd>{{lettre.pronom_personnel_employe_lettre}}</dd>
+                <dt>Cote</dt><dd>{{lettre.cote_lettre}}</dd>
+                <dt>Statut</dt><dd>{{lettre.statut_lettre}}</dd>
+                <dt>Institution de conservation</dt><dd>{{institution_conservation.nom_institution_conservation}}</dd>
+                <dt>Lien vers le texte numérisé</dt><dd><a href="{{url_for('image', image=image_numerisee.url_image_numerisee)}}">{{lettre.lien_image_lettre}}</a></dd>
+                <dt>Référence bibliographique du texte numérisé</dt><dd><a href="{{url_for('ref', ref=image_numerisee.reference_bibliographique_image_numerisee)}}">{{image_numerisee.reference_bibliographique_image_numerisee}}</a></dd>
+            </dl>
+        {% else %}
+            <p>La base de données est en cours de constitution</p>
+        {% endif %}
+        <ul>
+        <li><a href="{{url_for('index_lettres')}}">Retour à l'index des lettres recensés</a></li>
+        <li><a href="{{url_for('accueil')}}">Retour à la page d'accueil</a></li>
+    </ul>
+    </body>
+    {% endblock %}
+</html>
