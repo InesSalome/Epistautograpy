@@ -38,7 +38,7 @@ def index_lettres():
 @app.route("/index_dates")
 def index_dates():
 	dates = Lettre.query.order_by(Lettre.date_envoie_lettre).all()
-	return render_template("pages/index_dates.html", nom="Epistautograpy", dates=dates)
+	return render_template("pages/index_dates.html", nom="Epistautograpy", dates=dates, lettre=lettre)
 
 @app.route("/index_destinataires")
 def index_destinataires():
@@ -50,10 +50,10 @@ def index_contresignataires():
 	contresignataires = Lettre.query.with_entities(Lettre.contresignataire_lettre).distinct().order_by(Lettre.contresignataire_lettre).all()
 	return render_template("pages/index_contresignataires.html", nom="Epistautograpy", contresignataires=contresignataires)
 
-@app.route("/index_institution_conservation")
-def index_institution_conservation():
-	institutions = Institution_Conservation.query.with_entities(Institution_Conservation.nom_institution_conservation).distinct().order_by(Institution_Conservation.nom_institution_conservation).all()
-	return render_template("pages/index_institution_conservation.html", nom="Epistautograpy", institutions=institutions)
+@app.route("/index_institutions_conservations")
+def index_institutions_conservations():
+	institutions_conservations = Institution_Conservation.query.with_entities(Institution_Conservation.nom_institution_conservation).distinct().order_by(Institution_Conservation.nom_institution_conservation).all()
+	return render_template("pages/index_institutions_conservations.html", nom="Epistautograpy", institutions_conservations=institutions_conservations)
 
 
 #Chemin vers les pages de contenu
@@ -61,22 +61,54 @@ def index_institution_conservation():
 #Création d'une route avec l'identifiant associé à chaque lettre dans la 
 #base de données. On a conditionné le type de l'identifiant qui ne peut être
 #qu'un entier.
-@app.route("/lettre/<id_lettre>", methods=['GET', "POST"])
+@app.route("/lettre/<id_lettre>", methods=['GET', 'POST'])
 def lettre(id_lettre):
 
-	"""Création d'une page de résultat type pour une lettre
+	"""Création d'une page de résultat vers une lettre
 	:param id_lettre: Clé primaire dans la table Lettre
 	:type id_lettre: integer
 	:returns: création de la page
 	:rtype: page HTML de la lettre souhaitée"""
-
-	unique_lettre = Lettre.query.get(id_lettre)
-	destinataire = Destinataire.query.filter(db.and_(Destinataire.id_destinataire==Correspondance.destinataire_id,id_lettre==Correspondance.lettre_id)).all()
-	institution_conservation = Institution_Conservation.query.filter(Institution_Conservation.id_institution_conservation==Lettre.institution_id).all()
+	
 	#Après avoir récupérer les valeurs d'attributs de la table Lettre, on filtre les autres
-	#tables qui ont une clé étragère correspondant au paramètre id_lettre, pour récupérer
+	#tables qui ont une clé étrangère correspondant au paramètre id_lettre, pour récupérer
 	#les informations adéquates
-	return render_template("pages/lettre.html", nom="Epistautograpy", lettre=unique_lettre, destinataire=destinataire, contresignataire=contresignataire, institution_conservation=institution_conservation)
+	unique_lettre = Lettre.query.get(id_lettre)
+	destinataire = Destinataire.query.filter(db.and_(Destinataire.id_destinataire==Correspondance.destinataire_id,Correspondance.lettre_id==Lettre.id_lettre, Lettre.id_lettre==id_lettre)).first()
+	institution_conservation = Institution_Conservation.query.filter(db.and_(Institution_Conservation.id_institution_conservation==Lettre.institution_id, Lettre.id_lettre==id_lettre)).first()
+	image_numerisee = Image_Numerisee.query.filter(db.and_(Image_Numerisee.lettre_id==Lettre.id_lettre, Lettre.id_lettre==id_lettre)).first()
+	
+	return render_template("pages/lettre.html", nom="Epistautograpy", lettre=unique_lettre, contresignataire=contresignataire, destinataire=destinataire, institution_conservation=institution_conservation, institution=institution, image_numerisee=image_numerisee)
+
+@app.route("/date/<date_envoie_lettre>", methods=['GET', 'POST'])
+def date(date_envoie_lettre):
+
+	"""Création d'une page de résultat depuis une date vers la lettre correspondante
+	:param date_envoie_lettre: Attribut dans la table Lettre
+	:type date_envoie_lettre: string
+	:returns: création de la page
+	:rtype: page HTML de la lettre souhaitée"""
+
+	unique_date = Lettre.query.get(date_envoie_lettre)
+	lettres = Lettre.query.filter(Lettre.date_envoie_lettre==date_envoie_lettre).order_by(Lettre.id_lettre).all()
+	return render_template("pages/date.html", nom="Epistautograpy", date=unique_date, lettres=lettres, lettre=lettre)
+
+@app.route("/destinataire/<id_destinataire>", methods=['GET', 'POST'])
+def destinataire(id_destinataire):
+
+	"""Création d'une page de résultat vers un destinataire
+	:param id_destinataire: Clé primaire dans la table Destinataire
+	:type id_destinataire: integer
+	:returns: création de la page
+	:rtype: page HTML du destinataire souhaité"""
+
+	#Après avoir récupérer les valeurs d'attributs de la table Destinataire, on filtre les autres
+	#tables qui ont une clé étrangère correspondant au paramètre id_destinataire pour récupérer
+	#les informations adéquates
+	unique_destinataire = Destinataire.query.get(id_destinataire)
+	lettres = Lettre.query.filter(db.and_(Lettre.id_lettre==Correspondance.lettre_id, Correspondance.destinataire_id==Destinataire.id_destinataire, Destinataire.id_destinataire==id_destinataire)).order_by(Lettre.id_lettre).all()
+	
+	return render_template("pages/destinataire.html", nom="Epistautograpy", destinataire=unique_destinataire, lettres=lettres, lettre=lettre)
 
 @app.route("/contresignataire/<nom_contresignataire>")
 def contresignataire(nom_contresignataire):
@@ -88,10 +120,26 @@ def contresignataire(nom_contresignataire):
 	:rtype: page HTML de la lettre souhaitée"""
 
 	unique_contresignataire = Lettre.query.get(nom_contresignataire)
-	#Après avoir récupérer les valeurs d'attributs de la table Lettre, on filtre les autres
-	#tables qui ont une clé étragère correspondant au paramètre id_lettre, pour récupérer
+	lettres = Lettre.query.filter(Lettre.contresignataire_lettre==nom_contresignataire).order_by(Lettre.id_lettre).all()
+
+	return render_template("pages/contresignataire.html", nom="Epistautograpy", contresignataire=unique_contresignataire, lettres=lettres, lettre=lettre)
+
+@app.route("/institution/<id_institution_conservation>")
+def institution(id_institution_conservation):
+
+	"""Création d'une page de résultat vers une institution avec la liste des lettres qu'elle conserve
+	:param id_institution_conservation: Clé primaire dans la table Institution_Conservation
+	:type id_institution_conservation: integer
+	:returns: création de la page
+	:rtype: page HTML de l'institution souhaitée"""
+
+	#Après avoir récupérer les valeurs d'attributs de la table Institution_Conservation, on filtre les autres
+	#tables qui ont une clé étrangère correspondant au paramètre id_institution_conservation, pour récupérer
 	#les informations adéquates
-	return render_template("pages/lettre.html", nom="Epistautograpy", contresignataire=unique_contresignataire)
+	unique_institution = Institution_Conservation.query.get(id_institution_conservation)
+	lettres = Lettre.query.filter(db.and_(Lettre.institution_id==Institution_Conservation.id_institution_conservation, Institution_Conservation.id_institution_conservation)).all()
+	
+	return render_template("pages/contresignataire.html", nom="Epistautograpy", institution=unique_institution, lettres=lettres, lettre=lettre)
 
 
 #Chemins vers pages dynamiques 

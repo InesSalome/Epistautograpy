@@ -8,7 +8,7 @@
     <p>Pour lors, la base recense {{destinataires|length}} destinataires :</p>
         <ul>
             {% for destinataire in destinataires %}
-            <li><a href="{{url_for('index_destinataires', index_destinataires=destinataire.identite_destinataire)}}">{{destinataire.identite_destinataire}}</a></li>
+            <li><a href="{{url_for('destinataire', id_destinataire=destinataire.id_destinataire)}}">{{destinataire.identite_destinataire}}</a></li>
             {% endfor %}
         </ul>
     {% else %}

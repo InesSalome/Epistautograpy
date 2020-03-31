@@ -11,7 +11,7 @@
     <p>Pour lors, la base recense {{dates|length}} dates :</p>
         <ul>
             {% for date in dates %}
-            <li><a href="{{url_for('lettre', id_lettre=date.date_envoie_lettre)}}">{{date.date_envoie_lettre}}</a></li>
+            <li><a href="{{url_for('date', date_envoie_lettre=date.date_envoie_lettre)}}">{{date.date_envoie_lettre}}</a></li>
             {% endfor %}
         </ul>
     {% else %}

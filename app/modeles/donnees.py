@@ -1,12 +1,12 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 #Import d'informations si besoin depuis le fichier concerné.
+from .. app import db
 from flask import url_for
 import datetime
 from sqlalchemy import update
 from sqlalchemy import Column, Integer, String
 
-from .. app import db
 
 #Tables pour faire les jointures
 
@@ -40,7 +40,7 @@ class Authorship(db.Model):
 		}
 
 class Correspondance(db.Model):
-	_tablename_= "correspondance"
+	__tablename__= "correspondance"
 	__table_args__ = {'extend_existing': True}
 	destinataire_id = db.Column(db.Integer, db.ForeignKey('destinataire.id_destinataire'), primary_key=True)
 	lettre_id = db.Column(db.Integer, db.ForeignKey('lettre.id_lettre'), primary_key=True)		
@@ -48,13 +48,14 @@ class Correspondance(db.Model):
 #Création de notre modèle
 
 class Destinataire(db.Model) :
-	_tablename_ = "destinataire"
+	__tablename__ = "destinataire"
 	id_destinataire  = db.Column(db.Integer, unique=True, nullable=False, primary_key=True, autoincrement=True)
 	type_destinataire = db.Column(db.String(45))
 	titre_destinataire = db.Column(db.Text)
 	identite_destinataire = db.Column(db.Text)
 	date_naissance = db.Column(db.Text)
 	date_deces = db.Column(db.Text)
+	lien_infos_destinataire = db.Column(db.Text)
 	correspondance = db.relationship("Lettre", secondary="correspondance", backref="destinataire", lazy="dynamic")
 
 	def to_jsonapi_dict(self):
@@ -70,8 +71,9 @@ class Destinataire(db.Model) :
 				"type": self.type_destinataire,
 				"titre": self.titre_destinataire,
 				"identite": self.identite_destinataire,
-				"naissance":self.date_naissance,
-				"deces":self.date_deces
+				"naissance": self.date_naissance,
+				"deces": self.date_deces,
+				"lien_infos_destinataire": self.lien_infos_destinataire
 			},
 			"links": {
 				"self": url_for("destinataire", id_destinataire=self.id_destinataire, _external=True),
@@ -86,7 +88,7 @@ class Destinataire(db.Model) :
 		}
 
 class Institution_Conservation(db.Model) :
-	_tablename_ = "institution_conservation"
+	__tablename__ = "institution_conservation"
 	id_institution_conservation = db.Column(db.Integer, unique=True, nullable=False, primary_key=True, autoincrement=True)
 	nom_institution_conservation = db.Column(db.String(45))
 	latitude_institution_conservation = db.Column(db.Float)
@@ -119,7 +121,7 @@ class Institution_Conservation(db.Model) :
 		}
 
 class Lettre(db.Model) :
-	_tablename_ = "lettre"
+	__tablename__ = "lettre"
 	id_lettre = db.Column(db.Integer, unique=True, nullable=False, primary_key=True, autoincrement=True)
 	date_envoie_lettre = db.Column(db.Text)
 	lieu_ecriture_lettre = db.Column(db.String(45))
@@ -151,7 +153,8 @@ class Lettre(db.Model) :
 				"langue": self.langue_lettre,
 				"pronom": self.pronom_personnel_employe_lettre,
 				"cote": self.cote_lettre,
-				"statut": self.statut_lettre
+				"statut": self.statut_lettre,
+				"lien_image_lettre": self.lien_image_lettre
 			},
 			"links": {
 				"self": url_for("lettre", id_lettre=self.id_lettre, _external=True),
@@ -166,7 +169,7 @@ class Lettre(db.Model) :
 		}
 
 class Image_Numerisee(db.Model):
-	_tablename_ = "image_numerisee"
+	__tablename__ = "image_numerisee"
 	id_image_numerisee = db.Column(db.Integer, unique=True, nullable=False, primary_key=True, autoincrement=True)
 	url_image_numerisee = db.Column(db.Text)
 	reference_bibliographique_image_numerisee = db.Column(db.Text)

@@ -23,7 +23,8 @@ CREATE TABLE IF NOT EXISTS DESTINATAIRE (
                                                                 -- ou des fonctions exercées. 
   identite_destinataire TINYTEXT NOT NULL,                      -- nom de la personne ou de l'institution à qui est adressée la lettre
   date_naissance TINYTEXT,                                          -- Valeur complétée uniquement s'il s'agit d'une personne
-  date_deces TINYTEXT                                              -- Valeur complétée uniquement s'il s'agit d'une personne
+  date_deces TINYTEXT,
+  lien_infos_destinataire TEXT                                            -- Valeur complétée uniquement s'il s'agit d'une personne
   );                                          
 
 -- -------------------------------------------------------------------------------------------------------

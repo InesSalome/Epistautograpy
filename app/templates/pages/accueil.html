@@ -28,9 +28,10 @@
                     <li>un email</li>
                     <li>un mot de passe</li>
                 </ul></p>
+            <p>Pour vous inscrire, <a href="{{url_for('inscription')}}">cliquez ici !</a></p>
         <p>
             {% if lettres %}
-                Pour l'instant, il y a {{lettres|length}} lettres enregistrés.
+                Pour l'instant, {{lettres|length}} lettres sont enregistrées.
             {% else %}
                 La base de données est en cours de constitution.
             {% endif %}
@@ -40,7 +41,7 @@
                 <li><a href="{{url_for('index_lettres')}}">des lettres de Charles VIII</a></li>
                 <li><a href="{{url_for('index_destinataires')}}">leurs destinataires</a></li>
                 <li><a href="{{url_for('index_contresignataires')}}">les contresignataires</a></li>
-                <li><a href="{{url_for('index_institution_conservation')}}">les institutions de conservation</a></li>
+                <li><a href="{{url_for('index_institutions_conservations')}}">les institutions de conservation</a></li>
             </ul>
         </p>
     </body>

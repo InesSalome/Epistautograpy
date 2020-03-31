@@ -29,7 +29,7 @@ statics = os.path.join(chemin_actuel, "static")
 app = Flask(
 	"Application",
 	template_folder=templates,
-    static_folder=statics
+	static_folder=statics
 )
 #Configuration du secret
 app.config['SECRET_KEY'] = SECRET_KEY
@@ -46,12 +46,12 @@ migrate = Migrate(app, db)
 login = LoginManager(app)
 
 #Import des pages correspondantes depuis le dossier routes.
-from .routes import accueil, lettre, index_lettres, index_dates, index_destinataires, index_contresignataires, index_institution_conservation, formulaire, recherche, rechercheavancee, inscription, connexion, deconnexion, formulaire_lettre, formulaire_destinataire, formulaire_institution, formulaire_image, about
+from .routes import accueil, index_lettres, index_dates, index_destinataires, index_contresignataires, index_institutions_conservations, formulaire, recherche, rechercheavancee, formulaire_lettre, formulaire_destinataire, formulaire_institution, lettre, date, destinataire, contresignataire, institution, inscription, connexion, deconnexion, cgu, about
 
 #Fonction pour créer toutes les tables et qu'elles soient reconnues lors du lancement de l'application
 def init_db():
+	print("Initialisation de la base de données en cours")
+	db.drop_all()
+	print("Création des tables de la base de données")
 	db.create_all()
-
-if __name__ == '__main__':
-	init_db()
 

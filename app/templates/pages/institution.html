@@ -1,24 +1,22 @@
 {% extends "conteneur.html" %}
 
         {% block titre %}
-            {%if institution %}| Institution : {{Institution_Conservation.nom_institution_conservation}} {% endif %}
+            {%if institution %}| Institution : {{institution_conservation.nom_institution_conservation}} {% endif %}
         {% endblock %}
  
     {% block corps %}
-        {% if institution %}
-            <h1>{{Institution_Conservation.nom_institution_conservation}}</h1>
+        <h1>{{Institution_Conservation.nom_institution_conservation}}</h1>
             
-            <dl>
-                <dt>latitude</dt><dd>{{Institution_Conservation.latitude_institution_conservation}}</dd>
-                <dt>longitude</dt><dd>{{Institution_Conservation.longitude_institution_conservation}}</dd>
-                <dt>Lien vers une carte de géolocalisation</dt><dd></dd>
-            </dl>
-        {% else %}
-            <p>La base de données est en cours de constitution</p>
-        {% endif %}
+        <dl>
+            <dt>Lettres conservées</dt><dd><a href="{{url_for('lettre', id_lettre=lettre.id_lettre)}}">Lettre n°{{lettre.id_lettre}}</a></dd>
+            <dt>latitude</dt><dd>{{Institution_Conservation.latitude_institution_conservation}}</dd>
+            <dt>longitude</dt><dd>{{Institution_Conservation.longitude_institution_conservation}}</dd>
+            <dt>Lien vers une carte de géolocalisation API</dt><dd></dd>
+        </dl>
+
         <ul>
         <li><a href="{{url_for('index_lettres')}}">Retour à l'index des lettres recensés</a></li>
         <li><a href="{{url_for('accueil')}}">Retour à la page d'accueil</a></li>
-    </ul>
+        </ul>
     </body>
     {% endblock %}

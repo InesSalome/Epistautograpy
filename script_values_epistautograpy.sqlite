@@ -1,13 +1,13 @@
 PRAGMA encoding = 'UTF-8';
 
-INSERT INTO DESTINATAIRE(type_destinataire,titre_destinataire, identite_destinataire,date_naissance,date_deces) 
-VALUES ("noblesse","Princesse de Viane","Madeleine de France","1443-12-01","1495-01-21"),
-("noblesse","Reine de Navarre ","Catherine de Navarre","1468-04-18","1517-02-12"),
-("noblesse","Duc de Milan","Jean Galéas Sforza","1469-06-20","1494-10-22"),
-("institution",NULL,"États de Béarn",NULL,NULL),
-("institution",NULL,"Chambre des Comptes de Paris",NULL,NULL),
-("institution",NULL,"Anciennes Ligues de la Haute-Allemagne",NULL,NULL),
-("institution",NULL,"Parlement de Paris",NULL,NULL);
+INSERT INTO DESTINATAIRE(type_destinataire,titre_destinataire, identite_destinataire,date_naissance,date_deces, lien_infos_destinataire) 
+VALUES ("noblesse","Princesse de Viane","Madeleine de France","1443-12-01","1495-01-21", "https://fr.wikipedia.org/wiki/Madeleine_de_France_(1443-1495)"),
+("noblesse","Reine de Navarre ","Catherine de Navarre","1468-04-18","1517-02-12", "https://fr.wikipedia.org/wiki/Catherine_de_Navarre"),
+("noblesse","Duc de Milan","Jean Galéas Sforza","1469-06-20","1494-10-22", "https://fr.wikipedia.org/wiki/Jean_Gal%C3%A9as_Sforza"),
+("institution",NULL,"États de Béarn",NULL,NULL, "https://fr.wikipedia.org/wiki/%C3%89tats_du_B%C3%A9arn"),
+("institution",NULL,"Chambre des Comptes de Paris",NULL,NULL, "https://fr.wikipedia.org/wiki/Chambre_des_comptes_de_Paris"),
+("institution",NULL,"Anciennes Ligues de la Haute-Allemagne",NULL,NULL, NULL),
+("institution",NULL,"Parlement de Paris",NULL,NULL, "https://fr.wikipedia.org/wiki/Parlement_de_Paris");
 
 INSERT INTO INSTITUTION_CONSERVATION(nom_institution_conservation,latitude_institution_conservation,longitude_institution_conservation)
 VALUES ("Archives départementales des Pyrénées-Atlantiques",43.3,-0.3667),

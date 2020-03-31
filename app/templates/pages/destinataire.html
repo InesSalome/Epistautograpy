@@ -2,21 +2,19 @@
 
 
         {% block titre %}
-            {%if destinataire %}| Destinataire : {{Destinataire.identite_destinataire}} {% endif %}
+            {%if destinataire %}| Destinataire : {{destinataire.identite_destinataire}} {% endif %}
         {% endblock %}
  
     {% block corps %}
-        {% if destinataire %}
-            <h1>{{Destinataire.identite_destinataire}}</h1>
-            <h3>{{Destinataire.titre_destinataire}}</h3>
-            <dl>
-                <dt>Naissance</dt><dd>{{Destinataire.date_naissance}}</dd>
-                <dt>Décès</dt><dd>{{Destinataire.date_deces}}</dd>
-                <dt>Lien vers sa correspondance avec Charles VIII</dt><dd></dd>
-            </dl>
-        {% else %}
-            <p>La base de données est en cours de constitution</p>
-        {% endif %}
+        <h1>{{destinataire.identite_destinataire}}</h1>
+        <h3>{{destinataire.titre_destinataire}}</h3>
+        <dl>
+            <dt>Naissance</dt><dd>{{destinataire.date_naissance}}</dd>
+            <dt>Décès</dt><dd>{{destinataire.date_deces}}</dd>
+            <dt>Lettre(s) reçue(s)</dt><dd><a href="{{url_for('lettre', id_lettre=lettre.id_lettre)}}">Lettre n°{{lettre.id_lettre}}</a></dd>
+            <dt>Lien vers la biographie de Wikipedia</dt><dd><a href="{{destinataire.lien_infos_destinataire}}", target="blank">{{destinataire.lien_infos_destinataire}}</a></dd>
+        </dl>
+
         <ul>
         <li><a href="{{url_for('index_lettres')}}">Retour à l'index des lettres recensés</a></li>
         <li><a href="{{url_for('accueil')}}">Retour à la page d'accueil</a></li>
