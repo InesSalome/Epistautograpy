@@ -1,26 +1,19 @@
-<!DOCTYPE html>
-<html lang="fr">
-
 {% extends "conteneur.html" %}
 
 {% block titre %}| Accueil{%endblock%}
 
 {% block corps %}
-<html>
-    <head>
-        <title>{{nom}}</title>
-    </head>
-    <body>
+
         <h1>Epistautograpy</h1>
         <h3>Bienvenue !</h3>
         <p>Un site pour naviguer dans les lettres de Charles VIII et comprendre le rôle du contreseing, si les lettres sont autographes ou non, afin de saisir la part d'implication du roi.</p><br/>
-        <p>Il est donc possible de faire des recherches par mots-clés dont :
+        <p>Il est donc possible de faire des recherches par mots-clés comme :
             <ul>
-                <li><a href="{{url_for('index_dates')}}">la date</a></li>
-                <li><a href="{{url_for('index_destinataires')}}">le nom du destinataire</a></li>
-                <li><a href="{{url_for('index_contresignataires')}}">le nom du contresignataire</a></li>
+                <li><a id="link" href="{{url_for('index_dates')}}">la date</a></li>
+                <li><a id="link" href="{{url_for('index_destinataires')}}">le nom du destinataire</a></li>
+                <li><a id="link" href="{{url_for('index_contresignataires')}}">le nom du contresignataire</a></li>
             </ul>
-         La collection de lettres ici accessible est amenée à être enrichie, n'hésitez pas !</p><br/>
+         La collection de lettres ici accessible est amenée à être enrichie, alors n'hésitez pas !</p><br/>
             <p>Pour enrichir la base, il est nécessaire de vous inscrire en remplissant les champs suivants :
                 <ul>
                     <li>un login</li>
@@ -28,7 +21,7 @@
                     <li>un email</li>
                     <li>un mot de passe</li>
                 </ul></p>
-            <p>Pour vous inscrire, <a href="{{url_for('inscription')}}">cliquez ici !</a></p>
+            <p>Pour vous inscrire, <a id="link" href="{{url_for('inscription')}}">cliquez ici</a>.</p>
         <p>
             {% if lettres %}
                 Pour l'instant, {{lettres|length}} lettres sont enregistrées.
@@ -36,14 +29,13 @@
                 La base de données est en cours de constitution.
             {% endif %}
         </p><br/>
-        <p>La base de données recense :
+        <p>La base de données recense donc :
            <ul>
-                <li><a href="{{url_for('index_lettres')}}">des lettres de Charles VIII</a></li>
-                <li><a href="{{url_for('index_destinataires')}}">leurs destinataires</a></li>
-                <li><a href="{{url_for('index_contresignataires')}}">les contresignataires</a></li>
-                <li><a href="{{url_for('index_institutions_conservations')}}">les institutions de conservation</a></li>
+                <li><a id="link" href="{{url_for('index_lettres')}}">des lettres de Charles VIII</a></li>
+                <li><a id="link" href="{{url_for('index_destinataires')}}">leurs destinataires</a></li>
+                <li><a id="link" href="{{url_for('index_contresignataires')}}">les contresignataires</a></li>
+                <li><a id="link" href="{{url_for('index_institutions_conservations')}}">les institutions de conservation</a></li>
             </ul>
         </p>
-    </body>
-</html>
+
 {% endblock %}

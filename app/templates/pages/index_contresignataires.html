@@ -1,6 +1,3 @@
-<!DOCTYPE html>
-<html lang="fr">
-
 {% extends "conteneur.html" %}
 
 {% block corps %}
@@ -11,12 +8,12 @@
     <p>Pour lors, la base recense {{contresignataires|length}} contresignataires :</p>
         <ul>
             {% for contresignataire in contresignataires %}
-            <li><a href="{{url_for('contresignataire', nom_contresignataire=contresignataire.contresignataire_lettre)}}">{{contresignataire.contresignataire_lettre}}</a></li>
+            <li><a id="link" href="{{url_for('contresignataire', nom_contresignataire=contresignataire.contresignataire_lettre)}}">{{contresignataire.contresignataire_lettre}}</a></li>
             {% endfor %}
         </ul>
     {% else %}
         <p>La base de données est en cours de constitution</p>
     {% endif %}
-    <p><a href="{{url_for('accueil')}}">Retour à la page d'accueil</a></p>
+    <p><a id="link" href="{{url_for('accueil')}}">Retour à la page d'accueil</a></p>
 
 {% endblock %}

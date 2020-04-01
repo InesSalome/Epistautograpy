@@ -120,9 +120,10 @@ def contresignataire(nom_contresignataire):
 	:rtype: page HTML de la lettre souhaitée"""
 
 	unique_contresignataire = Lettre.query.get(nom_contresignataire)
-	lettres = Lettre.query.filter(Lettre.contresignataire_lettre==nom_contresignataire).order_by(Lettre.id_lettre).all()
+	unique_lettre = Lettre.query.filter(Lettre.id_lettre)
+	lettres_signees = Lettre.query.filter(db.and_(Lettre.contresignataire_lettre==unique_contresignataire, Lettre.id_lettre==unique_lettre)).order_by(Lettre.id_lettre).all()
 
-	return render_template("pages/contresignataire.html", nom="Epistautograpy", contresignataire=unique_contresignataire, lettres=lettres, lettre=lettre)
+	return render_template("pages/contresignataire.html", nom="Epistautograpy", contresignataire=unique_contresignataire, lettres_signees=lettres_signees, lettre=lettre)
 
 @app.route("/institution/<id_institution_conservation>")
 def institution(id_institution_conservation):

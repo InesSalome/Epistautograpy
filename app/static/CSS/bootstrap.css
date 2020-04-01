@@ -679,6 +679,7 @@ pre code {
       flex-wrap: wrap;
   margin-right: -15px;
   margin-left: -15px;
+  grid-column: 1;
 }
 
 .no-gutters {
@@ -2629,16 +2630,16 @@ fieldset[disabled] a.btn {
 }
 
 .btn-outline-info {
-  color: #17a2b8;
-  background-color: transparent;
+  color: #d22100;
+  background-color: #000000;
   background-image: none;
-  border-color: #17a2b8;
+  border-color: #d22100;
 }
 
 .btn-outline-info:hover {
   color: #fff;
-  background-color: #17a2b8;
-  border-color: #17a2b8;
+  background-color: #d22100;
+  border-color: #d22100;
 }
 
 .btn-outline-info:focus, .btn-outline-info.focus {
@@ -2646,15 +2647,15 @@ fieldset[disabled] a.btn {
 }
 
 .btn-outline-info.disabled, .btn-outline-info:disabled {
-  color: #17a2b8;
+  color: #d22100;
   background-color: transparent;
 }
 
 .btn-outline-info:not([disabled]):not(.disabled):active, .btn-outline-info:not([disabled]):not(.disabled).active,
 .show > .btn-outline-info.dropdown-toggle {
   color: #fff;
-  background-color: #17a2b8;
-  border-color: #17a2b8;
+  background-color: #d22100;
+  border-color: #d22100;
   box-shadow: 0 0 0 0.2rem rgba(23, 162, 184, 0.5);
 }
 
@@ -3515,11 +3516,12 @@ tbody.collapse.show {
 }
 
 .nav-link:focus, .nav-link:hover {
-  text-decoration: none;
+  opacity: 1;
 }
 
 .nav-link.disabled {
-  color: #868e96;
+  color: #d22100;
+  background-color: transparent;
 }
 
 .nav-tabs {
@@ -3541,14 +3543,14 @@ tbody.collapse.show {
 }
 
 .nav-tabs .nav-link.disabled {
-  color: #868e96;
+  color: #d22100;
   background-color: transparent;
   border-color: transparent;
 }
 
 .nav-tabs .nav-link.active,
 .nav-tabs .nav-item.show .nav-link {
-  color: #495057;
+  color: #d22100;
   background-color: #fff;
   border-color: #ddd #ddd #fff;
 }
@@ -3565,7 +3567,7 @@ tbody.collapse.show {
 
 .nav-pills .nav-link.active,
 .nav-pills .show > .nav-link {
-  color: #fff;
+  color: #d22100;
   background-color: #007bff;
 }
 
@@ -3620,10 +3622,12 @@ tbody.collapse.show {
   display: inline-block;
   padding-top: 0.3125rem;
   padding-bottom: 0.3125rem;
+  padding-right= 10px; 
   margin-right: 1rem;
   font-size: 1.25rem;
   line-height: inherit;
   white-space: nowrap;
+  text-align: center;
 }
 
 .navbar-brand:focus, .navbar-brand:hover {
@@ -3991,7 +3995,7 @@ tbody.collapse.show {
 }
 
 .navbar-dark .navbar-brand {
-  color: #fff;
+  color: #d22100;
 }
 
 .navbar-dark .navbar-brand:focus, .navbar-dark .navbar-brand:hover {
@@ -8370,5 +8374,9 @@ a.text-dark:focus, a.text-dark:hover {
 
 .invisible {
   visibility: hidden !important;
+}
+
+#link {
+  color: #d22100;
 }
 /*# sourceMappingURL=bootstrap.css.map */

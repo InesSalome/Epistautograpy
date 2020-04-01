@@ -8,12 +8,12 @@
     <p>Pour lors, la base recense {{destinataires|length}} destinataires :</p>
         <ul>
             {% for destinataire in destinataires %}
-            <li><a href="{{url_for('destinataire', id_destinataire=destinataire.id_destinataire)}}">{{destinataire.identite_destinataire}}</a></li>
+            <li><a id="link" href="{{url_for('destinataire', id_destinataire=destinataire.id_destinataire)}}">{{destinataire.identite_destinataire}}</a></li>
             {% endfor %}
         </ul>
     {% else %}
         <p>La base de données est en cours de constitution</p>
     {% endif %}
-    <p><a href="{{url_for('accueil')}}">Retour à la page d'accueil</a></p>
+    <p><a id="link" href="{{url_for('accueil')}}">Retour à la page d'accueil</a></p>
 
 {% endblock %}

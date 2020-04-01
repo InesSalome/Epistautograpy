@@ -5,16 +5,16 @@
 {% block corps %}
 
     <div class="col-md-12 text-center">
-    <a href="{{url_for('formulaire')}}"name="singlebutton" class="btn btn-primary" type="button">Formulaire d'ajout général</a>
+    <a id="link" href="{{url_for('formulaire')}}"name="singlebutton" class="btn btn-primary" type="button">Formulaire d'ajout général</a>
     </div>
 
     <nav class=" navbar navbar-light bg-light">
     <form class="form-inline">
-        <a href="{{url_for('formulaire_lettre')}}" class="btn btn-sm btn-outline-secondary" type="button">Formulaire Lettre</a>
-        <a href="{{url_for('formulaire_date')}}"  class="btn btn-sm btn-outline-secondary" type="button">Formulaire Date</a>
-        <a href="{{url_for('formulaire_destinataire')}}" class="btn btn-sm btn-outline-secondary" type="button">Formulaire Destinataire</a>
-        <a href="{{url_for('formulaire_contresignataire')}}" class="btn btn-sm btn-outline-secondary" type="button">Formulaire Contresignataire</a>
-        <a href="{{url_for('formulaire_institution')}}" class="btn btn-sm btn-outline-secondary" type="button">Formulaire Institution</a>
+        <a id="link" href="{{url_for('formulaire_lettre')}}" class="btn btn-sm btn-outline-secondary" type="button">Formulaire Lettre</a>
+        <a id="link" href="{{url_for('formulaire_date')}}"  class="btn btn-sm btn-outline-secondary" type="button">Formulaire Date</a>
+        <a id="link" href="{{url_for('formulaire_destinataire')}}" class="btn btn-sm btn-outline-secondary" type="button">Formulaire Destinataire</a>
+        <a id="link" href="{{url_for('formulaire_contresignataire')}}" class="btn btn-sm btn-outline-secondary" type="button">Formulaire Contresignataire</a>
+        <a id="link" href="{{url_for('formulaire_institution')}}" class="btn btn-sm btn-outline-secondary" type="button">Formulaire Institution</a>
     </form>
     </nav>
 
