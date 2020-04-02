@@ -9,7 +9,10 @@
         <h1>{{date.date_envoie_lettre}}</h1>
 
         <dl>
-            <dt><a id="link" href="{{url_for('lettre', id_lettre=lettre.id_lettre)}}">Lettre n°</dt><dd>{{lettre.id_lettre}}</a></dd>
+            <dt>Lettres envoyées</dt>
+                            <ul>
+                                <li><a id="link" href="{{url_for('index_lettres')}}">{{lettres}}</a></li>
+                            </ul>
         </dl>
        
     <ul>

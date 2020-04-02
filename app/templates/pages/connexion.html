@@ -4,12 +4,12 @@
 
 {% block corps %}
 
-<h1>Inscription</h1>
-<form class="form" method="POST" action="{{url_for("connexion")}}">
+<h1>Connexion</h1>
+<form class="form" method="POST" action="{{url_for('connexion')}}">
   <div class="form-group row">
     <label for="register-login" class="col-sm-2 col-form-label">Login</label>
     <div class="col-sm-10">
-      <input type="text" class="form-control" id="register-login" name="login" placeholder="Nom d'utilisateur pour se connecter">
+      <input type="text" class="form-control" id="register-login" name="login" placeholder="Nom d'utilisateur">
     </div>
   </div>
   <div class="form-group row">

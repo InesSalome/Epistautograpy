@@ -12,7 +12,7 @@
             <dt>Date</dt><dd>{{lettre.date_envoie_lettre}}</dd>
             <dt>Lieu</dt><dd>{{lettre.lieu_ecriture_lettre}}</dd>
             <dt>Destinataire</dt><dd><a id="link" href="{{url_for('destinataire', id_destinataire=destinataire.id_destinataire)}}">{{destinataire.identite_destinataire}}</a></dd>
-            <dt>Contresignataire</dt><dd><a id="link" href="{{url_for('contresignataire', nom_contresignataire=contresignataire.contresignataire_lettre)}}">{{lettre.contresignataire_lettre}}</a></dd>
+            <dt>Contresignataire</dt><dd><a id="link" href="{{url_for('contresignataire', contresignataire_lettre=lettre.contresignataire_lettre)}}">{{lettre.contresignataire_lettre}}</a></dd>
             <dt>Langue</dt><dd>{{lettre.langue_lettre}}</dd>
             <dt>Pronom personnel employé</dt><dd>{{lettre.pronom_personnel_employe_lettre}}</dd>
             <dt>Cote</dt><dd>{{lettre.cote_lettre}}</dd>

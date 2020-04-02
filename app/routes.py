@@ -43,7 +43,7 @@ def index_dates():
 @app.route("/index_destinataires")
 def index_destinataires():
 	destinataires = Destinataire.query.with_entities(Destinataire.identite_destinataire).distinct().order_by(Destinataire.identite_destinataire).all()
-	return render_template("pages/index_destinataires.html", nom="Epistautograpy", destinataires=destinataires)
+	return render_template("pages/index_destinataires.html", nom="Epistautograpy", destinataires=destinataires, destinataire=destinataire)
 
 @app.route("/index_contresignataires")
 def index_contresignataires():
@@ -52,8 +52,8 @@ def index_contresignataires():
 
 @app.route("/index_institutions_conservations")
 def index_institutions_conservations():
-	institutions_conservations = Institution_Conservation.query.with_entities(Institution_Conservation.nom_institution_conservation).distinct().order_by(Institution_Conservation.nom_institution_conservation).all()
-	return render_template("pages/index_institutions_conservations.html", nom="Epistautograpy", institutions_conservations=institutions_conservations)
+	institutions = Institution_Conservation.query.with_entities(Institution_Conservation.nom_institution_conservation).distinct().order_by(Institution_Conservation.nom_institution_conservation).all()
+	return render_template("pages/index_institutions_conservations.html", nom="Epistautograpy", institutions=institutions, institution_conservation=institution_conservation)
 
 
 #Chemin vers les pages de contenu
@@ -61,7 +61,7 @@ def index_institutions_conservations():
 #Création d'une route avec l'identifiant associé à chaque lettre dans la 
 #base de données. On a conditionné le type de l'identifiant qui ne peut être
 #qu'un entier.
-@app.route("/lettre/<id_lettre>", methods=['GET', 'POST'])
+@app.route("/lettre/<int:id_lettre>", methods=['GET', 'POST'])
 def lettre(id_lettre):
 
 	"""Création d'une page de résultat vers une lettre
@@ -90,10 +90,11 @@ def date(date_envoie_lettre):
 	:rtype: page HTML de la lettre souhaitée"""
 
 	unique_date = Lettre.query.get(date_envoie_lettre)
-	lettres = Lettre.query.filter(Lettre.date_envoie_lettre==date_envoie_lettre).order_by(Lettre.id_lettre).all()
-	return render_template("pages/date.html", nom="Epistautograpy", date=unique_date, lettres=lettres, lettre=lettre)
+	lettres = Lettre.query.filter(db.and_(Lettre.id_lettre==Lettre.id_lettre, Lettre.date_envoie_lettre==date_envoie_lettre)).order_by(Lettre.id_lettre).all()
 
-@app.route("/destinataire/<id_destinataire>", methods=['GET', 'POST'])
+	return render_template("pages/date.html", nom="Epistautograpy", date=unique_date, lettres=lettres)
+
+@app.route("/destinataire/<int:id_destinataire>", methods=['GET', 'POST'])
 def destinataire(id_destinataire):
 
 	"""Création d'une page de résultat vers un destinataire
@@ -106,12 +107,12 @@ def destinataire(id_destinataire):
 	#tables qui ont une clé étrangère correspondant au paramètre id_destinataire pour récupérer
 	#les informations adéquates
 	unique_destinataire = Destinataire.query.get(id_destinataire)
-	lettres = Lettre.query.filter(db.and_(Lettre.id_lettre==Correspondance.lettre_id, Correspondance.destinataire_id==Destinataire.id_destinataire, Destinataire.id_destinataire==id_destinataire)).order_by(Lettre.id_lettre).all()
+	lettres_recues = Lettre.query.filter(db.and_(Lettre.id_lettre==Lettre.id_lettre, Lettre.id_lettre==Correspondance.lettre_id, Correspondance.destinataire_id==Destinataire.id_destinataire, Destinataire.id_destinataire==id_destinataire)).order_by(Lettre.id_lettre).all()
 	
-	return render_template("pages/destinataire.html", nom="Epistautograpy", destinataire=unique_destinataire, lettres=lettres, lettre=lettre)
+	return render_template("pages/destinataire.html", nom="Epistautograpy", destinataire=unique_destinataire, lettres_recues=lettres_recues)
 
-@app.route("/contresignataire/<nom_contresignataire>")
-def contresignataire(nom_contresignataire):
+@app.route("/contresignataire/<contresignataire_lettre>")
+def contresignataire(contresignataire_lettre):
 
 	"""Création d'une page de résultat type pour les lettres signées par un même contresignataire
 	:param nom_contresignataire: Nom du contresignataire indiqué dans la table Lettre
@@ -119,13 +120,12 @@ def contresignataire(nom_contresignataire):
 	:returns: création de la page
 	:rtype: page HTML de la lettre souhaitée"""
 
-	unique_contresignataire = Lettre.query.get(nom_contresignataire)
-	unique_lettre = Lettre.query.filter(Lettre.id_lettre)
-	lettres_signees = Lettre.query.filter(db.and_(Lettre.contresignataire_lettre==unique_contresignataire, Lettre.id_lettre==unique_lettre)).order_by(Lettre.id_lettre).all()
+	unique_contresignataire = Lettre.query.get(contresignataire_lettre)
+	lettres_signees = Lettre.query.filter(db.and_(Lettre.id_lettre==Lettre.id_lettre, Lettre.contresignataire_lettre==contresignataire_lettre)).order_by(Lettre.id_lettre).all()
 
 	return render_template("pages/contresignataire.html", nom="Epistautograpy", contresignataire=unique_contresignataire, lettres_signees=lettres_signees, lettre=lettre)
 
-@app.route("/institution/<id_institution_conservation>")
+@app.route("/institution/<int:id_institution_conservation>")
 def institution(id_institution_conservation):
 
 	"""Création d'une page de résultat vers une institution avec la liste des lettres qu'elle conserve
@@ -138,9 +138,9 @@ def institution(id_institution_conservation):
 	#tables qui ont une clé étrangère correspondant au paramètre id_institution_conservation, pour récupérer
 	#les informations adéquates
 	unique_institution = Institution_Conservation.query.get(id_institution_conservation)
-	lettres = Lettre.query.filter(db.and_(Lettre.institution_id==Institution_Conservation.id_institution_conservation, Institution_Conservation.id_institution_conservation)).all()
+	lettres_conservees = Lettre.query.filter(db.and_(Lettre.institution_id==Institution_Conservation.id_institution_conservation, Institution_Conservation.id_institution_conservation==id_institution_conservation)).all()
 	
-	return render_template("pages/contresignataire.html", nom="Epistautograpy", institution=unique_institution, lettres=lettres, lettre=lettre)
+	return render_template("pages/contresignataire.html", nom="Epistautograpy", institution=unique_institution, lettres=lettres_conservees, institution_conservation=institution_conservation)
 
 
 #Chemins vers pages dynamiques 

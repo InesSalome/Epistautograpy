@@ -8,7 +8,7 @@
     <p>Pour lors, la base recense {{contresignataires|length}} contresignataires :</p>
         <ul>
             {% for contresignataire in contresignataires %}
-            <li><a id="link" href="{{url_for('contresignataire', nom_contresignataire=contresignataire.contresignataire_lettre)}}">{{contresignataire.contresignataire_lettre}}</a></li>
+            <li><a id="link" href="{{url_for('contresignataire', contresignataire_lettre=contresignataire.contresignataire_lettre)}}">{{contresignataire.contresignataire_lettre}}</a></li>
             {% endfor %}
         </ul>
     {% else %}

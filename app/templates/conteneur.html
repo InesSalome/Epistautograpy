@@ -20,7 +20,7 @@
 
 <body>
         <nav class="navbar navbar-expand-md navbar-dark bg-dark justify-content-between" role="navigation">
-            <span><a id="link" class="navbar-brand" href="{{url_for('accueil')}}"><img src="{{url_for('static', filename='images/sceau.jpg')}}" width="40" height="40" class="d-inline-block align-top" alt="logo"/></span>Epistautograpy</a>
+            <span><a id="link" class="navbar-brand" href="{{url_for('accueil')}}"><img src="{{url_for('static', filename='images/sceau.jpg')}}" width="45" height="45" class="d-inline-block align-top" alt="logo"/></span>Epistautograpy</a>
         <div class="container-fluid">
             <ul class="navbar-nav mr-auto">
             {% if not current_user.is_authenticated %}
@@ -89,30 +89,30 @@
   		<div class="container">
     		<div class="row">
 
-    		    <div class="col-lg-2 col-md-auto mb-2">
+    		    <div class="col-lg-2 col-md-2 mb-2">
         		<!--Image-->
-        			<div class="view overlay z-depth-1-half">
-          			<img src="{{url_for('static', filename='images/plume_encrier.jpg')}}" class="img-fluid" alt=""/>
+        			<div class="view z-depth-1-half">
+          			<img id="plume_encrier" src="{{url_for('static', filename='images/plume_encrier.jpg')}}" class="img-fluid" alt=""/>
           			<a href="">
            		 	<div class="mask rgba-white-light"></div>
          	 		</a>
         			</div>
         		</div>
 
-      			<div class="col-lg-2 col-md-auto mb-2">
+      			<div class="col-lg-2 col-md-2 mb-2">
        			<!--Image-->
-        			<div class="view overlay z-depth-1-half">
-          			<img src="{{url_for('static', filename='images/portrait_Charles_VIII.jpg')}}" class="img-fluid" alt=""/>
+        			<div class="view z-depth-1-half">
+          			<img id="signature" src="{{url_for('static', filename='images/signature.jpg')}}" class="img-fluid" alt=""/>
           			<a href="">
            			<div class="mask rgba-white-light"></div>
           			</a>
         			</div>
       			</div>
 
-      			<div class="col-lg-2 col-md-auto mb-2">
+      			<div class="col-lg-2 col-md-2 mb-2">
         		<!--Image-->
-        			<div class="view overlay z-depth-1-half">
-          			<img src="{{url_for('static', filename='images/signature.jpg')}}" class="img-fluid" alt=""/>
+        			<div class="view z-depth-1-half">
+          			<img id="portrait_Charles_VIII" src="{{url_for('static', filename='images/portrait_Charles_VIII.jpg')}}" class="img-fluid" alt=""/>
           			<a href="">
            			<div class="mask rgba-white-light"></div>
           			</a>

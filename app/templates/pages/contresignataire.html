@@ -2,19 +2,21 @@
 
 
     {% block titre %}
-        {%if contresignataire %}|Contresignataire : {{lettre.contresignataire_lettre}} {% endif %}
+        {%if contresignataire %}|Contresignataire : {{contresignataire.contresignataire_lettre}} {% endif %}
     {% endblock %}
  
     {% block corps %}
-        <h1>{{unique_contresignataire}}</h1>
+        <h1>{{contresignataire.contresignataire_lettre}}</h1>
             
         <dl>
-            <dt>Lettres signées</dt><dd><a id="link" href="{{url_for('lettre', id_lettre=lettre.id_lettre)}}">Lettre n°{{lettres_signees}}</a></dd>
+            <dt>Lettres signées</dt>
+                                    <ul>
+                                        <li><a id="link" href="{{url_for('index_lettres')}}">{{lettres_signees}}</a></li>
+                                    </ul>
         </dl>
 
         <ul>
         <li><a id="link" href="{{url_for('index_lettres')}}">Retour à l'index des lettres recensés</a></li>
         <li><a id="link" href="{{url_for('accueil')}}">Retour à la page d'accueil</a></li>
         </ul>
-
     {% endblock %}
