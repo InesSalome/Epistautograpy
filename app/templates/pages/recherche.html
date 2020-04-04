@@ -8,7 +8,7 @@
     <p>Il y a {{resultats|length}} lettres qui répondent à votre requête :</p>
         <ul>
             {% for lettre in resultats %}
-                <li><a id="link" href="{{url_for('lettre', id_lettre=lettre.lettre_id)}}">{{lettre.objet_lettre}}</a></li>
+                <li><a id="link" href="{{url_for('lettre', id_lettre=lettre.lettre_id)}}">Lettre n°{{lettre.lettre_id}}</a></li>
             {% endfor %}
         </ul>
 <nav aria-label="research-pagination">
@@ -30,6 +30,14 @@
                 <li class="page-item disabled">
                   <a id="link" class="page-link">...</a>
                 </li>
+            {% endif %}
+
+            {% if prev_url %}
+              <a href="{{ prev_url }}">Résultats précédents</a>
+            {% endif %}
+
+            {% if next_url %}
+              <a href="{{ next_url }}">Résultats suivants</a>
             {% endif %}
 
        	 {%- endfor %}

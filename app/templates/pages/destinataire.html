@@ -7,15 +7,70 @@
  
     {% block corps %}
         <h1>{{destinataire.identite_destinataire}}</h1>
+        {% if destinataire.titre_destinataire %}
         <h3>{{destinataire.titre_destinataire}}</h3>
+        {% endif %}
+
+        {% if destinataire.identite_destinataire=="Jean Galéas Sforza" %}
+            <div class="view z-depth-1-half">
+                <img src="{{url_for('static', filename='images/portrait_Jean_Galeas_Sforza.jpg')}}" class="img-fluid" alt=""/>
+                    <a href="">
+                    <div class="mask rgba-white-light"></div>
+                    </a>
+            </div>
+        {% endif %}
+
+        {% if destinataire.identite_destinataire=="Catherine de Navarre" %}
+            <div class="view z-depth-1-half">
+                <img src="{{url_for('static', filename='images/Portrait_Catherine_de_Navarre.jpg')}}" class="img-fluid" alt=""/>
+                    <a href="">
+                    <div class="mask rgba-white-light"></div>
+                    </a>
+            </div>
+        {% endif %}
+
+        {% if destinataire.identite_destinataire=="Madeleine de France" %}
+            <div class="view z-depth-1-half">
+                <img src="{{url_for('static', filename='images/portrait_Madeleine_de_France.jpg')}}" class="img-fluid" alt=""/>
+                    <a href="">
+                    <div class="mask rgba-white-light"></div>
+                    </a>
+            </div>
+        {% endif %}
+
         <dl>
+            {% if destinataire.date_naissance %}
             <dt>Naissance</dt><dd>{{destinataire.date_naissance}}</dd>
+            {% endif %}
+            {% if destinataire.date_deces %}
             <dt>Décès</dt><dd>{{destinataire.date_deces}}</dd>
+            {% endif %}
             <dt>Lettre(s) reçue(s)</dt><ul>
                                             <li><a id="link" href="{{url_for('index_lettres')}}">{{lettres_recues}}</a></li>
                                         </ul>
+            {% if destinataire.lien_infos_destinataire %}
             <dt>Lien vers la biographie de Wikipedia</dt><dd><a id="link" href="{{destinataire.lien_infos_destinataire}}", target="blank">{{destinataire.lien_infos_destinataire}}</a></dd>
+            {% endif %}
         </dl>
+
+        {% if destinataire.identite_destinataire=="Chambre des Comptes de Paris" %}
+            <div class="view z-depth-1-half">
+                <img src="{{url_for('static', filename='images/Chambre_des_comptes_Paris.jpg')}}" class="img-fluid" alt=""/>
+                    <a href="">
+                    <div class="mask rgba-white-light"></div>
+                    </a>
+            </div>
+        {% endif %}
+
+        {% if destinataire.identite_destinataire=="Parlement de Paris" %}
+            <div class="view z-depth-1-half">
+                <img src="{{url_for('static', filename='images/parlement_Paris.jpg')}}" class="img-fluid" alt=""/>
+                    <a href="">
+                    <div class="mask rgba-white-light"></div>
+                    </a>
+            </div>
+        {% endif %}
+        
 
         <ul>
         <li><a id="link" href="{{url_for('index_lettres')}}">Retour à l'index des lettres recensés</a></li>

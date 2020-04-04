@@ -1,3 +1,5 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 #Import de Flask et de la fonction render_template depuis le 
 #module flask.
 #Import de la variable request pour récupérer des informations depuis le formulaire
@@ -6,13 +8,11 @@ from .app import app, db
 from sqlalchemy import or_, and_
 from sqlalchemy import distinct
 from flask_login import login_user, current_user, logout_user
+from flask_paginate import Pagination
 from .modeles.utilisateurs import User
 from .constantes import LETTRES_PAR_PAGE
 from flask import flash, redirect, request
 from .modeles.donnees import Authorship, Lettre, Correspondance, Destinataire, Institution_Conservation, Image_Numerisee
-
-#Nombre de résultats par page
-LETTRES_PAR_PAGES = 2
 
 #Chemin vers la page d'accueil
 
@@ -42,7 +42,7 @@ def index_dates():
 
 @app.route("/index_destinataires")
 def index_destinataires():
-	destinataires = Destinataire.query.with_entities(Destinataire.identite_destinataire).distinct().order_by(Destinataire.identite_destinataire).all()
+	destinataires = Destinataire.query.order_by(Destinataire.identite_destinataire).distinct().all()
 	return render_template("pages/index_destinataires.html", nom="Epistautograpy", destinataires=destinataires, destinataire=destinataire)
 
 @app.route("/index_contresignataires")
@@ -52,8 +52,8 @@ def index_contresignataires():
 
 @app.route("/index_institutions_conservations")
 def index_institutions_conservations():
-	institutions = Institution_Conservation.query.with_entities(Institution_Conservation.nom_institution_conservation).distinct().order_by(Institution_Conservation.nom_institution_conservation).all()
-	return render_template("pages/index_institutions_conservations.html", nom="Epistautograpy", institutions=institutions, institution_conservation=institution_conservation)
+	institutions = Institution_Conservation.query.order_by(Institution_Conservation.nom_institution_conservation).distinct().all()
+	return render_template("pages/index_institutions_conservations.html", nom="Epistautograpy", institutions=institutions, institution_conservation=institution)
 
 
 #Chemin vers les pages de contenu
@@ -138,9 +138,9 @@ def institution(id_institution_conservation):
 	#tables qui ont une clé étrangère correspondant au paramètre id_institution_conservation, pour récupérer
 	#les informations adéquates
 	unique_institution = Institution_Conservation.query.get(id_institution_conservation)
-	lettres_conservees = Lettre.query.filter(db.and_(Lettre.institution_id==Institution_Conservation.id_institution_conservation, Institution_Conservation.id_institution_conservation==id_institution_conservation)).all()
+	lettres_conservees = Lettre.query.filter(db.and_(Lettre.id_lettre==Lettre.id_lettre, Lettre.institution_id==Institution_Conservation.id_institution_conservation, Institution_Conservation.id_institution_conservation==id_institution_conservation)).order_by(Lettre.id_lettre).all()
 	
-	return render_template("pages/contresignataire.html", nom="Epistautograpy", institution=unique_institution, lettres=lettres_conservees, institution_conservation=institution_conservation)
+	return render_template("pages/institution.html", nom="Epistautograpy", institution=unique_institution, lettres_conservees=lettres_conservees, institution_conservation=institution)
 
 
 #Chemins vers pages dynamiques 
@@ -197,6 +197,8 @@ def recherche():
 	#  et qui nous permet d'éviter un if long en mettant les deux conditions entre parenthèses
 	motclef = request.args.get("keyword", None)
 	page = request.args.get("page", 1)
+
+
 	#Association d'une page de résultat à un numéro de page ; s'il n'y a pas de résultats
 	#retour automatique à la première page de résultats.
 	if isinstance(page, str) and page.isdigit():
@@ -207,21 +209,35 @@ def recherche():
 	# On crée une liste vide de résultat (qui restera vide par défaut
 	#   si on n'a pas de mot clé)
 	resultats = []
+
 	# On fait de même pour le titre de la page
 	titre = "Recherche"
 	if motclef:
-		resultats = Lettre.query.filter(or_(
-			Lettre.objet_lettre.like("%{}%".format(motclef))),
+		resultats = Lettre.query.filter(db.or_(
+			Lettre.id_lettre.like("%{}%".format(motclef)),
+			Lettre.objet_lettre.like("%{}%".format(motclef)),
 			Lettre.date_envoie_lettre.like("%{}%".format(motclef)),
-			Destinataire.type_destinataire.like("%{}%".format(motclef)),
-			Destinataire.titre_destinataire.like("%{}%".format(motclef)),
-			Destinataire.identite_destinataire.like("%{}%".format(motclef))
+			Lettre.lieu_ecriture_lettre.like("%{}%".format(motclef)),
+			Lettre.contresignataire_lettre.like("%{}%".format(motclef)),
+			Lettre.correspondance.any(Destinataire.type_destinataire.like("%{}%".format(motclef))),
+			Lettre.correspondance.any(Destinataire.titre_destinataire.like("%{}%".format(motclef))),
+			Lettre.correspondance.any(Destinataire.identite_destinataire.like("%{}%".format(motclef))),
+			Institution_Conservation.nom_institution_conservation.like("%{}%".format(motclef))
 
-			).paginate(page=page, per_page=LETTRES_PAR_PAGES)
+			)).paginate(page=page, per_page=LETTRES_PAR_PAGE)
+
+	#En créant la pagination, on crée des routes pour les pages précédentes et suivantes s'il y a plus de deux lettres dans les résultats
+		next_url = url_for('recherche', page=resultats.next_num) \
+			if resultats.has_next else None
+		prev_url = url_for('recherche', page=resultats.prev_num) \
+			if resultats.has_prev else None
 
 		titre = "Résultat pour la recherche `" + motclef + "`"
 
-		return render_template("pages/recherche.html", resultats=resultats, titre=titre, keyword=motclef)
+	else:
+		titre = "Résultat de la recherche"
+
+	return render_template("pages/recherche.html", resultats=resultats, titre=titre, keyword=motclef, next_url=next_url, prev_url=prev_url)
 
 
 @app.route('/rechercheavancee', methods=["POST", "GET"])

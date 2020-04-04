@@ -1,7 +1,8 @@
 #Page pour créer des transactions sécurisées
 from warnings import warn
 
-LETTRES_PAR_PAGE = 2
+#Nombre de résultats par page
+LETTRES_PAR_PAGE = 1
 SECRET_KEY = "JE SUIS UN SECRET !"
 
 if SECRET_KEY == "JE SUIS UN SECRET !":

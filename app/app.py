@@ -13,7 +13,7 @@ from flask_login import LoginManager
 #Import du module pour faire des transactions sécurisées
 from .constantes import SECRET_KEY
 
-#Import du package os permettant de faire des opérations liées au système.
+#Import du package os permettant de communqiuer avec les différents systèmes d'exploitation (Mac, Ubuntu, etc.).
 import os
 import os.path
 #Stockage du chemin du fichier courant
