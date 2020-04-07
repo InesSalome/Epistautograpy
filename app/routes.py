@@ -162,24 +162,27 @@ def formulaire():
 
 	if request.method=="POST":
 		#Lettre
-		date=request.form.get("Date", None)
-		lieu= request.form.get("Lieu", None)
-		contresignataire=request.form.get("Contresignataire", None)
-		langue=request.form.get("Langue", None)
-		pronom=request.form.get("Pronom", None)
-		cote=request.form.get("Cote", None)
-		statut=request.form.get("Statut", None)
+		date=request.form.get("date_envoie_lettre", None)
+		lieu= request.form.get("lieu_ecriture_lettre", None)
+		contresignataire=request.form.get("contresignataire_lettre", None)
+		langue=request.form.get("langue_lettre", None)
+		pronom=request.form.get("pronom_personnel_employe_lettre", None)
+		cote=request.form.get("cote_lettre", None)
+		statut=request.form.get("statut_lettre", None)
 		#Destinataire
-		type_destinataire=request.form.get("Type_Destinataire", None)
-		titre_destinataire=request.form.get("Titre_Destinataire", None)
-		identite=request.form.get("Identite_Destinataire", None)
+		type_destinataire=request.form.get("type_destinataire", None)
+		titre_destinataire=request.form.get("titre_destinataire", None)
+		identite=request.form.get("identite_destinataire", None)
 		#Institution
-		nom=request.form.get("Nom_Institution", None)
+		nom=request.form.get("nom_institution_conservation", None)
+		#Lettre_numérisée
+		url=request.form.get("url_image_numerisee", None)
 
-		id_lettre=Lettre.ajouter(date, lieu, contresignataire, langue, pronom,cote, statut)
+		id_lettre=Lettre.ajouter(date, lieu, contresignataire, langue, pronom, cote, statut)
 		id_destinataire=Destinataire.ajouter(type_destinataire, titre_destinataire, identite)
 		id_institution=Institution_Conservation.ajouter(nom)
-		Lettre.association_Destinataire_Lettre(id_destinataire, id_lettre)
+		id_image_numerisee=Image_Numerisee.ajouter(url)
+		Correspondance.association_Destinataire_Lettre(destinataire_id, lettre_id)
 		flash("Ajout réussi", "success")
 		return render_template("pages/formulaire.html")
 
@@ -193,12 +196,15 @@ def formulaire():
 
 @app.route("/recherche")
 def recherche():
+
+	# RECUPERATION DES PARAMETRES DE RECHERCHE INDIQUES PAR L'UTILISATEUR
 	# On utilise .get ici pour partager les résultats de recherche de manière simple
 	#  et qui nous permet d'éviter un if long en mettant les deux conditions entre parenthèses
+	# On stocke les mots clefs recherchés par l'utilisateur présents dans les arguments de l'URL
 	motclef = request.args.get("keyword", None)
+
+	# GESTION DE LA VALEUR DE PAGE COURANTE
 	page = request.args.get("page", 1)
-
-
 	#Association d'une page de résultat à un numéro de page ; s'il n'y a pas de résultats
 	#retour automatique à la première page de résultats.
 	if isinstance(page, str) and page.isdigit():
@@ -213,7 +219,7 @@ def recherche():
 	# On fait de même pour le titre de la page
 	titre = "Recherche"
 	if motclef:
-		resultats = Lettre.query.filter(db.or_(
+		resultats = Lettre.query.filter(or_(
 			Lettre.id_lettre.like("%{}%".format(motclef)),
 			Lettre.objet_lettre.like("%{}%".format(motclef)),
 			Lettre.date_envoie_lettre.like("%{}%".format(motclef)),
@@ -221,23 +227,15 @@ def recherche():
 			Lettre.contresignataire_lettre.like("%{}%".format(motclef)),
 			Lettre.correspondance.any(Destinataire.type_destinataire.like("%{}%".format(motclef))),
 			Lettre.correspondance.any(Destinataire.titre_destinataire.like("%{}%".format(motclef))),
-			Lettre.correspondance.any(Destinataire.identite_destinataire.like("%{}%".format(motclef))),
-			Institution_Conservation.nom_institution_conservation.like("%{}%".format(motclef))
+			Lettre.correspondance.any(Destinataire.identite_destinataire.like("%{}%".format(motclef))))
 
-			)).paginate(page=page, per_page=LETTRES_PAR_PAGE)
-
-	#En créant la pagination, on crée des routes pour les pages précédentes et suivantes s'il y a plus de deux lettres dans les résultats
-		next_url = url_for('recherche', page=resultats.next_num) \
-			if resultats.has_next else None
-		prev_url = url_for('recherche', page=resultats.prev_num) \
-			if resultats.has_prev else None
+			).paginate(page=page, per_page=LETTRES_PAR_PAGE)
 
 		titre = "Résultat pour la recherche `" + motclef + "`"
-
 	else:
 		titre = "Résultat de la recherche"
 
-	return render_template("pages/recherche.html", resultats=resultats, titre=titre, keyword=motclef, next_url=next_url, prev_url=prev_url)
+	return render_template("pages/recherche.html", titre=titre, keyword=motclef, resultats=resultats)
 
 
 @app.route('/rechercheavancee', methods=["POST", "GET"])
@@ -309,7 +307,7 @@ def rechercheavancee ():
 
 @app.route("/formulaire_lettre", methods=["GET", "POST"])
 def formulaire_lettre():
-	listeLettre = Lettre.query.all()
+	listeLettre = Lettre.query
 	if request.method == "POST" :
 		date=request.form.get("Date", None)
 		lieu=request.form.get("Lieu", None)
