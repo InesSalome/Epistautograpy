@@ -160,7 +160,7 @@ def formulaire():
 	listenominstitution = Institution_Conservation.query.with_entities(Institution_Conservation.nom_institution_conservation).distinct()
 	listeurlimage = Image_Numerisee.query.with_entities(Image_Numerisee.url_image_numerisee).distinct()
 
-	if request.method=="POST":
+	if request.method=="GET":
 		#Lettre
 		date=request.form.get("date_envoie_lettre", None)
 		lieu= request.form.get("lieu_ecriture_lettre", None)
@@ -194,7 +194,7 @@ def formulaire():
 		listenominstitution=listenominstitution, listeurlimage=listeurlimage)
 
 
-@app.route("/recherche")
+@app.route("/recherche", methods=["GET"])
 def recherche():
 
 	# RECUPERATION DES PARAMETRES DE RECHERCHE INDIQUES PAR L'UTILISATEUR
@@ -235,11 +235,14 @@ def recherche():
 	else:
 		titre = "Résultat de la recherche"
 
-	return render_template("pages/recherche.html", titre=titre, keyword=motclef, resultats=resultats)
+	return render_template("pages/recherche.html", nom="Epistautograpy", titre=titre, keyword=motclef, resultats=resultats)
 
 
-@app.route('/rechercheavancee', methods=["POST", "GET"])
+@app.route('/rechercheavancee', methods=["GET"])
 def rechercheavancee ():
+
+	keyword = request.args.get("keyword", None)
+	# GESTION DE LA VALEUR DE PAGE COURANTE
 	page = request.args.get("page", 1)
 
 	if isinstance(page, str) and page.isdigit():
@@ -247,62 +250,70 @@ def rechercheavancee ():
 	else:
 		page = 1
 
-	if request.method == "POST":
-
+	# On crée une liste vide de résultat (qui restera vide par défaut
+	# si on n'a pas de mot clé)
 		resultats = []
+		titre = "Recherche Avancée"
 
-		titre = "Recherche"
-
-		keyword="test"
-		question=Lettre.query
-
-		 #Lettre
-		date=request.form.get("Date", None)
-		lieu= request.form.get("Lieu", None)
-		contresignataire=request.form.get("Contresignataire", None)
-		langue=request.form.get("Langue", None)
-		pronom=request.form.get("Pronom", None)
-		cote=request.form.get("Cote", None)
-		statut=request.form.get("Statut", None)
+	# RECUPERATION DES PARAMETRES DE RECHERCHE INDIQUES PAR L'UTILISATEUR
+	# On utilise .get ici pour partager les résultats de recherche de manière simple
+	#  et qui nous permet d'éviter un if long en mettant les deux conditions entre parenthèses
+	# On stocke les mots clefs recherchés par l'utilisateur présents dans les arguments de l'URL
+	
+		#Lettre
+		numero=request.form.get("keyword", None)
+		date=request.form.get("keyword", None)
+		lieu= request.form.get("keyword", None)
+		objet=request.form.get("Keyword", None)
+		contresignataire=request.form.get("keyword", None)
+		langue=request.form.get("keyword", None)
+		pronom=request.form.get("keyword", None)
+		cote=request.form.get("keyword", None)
+		statut=request.form.get("keyword", None)
 		#Destinataire
-		type_destinataire=request.form.get("Type_Destinataire", None)
-		titre_destinataire=request.form.get("Titre_Destinataire", None)
-		identite=request.form.get("Identite_Destinataire", None)
+		type_destinataire=request.form.get("keyword", None)
+		titre_destinataire=request.form.get("keyword", None)
+		identite=request.form.get("keyword", None)
 		#Institution
-		nom=request.form.get("Nom_Institution", None)
+		nom_institution=request.form.get("keyword", None)
 
+		if numero :
+			resultats=Lettre.query.filter(Lettre.id_lettre.like("%{}%".format(numero)))
 		if date:
-			question=question.filter(Lettre.Date.like("%{}%".format(date)))
+			resultats=Lettre.query.filter(Lettre.date_envoie_lettre.like("%{}%".format(date)))
 		if lieu:
-			question=question.filter(Lettre.Lieu.like("%{}%".format(lieu)))
+			resultats=Lettre.query.filter(Lettre.lieu_ecriture_lettre.like("%{}%".format(lieu)))
+		if objet:
+			resultats=Lettre.query.filter(Lettre.objet_lettre.like("%{}%".format(objet))),
 		if contresignataire:
-			question=question.filter(Lettre.contresignataire.like("%{}%".format(contresignataire)))
+			resultats=Lettre.query.filter(Lettre.contresignataire_lettre.like("%{}%".format(contresignataire)))
 		if langue:
-			question=question.filter(Lettre.langue.like("%{}%".format(langue)))
+			resultats=Lettre.query.filter(Lettre.langue.like("%{}%".format(langue))).all()
 		if pronom:
-			question=question.filter(Lettre.pronom.like("%{}%".format(pronom)))
+			resultats=Lettre.query.filter(Lettre.pronom_personnel_employe_lettre.like("%{}%".format(pronom)))
 		if cote:
-			question=question.filter(Lettre.cote.like("%{}%".format(cote)))
+			resultats=Lettre.query.filter(Lettre.cote.like("%{}%".format(cote)))
 		if statut:
-			question=question.filter(Lettre.statut.like("%{}%".format(statut)))
+			resultats=Lettre.query.filter(Lettre.statut.like("%{}%".format(statut)))
 		if type_destinataire:
-			question=question.filter(Lettre.destinataires.any(Destinataire.type_destinatatire.like("%{}%".format(type_destinatatire))))
+			resultats=Lettre.query.filter(Lettre.correspondance.any(Destinataire.type_destinataire.like("%{}%".format(type_destinataire))))
 		if titre_destinataire:
-			question=question.filter(Lettre.destinataires.any(Destinataire.titre_destinataire.like)("%{}%".format(titre_destinatatire)))
+			resultats=Lettre.query.filter(Lettre.correspondance.any(Destinataire.titre_destinataire.like("%{}%".format(titre_destinatatire))))
 		if identite:
-			question=question.filter((Lettre.destinataires.any(Destinataire.identite_destinataire.like)("%{}%".format(identite))))
-		if nom:
-			question=question.filter((Lettre.institutions.any(Institution_Conservation.nom_institution_conservation.like)("%{}%".format(nom))))
-		question=question.paginate(page=page)
+			resultats=Lettre.query.filter((Lettre.correspondance.any(Destinataire.identite_destinataire.like("%{}%".format(identite)))))
+		if nom_institution:
+			resultats=Institution_Conservation.query.filter((Institution_Conservation.nom_institution_conservation.like("%{}%".format(nom))))
 
-		return render_template(
-			"pages/recherche.html",
-			resultats=question,
-			titre=titre,
-			keyword=keyword
-		)
+			resultats=resultats.paginate(page=page, per_page=LETTRES_PAR_PAGE)
 
-	return render_template("pages/rechercheavancee.html",nom="Epistautograpy")
+			titre = "Résultat pour votre recherche"
+		else:
+			titre = "Résultat de la recherche"
+
+		return render_template("pages/rechercheavancee.html", titre=titre, keyword=keyword, resultats=resultats)
+
+	return render_template("pages/rechercheavancee.html", nom="Epistautograpy")
+
 
 
 @app.route("/formulaire_lettre", methods=["GET", "POST"])

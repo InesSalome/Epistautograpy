@@ -4,102 +4,70 @@
 
 {% block corps %}
 
-<h1>Recherche avancée</h1>
+{% include "partials/rechercheavancee.html" %}
 
-<form class="form" method="GET" action="{{url_for('rechercheavancee')}}">
-    <div class="panel panel-info">
-        <div class="form-group row">
-            <label for="register-id_lettre" class="col-sm-2 col-form-label">Numéro de la lettre :</label>
-            <div class="col-sm-10">
-                <input type="text" class="form-control" id="register-id_lettre" name="id_lettre" placeholder="n°">
-            </div>
-        </div>
-        <div>
-            <div class="col-md-12">
-                <div class="col-md-12">
-                    <h3>Lettre</h3>
-                </div>
-            </div>
-            <div class="form-group row flex-v-center">
-                <div class="col-md-6 col-xs-12">
-                    <strong>Objet :</strong>
-                    <input type="text" name="objet_lettre" class="form-control" value="" />
-                </div>
-            </div>
-            <div class="form-group row flex-v-center"/>
-                <div class="col-md-6 col-xs-12">
-                    <strong>Type de Destinataire :</strong>
-                    <input type="text" name="type_destinataire" class="form-control" value="" />
-                </div>
-            <div class="form-group row flex-v-center">
-                <div class="col-md-6 col-xs-12">
-                    <strong>Titre du destinataire :</strong>
-                    <input type="text" name="titre_destinataire" class="form-control" value="" />
-                </div>
-            </div>
-            <div class="form-group row flex-v-center"></div>
-                <div class="col-md-6 col-xs-12">
-                    <strong>Nom du Destinataire :</strong>
-                    <input type="text" name="identite_destinataire" class="form-control" value="" />
-                </div>
-            </div>
-            <div class="form-group row flex-v-center">
-                <div class="col-md-6 col-xs-12">
-                    <strong>Contresignataire:</strong>
-                    <input type="text" name="contresignataire_lettre" class="form-control" value="" />
-                </div>
-            </div>
-                <div class="form-group row flex-v-center"></div>
-                <div class="col-md-6 col-xs-12">
-                    <strong>date :</strong>
-                    <input type="text" name="date_envoie_lettre" class="form-control" value="" />
-                </div>
-            </div>
-            <div class="form-group row flex-v-center">
-                <div class="col-md-6 col-xs-12">
-                    <strong>Lieu :</strong>
-                    <input type="text" name="lieu_ecriture_lettre" class="form-control" value="" />
-                </div>
-            </div>
-                <div class="form-group row flex-v-center"></div>
-                <div class="col-md-6 col-xs-12">
-                    <strong>Langue :</strong>
-                    <input type="text" name="langue_lettre" class="form-control" value="" />
-                </div>
-            </div>
-            <div class="form-group row flex-v-center">
-                <div class="col-md-6 col-xs-12">
-                    <strong>Pronom Personnel employé :</strong>
-                    <input type="text" name="pronom_personnel_employe_lettre" class="form-control" value="" />
-                </div>
-            </div>
-                <div class="form-group row flex-v-center"></div>
-                <div class="col-md-6 col-xs-12">
-                    <strong>Cote :</strong>
-                    <input type="text" name="cote_lettre" class="form-control" value="" />
-                </div>
-            </div>
-            <div class="form-group row flex-v-center">
-                <div class="col-md-6 col-xs-12">
-                    <strong>Statut :</strong>
-                    <input type="text" name="statut_lettre" class="form-control" value="" />
-                </div>      
-             </div>
-            </div>
+    {% if resultats %}
+        <h1>Il y a {{resultats.total}} résultats pour votre recherche :</h1>
+            <ul>
+                {% for numero in resultats.items %}
+                    <li><a id="link" href="{{url_for('lettre', id_lettre=lettre.id_lettre)}}">Lettre n°{{lettre.id_lettre}}</a></li>
+                {% endfor %}
+                {% for date in resultats.items %}
+                    <li><a id="link"  href="{{url_for('lettre', id_lettre=lettre.id_lettre)}}">Lettre n°{{lettre.id_lettre}}}}</a></li>
+                {% endfor %}    
+                {% for contresignataire in resultats.items %}
+                    <li><a id="link" href="{{url_for('lettre', id_lettre=lettre.id_lettre)}}">Lettre n°{{lettre.id_lettre}}"></a></li>
+                {% endfor %}
+                {% for langue in resultats.items %}
+                    <li><a id="link" href="{{url_for('lettre', id_lettre=lettre.id_lettre)}}">Lettre n°{{lettre.id_lettre}}"></a></li>
+                {% endfor %}
+                {% for pronom in resultats.items %}
+                    <li><a id="link" href="{{url_for('lettre', id_lettre=lettre.id_lettre)}}">Lettre n°{{lettre.id_lettre}}"></a></li>
+                {% endfor %}
+                {% for cote in resultats.items %}
+                    <li><a id="link" href="{{url_for('lettre', id_lettre=lettre.id_lettre)}}">Lettre n°{{lettre.id_lettre}}"></a></li>
+                {% endfor %}
+                {% for statut in resultats.items %}
+                    <li><a id="link" href="{{url_for('lettre', id_lettre=lettre.id_lettre)}}">Lettre n°{{lettre.id_lettre}}"></a></li>
+                {% endfor %}
+                {% for type_destinataire in resultats.items %}
+                    <li><a id="link" href="{{url_for('lettre', id_lettre=lettre.id_lettre)}}">Lettre n°{{lettre.id_lettre}}"></a></li>
+                {% endfor %}
+                {% for titre_destinataire in resultats.items %}
+                    <li><a id="link" href="{{url_for('lettre', id_lettre=lettre.id_lettre)}}">Lettre n°{{lettre.id_lettre}}"></a></li>
+                {% endfor %}
+                {% for identite in resultats.items %}
+                    <li><a id="link" href="{{url_for('lettre', id_lettre=lettre.id_lettre)}}">Lettre n°{{lettre.id_lettre}}"></a></li>
+                {% endfor %}
+                {% for nom_institution in resultats.items %}
+                    <li><a id="link" href="{{url_for('lettre', id_lettre=lettre.id_lettre)}}">Lettre n°{{lettre.id_lettre}}"></a></li>
+                {% endfor %}
+            </ul>
 
-            <div class="col-md-12">
-                <h3>Institution de Conservation</h3>
-            </div>
-            <div class="form-group row flex-v-center">
-                <div class="col-md-6 col-xs-12">
-                    <strong>Nom :</strong>
-                    <input type="text" name="nom_institution_conservation" class="form-control" value="" />
-                </div>
-            </div>
-    </div>
+            <nav aria-label="research-pagination">
+                 <ul class="pagination">
+                    {%- for page in resultats.iter_pages() %}
+                        {% if page %}
 
-    <div>
-        <button type="submit" class="btn btn-primary">Recherche avancée</button>
-    </div>
-</form>
+                        {% if page != resultats.page %}
+                            <li class="page-item">
+                                    <a id="link" class="page-link" href="{{ url_for('recherche', keyword=keyword, page=page) }}">{{page}}</a>
+                                </li>
+                        {% else %}
+                            <li class="page-item active disabled">
+                                <a id="link" class="page-link">{{page}} <span class="sr-only">(actuelle)</span></a>
+                            </li>
+                        {% endif %}
+
+                        {% else %}
+                            <li class="page-item disabled">
+                                <a id="link" class="page-link">...</a>
+                            </li>
+                        {% endif %}
+
+                    {%- endfor %}
+                </ul>
+            </nav>
+    {% endif %}
+
 {% endblock %}

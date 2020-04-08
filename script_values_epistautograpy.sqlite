@@ -19,10 +19,13 @@ INSERT INTO LETTRE(date_envoie_lettre,lieu_ecriture_lettre,objet_lettre,contresi
 VALUES ("1483-09-09","Amboise","Invitation à consentir au mariage de la reine Catherine de Navarre avec Jean, fils aîné d'Alain, sire d'Albret.","Mesme","Français","Je","E 543","Copie",1,"https://archive.org/details/lettresdecharle06chargoog/page/n19/mode/"),
 ("1483-09-09","Amboise","Invitation à consentir au mariage de la reine Catherine de Navarre avec Jean, fils aîné d'Alain, sire d'Albret.","Mesme","Français","Je","E 543","Copie",1,"https://archive.org/details/lettresdecharle06chargoog/page/n21/mode/"),
 ("1483-09-21","Amboise","Réponse à la dernière lettre écrite par le duc au roi Louis XI, promesse à s'employer à la pacification de l'Italie.","Charbonier","Latin","Nous","Potenze estere, corrispondenze diplomatiche","Orig.",2,"https://archive.org/details/lettresdecharle06chargoog/page/n25/mode/"),
-("1483-09-08","Amboise","Invitation à consentir au mariage de la reine Catherine de Navarre avec Jean, fils aîné d'Alain, sire d'Albret.","non mentionné","Français","Nous","E 543", "Orig.",1,"https://archive.org/details/lettresdecharle06chargoog/page/n17/mode/"),
+("1483-09-08","Amboise","Invitation à consentir au mariage de la reine Catherine de Navarre avec Jean, fils aîné d'Alain, sire d'Albret.","non_mentionné","Français","Nous","E 543", "Orig.",1,"https://archive.org/details/lettresdecharle06chargoog/page/n17/mode/"),
 ("1488-02-05","Poissy","Ordre de mettre incontinent à exécution les lettres portant donation au maréchal de Gié de la terre et seigneurie de Fronsac, en échange de la terre de Fontenay-le-Comte, qui est réunie au domaine royal.","Robineau","Français","Nous","reg. MM 759, p.790","Copie",3,"https://archive.org/details/lettresdecharle06chargoog/page/n293/mode/"),
 ("1486-10-05","Compiègne","Sauf-conduit a été accordé aux Suisses de l'armée du duc d'Autriche qui se sont rendus aux Français, et un secours de deux francs a été attribué à chacun d'eux. Idée que si ces hommes avaient préféré le service de la France à celui de l'Autriche, ils n'eussent pas été réduits à une telle extrémité.","Damont","Latin","Nous","Lettres des rois de France","Orig.",4,"https://archive.org/details/lettresdecharle07chargoog/page/n151/mode/2up"),
-("1487-10-08","Laval","Surséance de trois mois en faveur de Navarrot d'Anglade, seigneur de Colombiers, présentement occupé à la guerre en Basse-Bretagne.","Robineau","Français","Nous","X1a, 9319, fol.13","Orig.",3,"https://archive.org/details/lettresdecharle07chargoog/page/n245/mode/2up");
+("1487-10-08","Laval","Surséance de trois mois en faveur de Navarrot d'Anglade, seigneur de Colombiers, présentement occupé à la guerre en Basse-Bretagne.","Robineau","Français","Nous","X1a, 9319, fol.13","Orig.",3,"https://archive.org/details/lettresdecharle07chargoog/page/n245/mode/2up"),
+("1485_04_19","Rouen","Ordre a été donné de remettre le sieur de Villarnoul aux mains des commissaires chargés de lui faire son procès.","Mesme","Français","Nous","X2a, 48","Copie",3,"https://archive.org/details/lettresdecharle07chargoog/page/n89/mode/"),
+("1485_02_28","Paris","Désir que sa tante, mère du duc, reçoive le meilleur traitement possible.","Parent","Français","Nous","Potenze estere, Francia, filza Ia.","Orig",2,"https://archive.org/details/lettresdecharle06chargoog/page/n79/mode/"),
+("1484_08_02","Paris","Sur les plaintes de sa tante la duchesse de Milan, que l'on dit plus maltraitée qu'une esclave, envoie en ambassade de maître Jean Cloppet avec ordre de s'enquérir de l'état de la duchesse et de lui faire obtenir réparation.","non_mentionné","Français","Nous","Carteggio dei Principi.","Orig.",2,"https://archive.org/details/lettresdecharle06chargoog/page/n55/mode/");
 
 INSERT INTO IMAGE_NUMERISEE(url_image_numerisee,reference_bibliographique_image_numerisee, lettre_id)
 VALUES ("https://archive.org/details/lettresdecharle06chargoog/page/n19/mode/","Lettres de Charles VIII, roi de France, vol.1, Librairie Renouard, H. Laurens, 1898, p.6.",1),
@@ -31,7 +34,10 @@ VALUES ("https://archive.org/details/lettresdecharle06chargoog/page/n19/mode/","
 ("https://archive.org/details/lettresdecharle06chargoog/page/n17/mode/","Lettres de Charles VIII, roi de France, vol.1, Librairie Renouard, H. Laurens, 1898, p.4.",4),
 ("https://archive.org/details/lettresdecharle06chargoog/page/n293/mode/","Lettres de Charles VIII, roi de France, vol.1, Librairie Renouard, H. Laurens, 1898, p.283.",5),
 ("https://archive.org/details/lettresdecharle07chargoog/page/n151/mode/2up","Lettres de Charles VIII, roi de France, vol.1, Librairie Renouard, H. Laurens, 1898, p.137.",6),
-("https://archive.org/details/lettresdecharle07chargoog/page/n245/mode/2up","Lettres de Charles VIII, roi de France, vol.1, Librairie Renouard, H. Laurens, 1898, p.231.",7);
+("https://archive.org/details/lettresdecharle07chargoog/page/n245/mode/2up","Lettres de Charles VIII, roi de France, vol.1, Librairie Renouard, H. Laurens, 1898, p.231.",7),
+("https://archive.org/details/lettresdecharle07chargoog/page/n89/mode/","Lettres de Charles VIII, roi de France, vol.1, Librairie Renouard, H. Laurens, 1898, p.74.", 8),
+("https://archive.org/details/lettresdecharle06chargoog/page/n79/mode/","Lettres de Charles VIII, roi de France, vol.1, Librairie Renouard, H. Laurens, 1898, p.67.",9),
+("https://archive.org/details/lettresdecharle06chargoog/page/n55/mode/","Lettres de Charles VIII, roi de France, vol.1, Librairie Renouard, H. Laurens, 1898, p.43.",10);
 
 INSERT INTO CORRESPONDANCE(destinataire_id, lettre_id)
 VALUES (1,1),
@@ -40,4 +46,7 @@ VALUES (1,1),
 (4,4),
 (5,5),
 (6,6),
-(7,7);
+(7,7),
+(7,8),
+(3,9),
+(3,10);
