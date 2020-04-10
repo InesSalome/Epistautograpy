@@ -8,41 +8,12 @@
 
     {% if resultats %}
         <h1>Il y a {{resultats.total}} résultats pour votre recherche :</h1>
+
             <ul>
-                {% for numero in resultats.items %}
-                    <li><a id="link" href="{{url_for('lettre', id_lettre=lettre.id_lettre)}}">Lettre n°{{lettre.id_lettre}}</a></li>
-                {% endfor %}
-                {% for date in resultats.items %}
-                    <li><a id="link"  href="{{url_for('lettre', id_lettre=lettre.id_lettre)}}">Lettre n°{{lettre.id_lettre}}}}</a></li>
-                {% endfor %}    
-                {% for contresignataire in resultats.items %}
-                    <li><a id="link" href="{{url_for('lettre', id_lettre=lettre.id_lettre)}}">Lettre n°{{lettre.id_lettre}}"></a></li>
-                {% endfor %}
-                {% for langue in resultats.items %}
-                    <li><a id="link" href="{{url_for('lettre', id_lettre=lettre.id_lettre)}}">Lettre n°{{lettre.id_lettre}}"></a></li>
-                {% endfor %}
-                {% for pronom in resultats.items %}
-                    <li><a id="link" href="{{url_for('lettre', id_lettre=lettre.id_lettre)}}">Lettre n°{{lettre.id_lettre}}"></a></li>
-                {% endfor %}
-                {% for cote in resultats.items %}
-                    <li><a id="link" href="{{url_for('lettre', id_lettre=lettre.id_lettre)}}">Lettre n°{{lettre.id_lettre}}"></a></li>
-                {% endfor %}
-                {% for statut in resultats.items %}
-                    <li><a id="link" href="{{url_for('lettre', id_lettre=lettre.id_lettre)}}">Lettre n°{{lettre.id_lettre}}"></a></li>
-                {% endfor %}
-                {% for type_destinataire in resultats.items %}
-                    <li><a id="link" href="{{url_for('lettre', id_lettre=lettre.id_lettre)}}">Lettre n°{{lettre.id_lettre}}"></a></li>
-                {% endfor %}
-                {% for titre_destinataire in resultats.items %}
-                    <li><a id="link" href="{{url_for('lettre', id_lettre=lettre.id_lettre)}}">Lettre n°{{lettre.id_lettre}}"></a></li>
-                {% endfor %}
-                {% for identite in resultats.items %}
-                    <li><a id="link" href="{{url_for('lettre', id_lettre=lettre.id_lettre)}}">Lettre n°{{lettre.id_lettre}}"></a></li>
-                {% endfor %}
-                {% for nom_institution in resultats.items %}
-                    <li><a id="link" href="{{url_for('lettre', id_lettre=lettre.id_lettre)}}">Lettre n°{{lettre.id_lettre}}"></a></li>
-                {% endfor %}
-            </ul>
+                        {% for lettre in resultats.items %}
+                                <li><a id="link" href="{{url_for('lettre', id_lettre=lettre.id_lettre)}}">Lettre n°{{lettre.id_lettre}}</a></li>
+                        {% endfor %}
+                </ul>
 
             <nav aria-label="research-pagination">
                  <ul class="pagination">

@@ -10,15 +10,12 @@
     <nav class=" navbar navbar-light bg-light">
     <form class="form-inline">
         <a id="link" href="{{url_for('formulaire_lettre')}}" class="btn btn-sm btn-outline-secondary" type="button">Formulaire Lettre</a>
-        <a id="link" href="{{url_for('formulaire_date')}}"  class="btn btn-sm btn-outline-secondary" type="button">Formulaire Date</a>
         <a id="link" href="{{url_for('formulaire_destinataire')}}" class="btn btn-sm btn-outline-secondary" type="button">Formulaire Destinataire</a>
-        <a id="link" href="{{url_for('formulaire_contresignataire')}}" class="btn btn-sm btn-outline-secondary" type="button">Formulaire Contresignataire</a>
-        <a id="link" href="{{url_for('formulaire_institution')}}" class="btn btn-sm btn-outline-secondary" type="button">Formulaire Institution</a>
     </form>
     </nav>
 
 <h1>Formulaire Institution</h1>
-<form class="form dropdown " method="POST" action="{{url_for('formulaire_destinataire')}}">
+<form class="form dropdown " method="POST" action="{{url_for('formulaire_institution')}}">
     <div class="panel panel-info">
 
             <div class="col-md-12">
@@ -29,8 +26,8 @@
                     <strong>Nom* :</strong>
                     <input type="text" name="Nom" list="listenominstitution" class="form-control" value="" />
                     <datalist id="listenominstitution">
-                {% for institution in listenominstitution %}
-                    <option data-value="test" value="{institution_conservation.Nom}}">
+                {% for nom in listenominstitution %}
+                    <option data-value="test" value="{institution_conservation.nom}}">
                 {% endfor %}
                      </datalist>
                 </div>

@@ -9,10 +9,7 @@
 
     <nav class=" navbar navbar-light bg-light">
     <form class="form-inline">
-        <a id="link" href="{{url_for('formulaire_lettre')}}" class="btn btn-sm btn-outline-secondary" type="button">Formulaire Lettre</a>
-        <a id="link" href="{{url_for('formulaire_date')}}"  class="btn btn-sm btn-outline-secondary" type="button">Formulaire Date</a>
         <a id="link" href="{{url_for('formulaire_destinataire')}}" class="btn btn-sm btn-outline-secondary" type="button">Formulaire Destinataire</a>
-        <a id="link" href="{{url_for('formulaire_contresignataire')}}" class="btn btn-sm btn-outline-secondary" type="button">Formulaire Contresignataire</a>
         <a id="link" href="{{url_for('formulaire_institution')}}" class="btn btn-sm btn-outline-secondary" type="button">Formulaire Institution</a>
     </form>
     </nav>
@@ -24,12 +21,23 @@
             <div class="col-md-12">
                 <h4>Lettre</h4>
             </div>
+            <div class="span1"></div>
+                <div class="col-md-6 col-xs-12">
+                    <strong>Objet* :</strong>
+                    <input type="text" name="Objet" list="listeobjetlettre" class="form-control" value="" />
+                    <datalist id="listeobjetlettre">
+                {% for Objet in listeobjetlettre %}
+                    <option data-value="test" value="{{lettre.Objet}}">
+                {% endfor %}
+                     </datalist>
+                </div>
+            </div>
             <div class="form-group row flex-v-center">
                 <div class="col-md-6 col-xs-12">
                     <strong>Date* :</strong>
                     <input type="text" name="Date" list="listedatelettre" class="form-control" value="" />
                     <datalist id="listedatelettre">
-                {% for lettre in listedatelettre %}
+                {% for Date in listedatelettre %}
                     <option data-value="test" value="{{lettre.Date}}">
                 {% endfor %}
                      </datalist>
@@ -39,7 +47,7 @@
                     <strong>Lieu* :</strong>
                     <input type="text" name="Lieu" list="listelieulettre" class="form-control" value="" />
                     <datalist id="listelieulettre">
-                {% for lieu in listelieulettre %}
+                {% for Lieu in listelieulettre %}
                     <option data-value="test" value="{{lettre.Lieu}}">
                 {% endfor %}
                      </datalist>
@@ -50,7 +58,7 @@
                     <strong>Contresignataire* :</strong>
                     <input type="text" name="Contresignataire" list="listecontresignataire" class="form-control" value="" />
                     <datalist id="listecontresignataire">
-                {% for contresignataire in listecontresignataire %}
+                {% for Contresignataire in listecontresignataire %}
                     <option data-value="test" value="{{lettre.Contresignataire}}">
                 {% endfor %}
                      </datalist>
@@ -60,7 +68,7 @@
                     <strong>Langue* :</strong>
                     <input type="text" name="Langue" list="listelangue" class="form-control" value="" />
                     <datalist id="listelangue">
-                {% for langue in listelangue %}
+                {% for Langue in listelangue %}
                     <option data-value="test" value="{{lettre.Langue}}">
                 {% endfor %}
                      </datalist>
@@ -71,7 +79,7 @@
                     <strong>Pronom* :</strong>
                     <input type="text" name="Pronom" list="listepronom" class="form-control" value="" />
                     <datalist id="listepronom">
-                {% for pronom in listepronom %}
+                {% for Pronom in listepronom %}
                     <option data-value="test" value="{{lettre.Pronom}}">
                 {% endfor %}
                      </datalist>
@@ -81,7 +89,7 @@
                     <strong>Cote* :</strong>
                     <input type="text" name="Cote" list="listecote" class="form-control" value="" />
                     <datalist id="listecote">
-                {% for cote in listecote %}
+                {% for Cote in listecote %}
                     <option data-value="test" value="{{lettre.Cote}}">
                 {% endfor %}
                      </datalist>
@@ -92,7 +100,7 @@
                     <strong>Statut* :</strong>
                     <input type="text" name="Statut" list="listestatut" class="form-control" value="" />
                     <datalist id="listestatut">
-                {% for statut in listestatut %}
+                {% for Statut in listestatut %}
                     <option data-value="test" value="{{lettre.Statut}}">
                 {% endfor %}
                      </datalist>

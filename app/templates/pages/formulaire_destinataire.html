@@ -10,9 +10,6 @@
     <nav class=" navbar navbar-light bg-light">
     <form class="form-inline">
         <a id="link" href="{{url_for('formulaire_lettre')}}" class="btn btn-sm btn-outline-secondary" type="button">Formulaire Lettre</a>
-        <a id="link" href="{{url_for('formulaire_date')}}"  class="btn btn-sm btn-outline-secondary" type="button">Formulaire Date</a>
-        <a id="link" href="{{url_for('formulaire_destinataire')}}" class="btn btn-sm btn-outline-secondary" type="button">Formulaire Destinataire</a>
-        <a id="link" href="{{url_for('formulaire_contresignataire')}}" class="btn btn-sm btn-outline-secondary" type="button">Formulaire Contresignataire</a>
         <a id="link" href="{{url_for('formulaire_institution')}}" class="btn btn-sm btn-outline-secondary" type="button">Formulaire Institution</a>
     </form>
     </nav>
@@ -27,20 +24,20 @@
             <div class="form-group row flex-v-center">
                 <div class="col-md-6 col-xs-12">
                     <strong>Type de destinataire* :</strong>
-                    <input type="text" name="type_destinataire" list="listetypedestinataire" class="form-control" value="" />
+                    <input type="text" name="Type_destinataire" list="listetypedestinataire" class="form-control" value="" />
                     <datalist id="listetypedestinataire">
-                {% for destinataire in listetypedestinataire %}
-                    <option data-value="test" value="{{destinataire.type_destinataire}}">
+                {% for type in listetypedestinataire %}
+                    <option data-value="test" value="{{destinataire.type}}">
                 {% endfor %}
                      </datalist>
                 </div>
                 <div class="span1"></div>
                 <div class="col-md-6 col-xs-12">
                     <strong>Titre destinataire* :</strong>
-                    <input type="text" name="titre_destinataire" list="listetitredestinataire" class="form-control" value="" />
+                    <input type="text" name="Titre_destinataire" list="listetitredestinataire" class="form-control" value="" />
                     <datalist id="listetitredestinataire">
-                {% for destinataire in listetitredestinataire %}
-                    <option data-value="test" value="{{destinataire.titre_destinataire}}">
+                {% for titre in listetitredestinataire %}
+                    <option data-value="test" value="{{destinataire.titre}}">
                 {% endfor %}
                      </datalist>
                 </div>
@@ -48,10 +45,10 @@
             <div class="form-group row flex-v-center">
                 <div class="col-md-6 col-xs-12">
                     <strong>Identite* :</strong>
-                    <input type="text" name="Identite" list="listeidentitedestinataire" class="form-control" value="" />
+                    <input type="text" name="Identite_destinataire" list="listeidentitedestinataire" class="form-control" value="" />
                     <datalist id="llisteidentitedestinataire">
-                {% for destinataire in listeidentitedestinataire %}
-                    <option data-value="test" value="{{destinataire.Identite}}">
+                {% for identite in listeidentitedestinataire %}
+                    <option data-value="test" value="{{destinataire.identite}}">
                 {% endfor %}
                      </datalist>
                 </div>
