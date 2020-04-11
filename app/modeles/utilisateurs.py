@@ -45,7 +45,7 @@ class User(UserMixin, db.Model):
             erreurs.append("L'email fourni est vide")
         if not nom:
             erreurs.append("Le nom fourni est vide")
-        if not password or len(password) < 6:
+        if not motdepasse or len(motdepasse) < 6:
             erreurs.append("Le mot de passe fourni est vide ou trop court")
 
         # On vérifie que personne n'a utilisé cet email ou ce login

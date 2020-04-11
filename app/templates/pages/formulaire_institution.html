@@ -3,16 +3,12 @@
 {% block titre %}| Formulaire Institution{%endblock%}
 
 {% block corps %}
-    <div class="col-md-12 text-center">
+<div class="col-md-12 text-center">
     <a id="link" href="{{url_for('formulaire')}}"name="singlebutton" class="btn btn-primary" type="button">Formulaire d'ajout général</a>
-    </div>
-
-    <nav class=" navbar navbar-light bg-light">
-    <form class="form-inline">
-        <a id="link" href="{{url_for('formulaire_lettre')}}" class="btn btn-sm btn-outline-secondary" type="button">Formulaire Lettre</a>
-        <a id="link" href="{{url_for('formulaire_destinataire')}}" class="btn btn-sm btn-outline-secondary" type="button">Formulaire Destinataire</a>
-    </form>
-    </nav>
+    <a id="link" href="{{url_for('formulaire_lettre')}}" class="btn btn-sm btn-outline-secondary" type="button">Formulaire Lettre</a>
+    <a id="link" href="{{url_for('formulaire_destinataire')}}" class="btn btn-sm btn-outline-secondary" type="button">Formulaire Destinataire</a>
+    <a id="link" href="{{url_for('formulaire_institution')}}" class="btn btn-sm btn-outline-secondary" type="button">Formulaire Institution</a>
+</div>
 
 <h1>Formulaire Institution</h1>
 <form class="form dropdown " method="POST" action="{{url_for('formulaire_institution')}}">

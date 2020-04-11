@@ -4,8 +4,8 @@
 #module flask.
 #Import de la variable request pour récupérer des informations depuis le formulaire
 from flask import render_template, request, flash, redirect, url_for
-from .app import app, db
-from sqlalchemy import or_, and_
+from .app import app, db, login
+from sqlalchemy import or_, and_, update
 from sqlalchemy import distinct
 from flask_login import login_user, current_user, logout_user
 from flask_paginate import Pagination
@@ -61,7 +61,7 @@ def index_institutions_conservations():
 #Création d'une route avec l'identifiant associé à chaque lettre dans la 
 #base de données. On a conditionné le type de l'identifiant qui ne peut être
 #qu'un entier.
-@app.route("/lettre/<int:id_lettre>", methods=['GET', 'POST'])
+@app.route("/lettre/<int:id_lettre>")
 def lettre(id_lettre):
 
 	"""Création d'une page de résultat vers une lettre
@@ -80,7 +80,7 @@ def lettre(id_lettre):
 	
 	return render_template("pages/lettre.html", nom="Epistautograpy", lettre=unique_lettre, contresignataire=contresignataire, destinataire=destinataire, institution_conservation=institution_conservation, institution=institution, image_numerisee=image_numerisee)
 
-@app.route("/date/<date_envoie_lettre>", methods=['GET', 'POST'])
+@app.route("/date/<date_envoie_lettre>")
 def date(date_envoie_lettre):
 
 	"""Création d'une page de résultat depuis une date vers la lettre correspondante
@@ -94,7 +94,7 @@ def date(date_envoie_lettre):
 
 	return render_template("pages/date.html", nom="Epistautograpy", date=unique_date, lettres=lettres)
 
-@app.route("/destinataire/<int:id_destinataire>", methods=['GET', 'POST'])
+@app.route("/destinataire/<int:id_destinataire>")
 def destinataire(id_destinataire):
 
 	"""Création d'une page de résultat vers un destinataire
@@ -145,9 +145,10 @@ def institution(id_institution_conservation):
 
 #Chemins vers pages dynamiques 
 
+#La page est disponible à la fois pour les méthodes http GET et POST
 @app.route("/formulaire", methods=["GET", "POST"])
 def formulaire():
-	listeobjetlettre = Lettre.queru.with_entities(Lettre.objet_lettre).distinct()
+	listeobjetlettre = Lettre.query.with_entities(Lettre.objet_lettre).distinct()
 	listedatelettre = Lettre.query.with_entities(Lettre.date_envoie_lettre).distinct()
 	listelieulettre = Lettre.query.with_entities(Lettre.lieu_ecriture_lettre).distinct()
 	listecontresignataire = Lettre.query.with_entities(Lettre.contresignataire_lettre).distinct()
@@ -163,27 +164,46 @@ def formulaire():
 	if request.method=="POST":
 		
 		#Lettre
-		objet=request.form.get("Objet", None)
-		contresignataire=request.form.get("Contresignataire", None)
-		date=request.form.get("Date", None)
-		lieu= request.form.get("Lieu", None)
-		langue=request.form.get("Langue", None)
-		pronom=request.form.get("Pronom", None)
-		cote=request.form.get("Cote", None)
+		id_lettre, donnees_lettre = Lettre.creer(
+			objet=request.form.get("Objet", None),
+		contresignataire=request.form.get("Contresignataire", None),
+		date=request.form.get("Date", None),
+		lieu= request.form.get("Lieu", None),
+		langue=request.form.get("Langue", None),
+		pronom=request.form.get("Pronom", None),
+		cote=request.form.get("Cote", None),
 		statut=request.form.get("Statut", None)
-		#Destinataire
-		type_destinataire=request.form.get("Type_destinataire", None)
-		titre_destinataire=request.form.get("Titre_destinataire", None)
-		identite=request.form.get("Identite_destinataire", None)
-		#Institution
-		nom_institution=request.form.get("Nom_institution", None)
+		)
 
-		id_lettre=Lettre.ajouter(date, lieu, contresignataire, langue, pronom, cote, statut)
-		id_destinataire=Destinataire.ajouter(type_destinataire, titre_destinataire, identite)
-		id_institution=Institution_Conservation.ajouter(nom)
-		Correspondance.association_Destinataire_Lettre(destinataire_id, lettre_id)
-		flash("Ajout réussi", "success")
-		return render_template("pages/formulaire.html")
+		if id_lettre is True:
+			flash("Ajout réussi", "success")
+			return redirect(url_for("index_lettres"))
+		else:
+			flash("Les erreurs suivantes ont été rencontrées : " + ",".join(donnees_lettre), "error")
+			return render_template("pages/formulaire.html")
+
+		#Destinataire
+		id_destinataire, donnees_destinataire=Destinataire.creer(type_destinataire=request.form.get("Type_destinataire", None),
+		titre_destinataire=request.form.get("Titre_destinataire", None),
+		identite=request.form.get("Identite_destinataire", None)
+		)
+
+		if id_destinataire is True:
+			flash("Ajout réussi", "success")
+			return redirect(url_for("index_destinataires"))
+		else:
+			flash("Les erreurs suivantes ont été rencontrées : " + ",".join(donnees_destinataire), "error")
+			return render_template("pages/formulaire.html")
+
+		#Institution
+		id_instution_conservation, donnees_institution=Institution_Conservation.creer(nom_institution=request.form.get("Nom_institution", None))
+
+		if id_instution_conservation is True:
+			flash("Ajout réussi", "success")
+			return redirect(url_for("index_institutions_conservations"))
+		else:
+			flash("Les erreurs suivantes ont été rencontrées : " + ",".join(donnees_institution), "error")
+			return render_template("pages/formulaire.html")
 
 
 	return render_template("pages/formulaire.html", nom="Epistautograpy", listeobjetlettre=listeobjetlettre, listedatelettre=listedatelettre,
@@ -193,7 +213,7 @@ def formulaire():
 		listenominstitution=listenominstitution)
 
 
-@app.route("/recherche", methods=["GET"])
+@app.route("/recherche", methods=["GET","POST"])
 def recherche():
 
 	# RECUPERATION DES PARAMETRES DE RECHERCHE INDIQUES PAR L'UTILISATEUR
@@ -281,33 +301,35 @@ def rechercheavancee ():
 		nom_institution=request.form.get("Nom_institution", None)
 
 		if numero :
-			resultats=Lettre.query.filter(Lettre.id_lettre.like("%{}%".format(numero))).paginate(page=page, per_page=LETTRES_PAR_PAGE)
+			resultats=Lettre.query.filter(Lettre.id_lettre.like("%{}%".format(numero)))
 		if objet:
-			resultats=Lettre.query.filter(Lettre.objet_lettre.like("%{}%".format(objet))).paginate(page=page, per_page=LETTRES_PAR_PAGE)
+			resultats=Lettre.query.filter(Lettre.objet_lettre.like("%{}%".format(objet)))
 		if contresignataire:
-			resultats=Lettre.query.filter(Lettre.contresignataire_lettre.like("%{}%".format(contresignataire))).paginate(page=page, per_page=LETTRES_PAR_PAGE)
+			resultats=Lettre.query.filter(Lettre.contresignataire_lettre.like("%{}%".format(contresignataire)))
 		if date:
-			resultats=Lettre.query.filter(Lettre.date_envoie_lettre.like("%{}%".format(date))).paginate(page=page, per_page=LETTRES_PAR_PAGE)
+			resultats=Lettre.query.filter(Lettre.date_envoie_lettre.like("%{}%".format(date)))
 		if lieu:
-			resultats=Lettre.query.filter(Lettre.lieu_ecriture_lettre.like("%{}%".format(lieu))).paginate(page=page, per_page=LETTRES_PAR_PAGE)
+			resultats=Lettre.query.filter(Lettre.lieu_ecriture_lettre.like("%{}%".format(lieu)))
 		if langue:
-			resultats=Lettre.query.filter(Lettre.langue_lettre.like("%{}%".format(langue))).paginate(page=page, per_page=LETTRES_PAR_PAGE)
+			resultats=Lettre.query.filter(Lettre.langue_lettre.like("%{}%".format(langue)))
 		if pronom:
-			resultats=Lettre.query.filter(Lettre.pronom_personnel_employe_lettre.like("%{}%".format(pronom))).paginate(page=page, per_page=LETTRES_PAR_PAGE)
+			resultats=Lettre.query.filter(Lettre.pronom_personnel_employe_lettre.like("%{}%".format(pronom)))
 		if cote:
-			resultats=Lettre.query.filter(Lettre.cote_lettre.like("%{}%".format(cote))).paginate(page=page, per_page=LETTRES_PAR_PAGE)
+			resultats=Lettre.query.filter(Lettre.cote_lettre.like("%{}%".format(cote)))
 		if statut:
-			resultats=Lettre.query.filter(Lettre.statut_lettre.like("%{}%".format(statut))).paginate(page=page, per_page=LETTRES_PAR_PAGE)
+			resultats=Lettre.query.filter(Lettre.statut_lettre.like("%{}%".format(statut)))
 		if type_destinataire:
-			resultats=Lettre.query.filter(Lettre.correspondance.any(Destinataire.type_destinataire.like("%{}%".format(type_destinataire)))).paginate(page=page, per_page=LETTRES_PAR_PAGE)
+			resultats=Lettre.query.filter(Lettre.correspondance.any(Destinataire.type_destinataire.like("%{}%".format(type_destinataire))))
 		if titre_destinataire:
-			resultats=Lettre.query.filter(Lettre.correspondance.any(Destinataire.titre_destinataire.like("%{}%".format(titre_destinatatire)))).paginate(page=page, per_page=LETTRES_PAR_PAGE)
+			resultats=Lettre.query.filter(Lettre.correspondance.any(Destinataire.titre_destinataire.like("%{}%".format(titre_destinatatire))))
 		if identite:
-			resultats=Lettre.query.filter((Lettre.correspondance.any(Destinataire.identite_destinataire.like("%{}%".format(identite))))).paginate(page=page, per_page=LETTRES_PAR_PAGE)
+			resultats=Lettre.query.filter((Lettre.correspondance.any(Destinataire.identite_destinataire.like("%{}%".format(identite)))))
 		if nom_institution:
-			resultats=Institution_Conservation.query.filter((Institution_Conservation.nom_institution_conservation.like("%{}%".format(nom)))).paginate(page=page, per_page=LETTRES_PAR_PAGE)
+			resultats=Institution_Conservation.query.filter((Institution_Conservation.nom_institution_conservation.like("%{}%".format(nom_institution))))
 
-		return render_template("pages/recherche.html", titre=titre, keyword=keyword, resultats=resultats)
+		resultats = resultats.paginate(page=page)
+
+		return render_template("pages/recherche.html", titre=titre, keyword=keyword, resultats=resultats, page=page)
 
 	return render_template("pages/rechercheavancee.html", nom="Epistautograpy")
 

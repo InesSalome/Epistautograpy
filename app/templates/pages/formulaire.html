@@ -4,18 +4,12 @@
 
 {% block corps %}
 
-    <div class="col-md-12 text-center">
+<div class="col-md-12 text-center">
     <a id="link" href="{{url_for('formulaire')}}"name="singlebutton" class="btn btn-primary" type="button">Formulaire d'ajout général</a>
-    </div>
-
-    <nav class=" navbar navbar-light bg-light">
-    <form class="form-inline">
-        <a id="link" href="{{url_for('formulaire_lettre')}}" class="btn btn-sm btn-outline-secondary" type="button">Formulaire Lettre</a>
-        <a id="link" href="{{url_for('formulaire_destinataire')}}" class="btn btn-sm btn-outline-secondary" type="button">Formulaire Destinataire</a>
-        <a id="link" href="{{url_for('formulaire_institution')}}" class="btn btn-sm btn-outline-secondary" type="button">Formulaire Institution</a>
-    </form>
-    </nav>
-
+    <a id="link" href="{{url_for('formulaire_lettre')}}" class="btn btn-sm btn-outline-secondary" type="button">Formulaire Lettre</a>
+    <a id="link" href="{{url_for('formulaire_destinataire')}}" class="btn btn-sm btn-outline-secondary" type="button">Formulaire Destinataire</a>
+    <a id="link" href="{{url_for('formulaire_institution')}}" class="btn btn-sm btn-outline-secondary" type="button">Formulaire Institution</a>
+</div>
 
 
 <h1>Formulaire</h1>
@@ -27,12 +21,12 @@
                     <h4>Lettre</h4>
                 </div>
             </div>
-            <div class="span1"/>
+            <div class="form-group row flex-v-center">
                 <div class="col-md-6 col-xs-12">
                     <strong>Objet* :</strong>
                     <select type="text" name="Objet" list="listeobjetlettre" class="form-control" value="" >
                         {% for Objet in listeobjetlettre %}
-                            <option value="{{ lettre.Objet }}">{{ lettre.Objet }}</option>
+                            <option value="{{ Objet.objetlettre }}">{{ Objet.objetlettre }}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -42,16 +36,17 @@
                     <strong>Date* :</strong>
                     <select type="text" class="form-control" name="Date" list="listedatelettre" value="">
                         {% for Date in listedatelettre %}
-                            <option value="{{lettre.Date}}">{{lettre.Date}}</option>
+                            <option value="{{Date.date_envoie_lettre}}">{{Date.date_envoie_lettre}}</option>
                         {% endfor %}
                     </select>
                 </div>
-                <div class="span1"/>
+            </div>
+            <div class="form-group row flex-v-center">
                 <div class="col-md-6 col-xs-12">
                     <strong>Lieu* :</strong>
                     <select type="text" name="lieu" list="listelieulettre" class="form-control" value="" >
                         {% for Lieu in listelieulettre %}
-                            <option value="{{ lettre.Lieu }}">{{ lettre.Lieu }}</option>
+                            <option value="{{ Lieu.lieu_ecriture_lettre }}">{{ Lieu.lieu_ecriture_lettre }}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -61,16 +56,17 @@
                     <strong>Contresignataire* :</strong>
                     <select type="text" name="Contresignataire" list="listecontresignataire" class="form-control" value="">
                         {% for Contresignataire in listecontresignataire %}
-                            <option value="{{ lettre.Contresignataire }}">{{ lettre.Contresignataire }}</option>
+                            <option value="{{ Contresignataire.contresignataire_lettre }}">{{ Contresignataire.contresignataire_lettre }}</option>
                         {% endfor %}
                     </select>
                 </div>
-                <div class="span1"></div>
+            </div>
+            <div class="form-group row flex-v-center">
                 <div class="col-md-6 col-xs-12">
                     <strong>Langue* :</strong>
                     <select type="text" name="Langue" list="listelangue" class="form-control" value="" >
                         {% for Langue in listelangue %}
-                            <option value="{{ lettre.Langue }}">{{ lettre.Langue }}</option>
+                            <option value="{{ Langue.langue_lettre }}">{{ Langue.langue_lettre }}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -80,16 +76,17 @@
                     <strong>Pronom* :</strong>
                     <select type="text" name="Pronom" list="listepronom" class="form-control" value="" >
                         {% for Pronom in listepronom %}
-                            <option value="{{ lettre.Pronom }}">{{ lettre.Pronom }}</option>
+                            <option value="{{ Pronom.pronom_personnel_employe_lettre }}">{{ Pronom.pronom_personnel_employe_lettre }}</option>
                         {% endfor %}
                     </select>
                 </div>
-                <div class="span1"></div>
+            </div>
+            <div class="form-group row flex-v-center">
                 <div class="col-md-6 col-xs-12">
                     <strong>Cote* :</strong>
                     <select type="text" name="Cote" list="listecote" class="form-control" value="" >
                         {% for Cote in listecote %}
-                            <option value="{{ lettre.Cote }}">{{ lettre.Cote }}</option>
+                            <option value="{{ Cote.cote_lettre }}">{{ Cote.cote_lettre }}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -99,7 +96,7 @@
                     <strong>Statut* :</strong>
                     <select type="text" name="Statut" list="listestatut" class="form-control" value="" >
                         {% for Statut in listestatut %}
-                            <option value="{{ lettre.Statut }}">{{ lettre.Statut }}</option>
+                            <option value="{{ Statut.statut_lettre }}">{{ Statut.statut_lettre }}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -112,12 +109,12 @@
                     <h4>Destinataire</h4>
                 </div>
             </div>
-                <div class="span1"></div>
+            <div class="form-group row flex-v-center">
                 <div class="col-md-6 col-xs-12">
                     <strong>Type de destinataire* :</strong>
                     <select type="text" name="Type_destinataire" list="listetypedestinataire" class="form-control" value="" >
                         {% for type in listetypedestinataire %}
-                            <option value="{{ destinataire.type }}">{{ destinataire.type }}</option>
+                            <option value="{{ type.type_destinataire }}">{{ type.type_destinataire }}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -127,16 +124,17 @@
                     <strong>Titre destinataire* :</strong>
                     <select type="text" name="Titre_destinataire" list="listetitredestinataire" class="form-control" value="" >
                         {% for titre in listetitredestinataire %}
-                            <option value="{{ destinataire.titre }}">{{ destinataire.titre }}</option>
+                            <option value="{{ titre.titre_destinataire }}">{{ titre.titre_destinataire }}</option>
                         {% endfor %}
                     </select>
                 </div>
-                <div class="span1"></div>
+            </div>
+            <div class="form-group row flex-v-center">
                 <div class="col-md-6 col-xs-12">
                     <strong>Identité* :</strong>
                     <select type="text" name="Identité_destinataire" list="listeidentitedestinataire" class="form-control" value="">
                         {% for identite in listeidentitedestinataire %}
-                            <option value="{{ destinataire.identite }}">{{ destinataire.identite }}</option>
+                            <option value="{{ identite.identite_destinataire }}">{{ identite.identite_destinataire }}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -154,19 +152,20 @@
                     <strong>Nom* :</strong>
                     <select type="text" name="Nom_institution" list="listenominstitution" class="form-control" value="">
                         {% for nom in listenominstitution %}
-                            <option value="{{ institution_conservation.Nom }}">{{ institution_conservation.nom }}</option>
+                            <option value="{{ nom.nom_institution_conservation }}">{{ nom.nom_institution_conservation }}</option>
                         {% endfor %}
                     </select>
                 </div>
             </div>
         </div>
-    </div>
     
     <div>
         <p>* Obligatoire pour la validation du formulaire</p>
     </div>
     <div>
         <button type="submit" class="btn btn-primary">Ajouter</button>
+    </div>
+
     </div>
 </form>
 {% endblock %}
