@@ -1,4 +1,4 @@
-#titre Epistautograpy
+# Epistautograpy
 
 Epistautograpy est une application web permettant de naviguer dans une collection de lettres de Charles VIII *via* des recherches simples ou à facette. Elle s'inscrit dans une étude sur le rôle du contreseing et de l'autographie dans les lettres de Charles VIII, mais aussi l'éclairage que le numérqiue peut apporter à ces analyses. Elle a été réalisée par Gwenaëlle Patat dans le cadre du Master 2 de l'École des Chartes "Technologies Numériques appliquées à l'Histoire", selon les consignes suivantes : 
 
@@ -30,7 +30,7 @@ Epistautograpy est une application web permettant de naviguer dans une collectio
 >Le devoir sera à rendre sous la forme d'un repository git, dont la gouvernance sera transférée, en fin de devoir, à l'organisation TNAH-Chartes. Tout retard équivaudra à 2 points en moins par jour.
 
 
-##titre Description des fonctionnalités de l'application
+## Description des fonctionnalités de l'application
 
 Epistautograpy permet de consulter des lettres de Charles VIII grâce à des recherches simples ou avancées. Les filtres ont été pensés pour pouvoir mieux visualiser quelles lettres ont été contresignées par quel secrétaire, mais aussi quel destinatire est le plus sollicité, à quelle date, etc. L'application propose donc l'accès à :
 
@@ -47,7 +47,7 @@ __Développement du projet__
   Ce projet a été développé grâce au langage de programmation python3 et au framework d'application web Flask. Il s’appuie sur une base de données réalisée avec les logiciels MySQLWorkbench et DB Browser for SQLite. Le graphisme de l’application a été réalisé grâce à Bootstrap.
 
 
-##titre Comment lancer Epistautograpy ?
+## Comment lancer Epistautograpy ?
 
 * Installer Python3
 * Cloner ce dépôt Git : git clone https://github.com/InesSalome/Epistautograpy.git; rentrer dedans
