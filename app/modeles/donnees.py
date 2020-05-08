@@ -58,6 +58,50 @@ class Destinataire(db.Model) :
 	lien_infos_destinataire = db.Column(db.Text)
 	correspondance = db.relationship("Lettre", secondary="correspondance", backref="destinataire", lazy="dynamic")
 
+	@staticmethod
+	def ajout_destinataire(type_destinataire, titre, identite):
+		"""
+		Rajout de données via le formulaire.
+		S'il y a une erreur, la fonction renvoie False suivi d'une liste d'erreur.
+		Sinon, elle renvoie True et les données sont enregistrées dans la base.
+		:param type: type de destinataire, institution ou noblesse
+		:type type: string
+		:param titre: titre assigné à un destinataire issu de la noblesse
+		:type titre: string
+		:param identite: nom du destinataire ou de l'institution à qui s'adresse la lettre
+		:type identite: string
+		"""
+
+		# Définition des paramètres obligatoires : s'ils manquent, cela crée une liste d'erreurs
+		erreurs = []
+		if not type_destinataire:
+			erreurs.append("Le champ type de destinataire est vide")
+		if not identite:
+			erreurs.append("Le champ identite est vide")
+		if type != "institution" or statut != "noblesse":
+			erreurs.append(("Le champ identite est vide ou ne correspond pas aux données attendues")
+
+		# Si on a au moins une erreur
+		if len(erreurs) > 0 :
+			return False, erreurs
+
+		# On crée une nouvelle lettre dans la base Lettre
+		new_destinataire = Destinataire(
+			type_destinataire=type_destinataire,
+			titre_destinataire=titre,
+			identite_destinataire=identite
+		)
+
+		try:
+			# On l'ajoute au transport vers la base de données
+			db.session.add(new_destinataire)
+			# On envoie le paquet
+			db.session.commit()
+			return( True, new_destinataire)
+
+		except Exception as erreur:
+			return False, [str(erreur)]
+
 	def to_jsonapi_dict(self):
 		"""
 		It ressembles a little JSON API format but it is not completely compatible
@@ -93,6 +137,40 @@ class Institution_Conservation(db.Model) :
 	nom_institution_conservation = db.Column(db.String(45))
 	latitude_institution_conservation = db.Column(db.Float)
 	longitude_institution_conservation = db.Column(db.Float)
+
+	@staticmethod
+	def ajout_institution(nom):
+		"""
+		Rajout de données via le formulaire.
+		S'il y a une erreur, la fonction renvoie False suivi d'une liste d'erreur.
+		Sinon, elle renvoie True et les données sont enregistrées dans la base.
+		:param nom: nom de l'institution
+		:type nom: string
+		"""
+
+		# Définition des paramètres obligatoires : s'ils manquent, cela crée une liste d'erreurs
+		erreurs = []
+		if not nom:
+			erreurs.append("Le champ nom est vide")
+
+		# Si on a au moins une erreur
+		if len(erreurs) > 0:
+			return False, erreurs
+
+		# On crée une nouvelle lettre dans la base Lettre
+		new_institution = Institution_Conservation(
+			nom_institution_conservation=nom
+		)
+
+		try:
+			# On l'ajoute au transport vers la base de données
+			db.session.add(new_institution)
+			# On envoie le paquet
+			db.session.commit()
+			return( True, new_institution)
+
+		except Exception as erreur:
+			return False, [str(erreur)]
 
 	def to_jsonapi_dict(self):
 		"""
@@ -135,6 +213,77 @@ class Lettre(db.Model) :
 	lien_image_lettre = db.Column(db.Text)
 	authorships = db.relationship("User", secondary="authorship", backref="lettre", lazy="dynamic")
 	correspondance = db.relationship("Destinataire", secondary="correspondance", backref="lettre", lazy="dynamic")
+
+	@staticmethod
+	def ajout_lettre(objet, contresignataire, date, lieu, langue, pronom, cote, statut):
+		"""
+		Rajout de données via le formulaire.
+		Si il y a une erreur, la fonction renvoie False suivi d'une liste d'erreur.
+		Sinon, elle renvoie True et les données sont enregistrées dans la base.
+		:param objet: Objet de la lettre
+		:type objet: string
+		:param contresignataire: Nom du contresigataire de la lettre
+		:type contresignataire: string
+		:param date: date d'envoie de la lettre
+		:type date: string
+		:param lieu: lieu d'envoie de la lettre
+		:type lieu: string
+		:param langue: langue d'écriture de la lettre
+		:type langue: string
+		:param pronom: pronom personnel employé dans la lettre
+		:type lieu: string
+		:param cote: cote de la lettre
+		:type lieu: string
+		:param statut: statut de la lettre, originale ou copie
+		:type lieu: string
+		"""
+
+		# Définition des paramètres obligatoires : s'ils manquent, cela crée une liste d'erreurs
+		erreurs = []
+		if not contresigataire:
+			erreurs.append("Le champ contresignataire est vide")
+		if not date:
+			erreurs.append("Le champ date est vide")
+		if not lieu:
+			erreurs.append("Le champ lieu est vide")
+		if not cote:
+			erreurs.append("Le champ cote est vide")
+		if not statut or statut != "orig." or statut != "copie":
+			erreurs.append(("Le champ statut est vide ou ne correspond pas aux données attendues")
+
+		# Si on a au moins une erreur
+		if len(erreurs) > 0 :
+			return False, erreurs
+
+		# On vérifie que la lettre n'a pas déjà été enregistrée
+		exemplaire_lettre = Lettre.query.filter(
+			db.or_(Lettre.date_envoie_lettre == date, Lettre.cote_lettre == cote)
+		).count()
+		if exemplaire_lettre > 0:
+			erreurs.append("La lettre a déjà été renseignée dans notre base de données")
+
+		# On crée une nouvelle lettre dans la base Lettre
+		new_lettre = Lettre(
+			objet_lettre=objet,
+			contresignataire_lettre=contresignataire,
+			date_envoie_lettre=date,
+			lieu_ecriture_lettre=lieu,
+			langue_lettre=langue,
+			pronom_personnel_employe_lettre=pronom,
+			cote_lettre=cote,
+			statut_lettre=statut
+		)
+
+		try:
+			# On l'ajoute au transport vers la base de données
+			db.session.add(new_lettre)
+			# On envoie le paquet
+			db.session.commit()
+			return( True, new_lettre)
+
+		except Exception as erreur:
+			return False, [str(erreur)]
+
 
 	def to_jsonapi_dict(self):
 		"""

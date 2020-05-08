@@ -161,18 +161,19 @@ def formulaire():
 	listeidentitedestinataire = Destinataire.query.with_entities(Destinataire.identite_destinataire).distinct()
 	listenominstitution = Institution_Conservation.query.with_entities(Institution_Conservation.nom_institution_conservation).distinct()
 
+	#Une fois le formulaire envoyé, on passe en méthode http POST
 	if request.method=="POST":
-		
-		#Lettre
-		id_lettre, donnees_lettre = Lettre.creer(
+
+		# On applique la fonction ajout_lettre définie dans le fichier donnees.py
+		id_lettre, donnees_lettre = Lettre.ajout_lettre(
 			objet=request.form.get("Objet", None),
-		contresignataire=request.form.get("Contresignataire", None),
-		date=request.form.get("Date", None),
-		lieu= request.form.get("Lieu", None),
-		langue=request.form.get("Langue", None),
-		pronom=request.form.get("Pronom", None),
-		cote=request.form.get("Cote", None),
-		statut=request.form.get("Statut", None)
+			contresignataire=request.form.get("Contresignataire", None),
+			date=request.form.get("Date", None),
+			lieu= request.form.get("Lieu", None),
+			langue=request.form.get("Langue", None),
+			pronom=request.form.get("Pronom", None),
+			cote=request.form.get("Cote", None),
+			statut=request.form.get("Statut", None)
 		)
 
 		if id_lettre is True:
@@ -182,10 +183,11 @@ def formulaire():
 			flash("Les erreurs suivantes ont été rencontrées : " + ",".join(donnees_lettre), "error")
 			return render_template("pages/formulaire.html")
 
-		#Destinataire
-		id_destinataire, donnees_destinataire=Destinataire.creer(type_destinataire=request.form.get("Type_destinataire", None),
-		titre_destinataire=request.form.get("Titre_destinataire", None),
-		identite=request.form.get("Identite_destinataire", None)
+		## On applique la fonction ajout_destinataire définie dans le fichier donnees.py
+		id_destinataire, donnees_destinataire=Destinataire.ajout_destinataire(
+			type_destinataire=request.form.get("Type_destinataire", None),
+			titre_destinataire=request.form.get("Titre_destinataire", None),
+			identite=request.form.get("Identite_destinataire", None)
 		)
 
 		if id_destinataire is True:
@@ -195,8 +197,9 @@ def formulaire():
 			flash("Les erreurs suivantes ont été rencontrées : " + ",".join(donnees_destinataire), "error")
 			return render_template("pages/formulaire.html")
 
-		#Institution
-		id_instution_conservation, donnees_institution=Institution_Conservation.creer(nom_institution=request.form.get("Nom_institution", None))
+		# On applique la fonction ajout_institution définie dans le fichier donnees.py
+		id_instution_conservation, donnees_institution=Institution_Conservation.ajout_institution(
+			nom_institution=request.form.get("Nom_institution", None))
 
 		if id_instution_conservation is True:
 			flash("Ajout réussi", "success")
@@ -341,35 +344,51 @@ def formulaire_lettre():
 	listeLettre = Lettre.query.all()
 	listeInstitution = Institution_Conservation.query.all()
 
-	if request.method == "POST" :
-		date=request.form.get("Date", None)
-		lieu=request.form.get("Lieu", None)
-		objet=request.form.get("Objet", None)
-		contresignataire=request.form.get("Contresignataire", None)
-		langue=request.form.get("Langue", None)
-		pronom=request.form.get("Pronom", None)
-		cote=request.form.get("Cote", None)
-		statut=request.form.get("Statut", None)
-		recup_institution = Institution_Conservation.query.filter(Institution_Conservation.nom_institution_conservation == institution_id).first()
+	#Une fois le formulaire envoyé, on passe en méthode http POST
+	if request.method=="POST":
 
-		Lettre.ajouter(date, lieu, objet, contresignataire, langue, pronom, cote, statut, recup.institution_id)
-		flash("Ajout réussi", "success")
-		return render_template('pages/formulaire_lettre.html', nom="Epistautograpy", listeLettre=listeLettre, listeInstitution=listeInstitution)
+		# On applique la fonction ajout_lettre définie dans le fichier donnees.py
+		id_lettre, donnees_lettre = Lettre.ajout_lettre(
+			objet=request.form.get("Objet", None),
+			contresignataire=request.form.get("Contresignataire", None),
+			date=request.form.get("Date", None),
+			lieu= request.form.get("Lieu", None),
+			langue=request.form.get("Langue", None),
+			pronom=request.form.get("Pronom", None),
+			cote=request.form.get("Cote", None),
+			statut=request.form.get("Statut", None)
+		)
 
-	return render_template('pages/formulaire_lettre.html', nom="Epistautograpy", listeLettre=listedatelettre, listeInstitution=listeInstitution)
+		if id_lettre is True:
+			flash("Ajout réussi", "success")
+			return redirect(url_for("index_lettres"))
+		else:
+			flash("Les erreurs suivantes ont été rencontrées : " + ",".join(donnees_lettre), "error")
+			return render_template('pages/formulaire_lettre.html', nom="Epistautograpy", listeLettre=listeLettre, listeInstitution=listeInstitution)
+
+	return render_template('pages/formulaire_lettre.html', nom="Epistautograpy", listeLettre=listeLettre, listeInstitution=listeInstitution)
 
 
 @app.route("/formulaire_destinataire", methods=["GET", "POST"])
 def formulaire_destinataire():
 	listeDestinataire = Destinataire.query.all()
-	if request.method == "POST" :
-		type_destinataire=request.form.get("Type_destinataire", None)
-		titre=request.form.get("Titre_destinataire", None)
-		identite=request.form.get("Identité", None)
 
-		Destinataire.ajouter(type_destinataire, titre, identite)
-		flash("Ajout réussi", "success")
-		return render_template('pages/formulaire_destinataire.html', nom="Epistautograpy", listeDestinataire=listeDestinataire)
+	# Une fois le formulaire envoyé, on passe en méthode http POST
+	if request.method == "POST" :
+
+		## On applique la fonction ajout_destinataire définie dans le fichier donnees.py
+		id_destinataire, donnees_destinataire=Destinataire.ajout_destinataire(
+			type_destinataire=request.form.get("Type_destinataire", None),
+			titre_destinataire=request.form.get("Titre_destinataire", None),
+			identite=request.form.get("Identite_destinataire", None)
+		)
+
+		if id_destinataire is True:
+			flash("Ajout réussi", "success")
+			return redirect(url_for("index_destinataires"))
+		else:
+			flash("Les erreurs suivantes ont été rencontrées : " + ",".join(donnees_destinataire), "error")
+			return render_template('pages/formulaire_destinataire.html', nom="Epistautograpy", listeDestinataire=listeDestinataire)
 
 	return render_template('pages/formulaire_destinataire.html', nom="Epistautograpy", listeDestinataire=listeDestinataire)
 
@@ -377,12 +396,20 @@ def formulaire_destinataire():
 @app.route("/formulaire_institution", methods=["GET", "POST"])
 def formulaire_institution():
 	listeInstitution = Institution_Conservation.query.all()
-	if request.method == "POST" :
-		nom=request.form.get("Nom", None)
 
-		Institution_Conservation.ajouter(nom)
-		flash("Ajout réussi", "success")
-		return render_template('pages/formulaire_institution.html', nom="Epistautograpy", listeInstitution=listeInstitution)
+	# Une fois le formulaire envoyé, on passe en méthode http POST
+	if request.method == "POST" :
+
+		# On applique la fonction ajout_institution définie dans le fichier donnees.py
+		id_instution_conservation, donnees_institution=Institution_Conservation.ajout_institution(
+			nom_institution=request.form.get("Nom_institution", None))
+
+		if id_instution_conservation is True:
+			flash("Ajout réussi", "success")
+			return redirect(url_for("index_institutions_conservations"))
+		else:
+			flash("Les erreurs suivantes ont été rencontrées : " + ",".join(donnees_institution), "error")
+			return render_template('pages/formulaire_institution.html', nom="Epistautograpy", listeInstitution=listeInstitution)
 
 	return render_template('pages/formulaire_institution.html', nom="Epistautograpy", listeInstitution=listeInstitution)
 

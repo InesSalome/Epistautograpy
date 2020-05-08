@@ -6,6 +6,7 @@ from .. app import db, login
 from sqlalchemy import update
 
 class User(UserMixin, db.Model):
+    __tablename__ = "user"
     id_user = db.Column(db.Integer, unique=True, nullable=False, primary_key=True, autoincrement=True)
     nom_user = db.Column(db.Text, nullable=False)
     login_user = db.Column(db.String(45), nullable=False)
@@ -13,7 +14,7 @@ class User(UserMixin, db.Model):
     password_user = db.Column(db.String(64), nullable=False)
     authorships = db.relationship("Authorship", back_populates="user")
 
-    #Méthode static our appeler et enregistrer la fonction sous la responsabilité de la classe User
+    #Méthode static pour appeler et enregistrer la fonction sous la responsabilité de la classe User
     @staticmethod
     #Fonction pour vérifier la validité de l'identification de l'utilisateur
     def identification(login, motdepasse):
@@ -75,6 +76,7 @@ class User(UserMixin, db.Model):
 
             # On renvoie l'utilisateur
             return True, utilisateur
+
         except Exception as erreur:
             return False, [str(erreur)]
 
@@ -88,5 +90,10 @@ class User(UserMixin, db.Model):
 
 #Fonction pour récupérer un utilisateur selon son identifiant
 @login.user_loader
-def trouver_utilisateur_via_id(identifiant):
-    return User.query.get(int(identifiant))
+def trouver_utilisateur_via_id(id_user):
+    """
+        Permet de récupérer un·e utilisateur·rice en fonction de son identifiant
+        :return: ID de l'utilisateur·rice
+        :rtype: int
+        """
+    return User.query.get(int(id_user))
