@@ -4,14 +4,6 @@
 
 {% block corps %}
 
-<div class="col-md-12 text-center">
-    <a id="link" href="{{url_for('formulaire')}}"name="singlebutton" class="btn btn-primary" type="button">Formulaire d'ajout général</a>
-    <a id="link" href="{{url_for('formulaire_lettre')}}" class="btn btn-sm btn-outline-secondary" type="button">Formulaire Lettre</a>
-    <a id="link" href="{{url_for('formulaire_destinataire')}}" class="btn btn-sm btn-outline-secondary" type="button">Formulaire Destinataire</a>
-    <a id="link" href="{{url_for('formulaire_institution')}}" class="btn btn-sm btn-outline-secondary" type="button">Formulaire Institution</a>
-</div>
-
-
 <h1>Formulaire</h1>
 <p>Complétez le formulaire et cliquez sur Ajouter.</p>
 <form class="form dropdown " method="POST" action="{{url_for('formulaire')}}">
@@ -23,7 +15,7 @@
             </div>
             <div class="form-group row flex-v-center">
                 <div class="col-md-6 col-xs-12">
-                    <strong>Objet :</strong>
+                    <strong>Objet* :</strong>
                     <input type="text" name="Objet" list="listeobjetlettre" class="form-control" value="" />
                     <datalist id="listeobjetlettre">
                 {% for Objet in listeobjetlettre %}
@@ -34,7 +26,7 @@
             </div>
             <div class="form-group row flex-v-center">
                 <div class="col-md-6 col-xs-12">
-                    <strong>Date :</strong>
+                    <strong>Date* :</strong>
                     <input type="text" name="Date" list="listedatelettre" class="form-control" value="" />
                     <datalist id="listedatelettre">
                 {% for Date in listedatelettre %}
@@ -45,18 +37,18 @@
             </div>
             <div class="form-group row flex-v-center">
                 <div class="col-md-6 col-xs-12">
-                    <strong>Lieu :</strong>
+                    <strong>Lieu* :</strong>
                     <input type="text" name="Lieu" list="listelieulettre" class="form-control" value="" />
                     <datalist id="listelieulettre">
                 {% for Lieu in listelieulettre %}
-                    <option data-value="test" value="{listelieulettre.Lieu}}">
+                    <option data-value="test" value="{{listelieulettre.Lieu}}">
                 {% endfor %}
                      </datalist>
                 </div>
             </div>
             <div class="form-group row flex-v-center">
                 <div class="col-md-6 col-xs-12">
-                    <strong>Contresignataire :</strong>
+                    <strong>Contresignataire* :</strong>
                     <input type="text" name="Contresignataire" list="listecontresignataire" class="form-control" value="" />
                     <datalist id="listecontresignataire">
                 {% for Contresignataire in listecontresignataire %}
@@ -89,7 +81,7 @@
             </div>
             <div class="form-group row flex-v-center">
                 <div class="col-md-6 col-xs-12">
-                    <strong>Cote :</strong>
+                    <strong>Cote* :</strong>
                     <input type="text" name="Cote" list="listecote" class="form-control" value="" />
                      <datalist id="listecote">
                 {% for Cote in listecote %}
@@ -100,7 +92,7 @@
             </div>
             <div class="form-group row flex-v-center">
                 <div class="col-md-6 col-xs-12">
-                    <strong>Statut :</strong>
+                    <strong>Statut* :</strong>
                     <input type="text" name="Statut" list="listestatut" class="form-control" value="" />
                     <datalist id="listestatut">
                 {% for Statut in listestatut %}
@@ -119,7 +111,7 @@
             </div>
             <div class="form-group row flex-v-center">
                 <div class="col-md-6 col-xs-12">
-                    <strong>Type de destinataire :</strong>
+                    <strong>Type de destinataire* :</strong>
                    <input type="text" name="Type_destinataire" list="listetypedestinataire" class="form-control" value="" />
                     <datalist id="listetypedestinataire">
                 {% for type in listetypedestinataire %}
@@ -141,7 +133,7 @@
             </div>
             <div class="form-group row flex-v-center">
                 <div class="col-md-6 col-xs-12">
-                    <strong>Identité :</strong>
+                    <strong>Identité* :</strong>
                     <input type="text" name="Identite_destinataire" list="listeidentitedestinataire" class="form-control" value="" />
                     <datalist id="llisteidentitedestinataire">
                 {% for identite in listeidentitedestinataire %}
@@ -160,19 +152,19 @@
             </div>
             <div class="form-group row flex-v-center">
                 <div class="col-md-6 col-xs-12">
-                    <strong>Nom :</strong>
+                    <strong>Nom* :</strong>
                     <input type="text" name="Nom" list="listenominstitution" class="form-control" value="" />
                     <datalist id="listenominstitution">
                 {% for nom in listenominstitution %}
-                    <option data-value="test" value="{listenominstitution.nom}}">
+                    <option data-value="test" value="{{listenominstitution.nom}}">
                 {% endfor %}
                      </datalist>
                 </div>
             </div>
         </div>
-    
+
     <div>
-        <p>Les champs marqués d'une * sont obligatoires. Le champ Statut attend comme données "Orig." pour original ou "Copie". Le champ Type de destinataire attend comme données "institution" ou "noblesse".</p>
+        <p>Les champs marqués d'une * sont obligatoires. Le champ Statut attend comme données "Orig." pour original ou "Copie". Le champ Type de destinataire attend comme données "institution" ou "noblesse". Le champ Date doit être rempli de la manière suivante : AAAA/MM/JJ.</p>
     </div>
     <div>
         <button type="submit" class="btn btn-primary">Ajouter</button>

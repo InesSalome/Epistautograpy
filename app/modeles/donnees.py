@@ -4,8 +4,7 @@
 from .. app import db
 from flask import url_for
 import datetime
-from sqlalchemy import update
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import create_engine, Column, Integer, String,update
 
 
 #Tables pour faire les jointures
@@ -43,7 +42,7 @@ class Correspondance(db.Model):
 	__tablename__= "correspondance"
 	__table_args__ = {'extend_existing': True}
 	destinataire_id = db.Column(db.Integer, db.ForeignKey('destinataire.id_destinataire'), primary_key=True)
-	lettre_id = db.Column(db.Integer, db.ForeignKey('lettre.id_lettre'), primary_key=True)		
+	lettre_id = db.Column(db.Integer, db.ForeignKey('lettre.id_lettre'), primary_key=True)      
 
 #Création de notre modèle
 
@@ -78,12 +77,17 @@ class Destinataire(db.Model) :
 			erreurs.append("Le champ type de destinataire est vide")
 		if not identite:
 			erreurs.append("Le champ identite est vide")
-		if type != "institution" or statut != "noblesse":
-			erreurs.append(("Le champ identite est vide ou ne correspond pas aux données attendues")
+		if not type_destinataire=="institution" or type_destinataire=="noblesse":
+			erreurs.append("Le champ identite ne correspond pas aux données attendues : institution ou noblesse.")
 
 		# Si on a au moins une erreur
-		if len(erreurs) > 0 :
+		if len(erreurs) > 0:
 			return False, erreurs
+
+		# On vérifie que l'le destinataire n'a pas déjà été enregistré
+		#Si c'est le cas, on fait la jointure
+		if identite == db.query.filter(Destinataire.identite_destinataire):
+			db.session.update(Destinataire)
 
 		# On crée une nouvelle lettre dans la base Lettre
 		new_destinataire = Destinataire(
@@ -156,6 +160,11 @@ class Institution_Conservation(db.Model) :
 		# Si on a au moins une erreur
 		if len(erreurs) > 0:
 			return False, erreurs
+
+		# On vérifie que l'institution n'a pas déjà été enregistrée
+		#Si c'est le cas, on fait la jointure
+		if nom == db.query.filter(Institution_Conservation.nom_institution_conservation):
+			db.session.update(Institution_Conservation)
 
 		# On crée une nouvelle lettre dans la base Lettre
 		new_institution = Institution_Conservation(
@@ -240,7 +249,7 @@ class Lettre(db.Model) :
 
 		# Définition des paramètres obligatoires : s'ils manquent, cela crée une liste d'erreurs
 		erreurs = []
-		if not contresigataire:
+		if not contresignataire:
 			erreurs.append("Le champ contresignataire est vide")
 		if not date:
 			erreurs.append("Le champ date est vide")
@@ -248,11 +257,13 @@ class Lettre(db.Model) :
 			erreurs.append("Le champ lieu est vide")
 		if not cote:
 			erreurs.append("Le champ cote est vide")
-		if not statut or statut != "orig." or statut != "copie":
-			erreurs.append(("Le champ statut est vide ou ne correspond pas aux données attendues")
+		if not statut:
+			erreurs.append("Le champ statut est vide")
+		if not statut=="Orig." or statut=="Copie":
+			erreurs.append("Le champ statut ne correspond pas aux données attendues : Orig. ou Copie")
 
 		# Si on a au moins une erreur
-		if len(erreurs) > 0 :
+		if len(erreurs) > 0:
 			return False, erreurs
 
 		# On vérifie que la lettre n'a pas déjà été enregistrée

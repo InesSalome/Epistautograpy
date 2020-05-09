@@ -46,7 +46,7 @@ migrate = Migrate(app, db)
 login = LoginManager(app)
 
 #Import des pages correspondantes depuis le dossier routes.
-from .routes import accueil, index_lettres, index_dates, index_destinataires, index_contresignataires, index_institutions_conservations, formulaire, recherche, rechercheavancee, formulaire_lettre, formulaire_destinataire, formulaire_institution, lettre, date, destinataire, contresignataire, institution, inscription, connexion, deconnexion, cgu, about
+from .routes import accueil, index_lettres, index_dates, index_destinataires, index_contresignataires, index_institutions_conservations, formulaire, recherche, rechercheavancee, lettre, date, destinataire, contresignataire, institution, inscription, connexion, deconnexion, cgu, about
 
 #Fonction pour créer toutes les tables et qu'elles soient reconnues lors du lancement de l'application
 def init_db():
