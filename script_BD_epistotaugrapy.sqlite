@@ -50,8 +50,8 @@ CREATE TABLE IF NOT EXISTS LETTRE (
   pronom_personnel_employe_lettre VARCHAR(45) NULL,
   cote_lettre VARCHAR(45) NOT NULL,
   statut_lettre VARCHAR(45) NOT NULL,                          -- Pour savoir s'il s'agit d'un original ou d'une copie.
-  institution_id INTEGER NOT NULL,
-  lien_image_lettre TEXT NOT NULL,
+  institution_id INTEGER,
+  lien_image_lettre TEXT,
   FOREIGN KEY(institution_id) REFERENCES INSTITUTION_CONSERVATION(id_institution_conservation)
   ON DELETE CASCADE ON UPDATE CASCADE
   );
