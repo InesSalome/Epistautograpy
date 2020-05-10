@@ -40,7 +40,7 @@ Epistautograpy permet de consulter des lettres de Charles VIII grâce à des rec
 * un index des institutions de conservation
 * bien évidemment, un index des lettres recensées
 
-Il est aussi possible pour les utilisateurs de s'inscrire et de participer à l'enrichissmeent des lettres répertoriées. 
+Il est aussi possible pour les utilisateurs de s'inscrire et de participer à l'enrichissement des lettres répertoriées en remplissant un formulaire. 
 
 __Développement du projet__
 
