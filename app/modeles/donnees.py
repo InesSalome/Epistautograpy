@@ -84,10 +84,13 @@ class Destinataire(db.Model) :
 		if len(erreurs) > 0:
 			return False, erreurs
 
-		# On vérifie que l'le destinataire n'a pas déjà été enregistré
-		#Si c'est le cas, on fait la jointure
-		if identite == db.query.filter(Destinataire.identite_destinataire):
-			db.session.update(Destinataire)
+		# On vérifie que le/la destinataire n'a pas déjà été enregistré(e)
+		# Si c'est le cas, on récupère la données déjà existante
+		entree_destinataire = Destinataire.query.filter(
+			Destinataire.identite_destinataire==identite
+		).count()
+		if entree_destinataire > 0:
+			entree_destinataire = Destinataire.query.filter(Destinataire.id_destinataire==Correspondance.destinataire_id)
 
 		# On crée une nouvelle lettre dans la base Lettre
 		new_destinataire = Destinataire(
@@ -104,6 +107,8 @@ class Destinataire(db.Model) :
 			return( True, new_destinataire)
 
 		except Exception as erreur:
+			# On annule les requêtes de la transaction en cours en cas d'erreurs
+			db.session.rollback()
 			return False, [str(erreur)]
 
 	def to_jsonapi_dict(self):
@@ -162,9 +167,12 @@ class Institution_Conservation(db.Model) :
 			return False, erreurs
 
 		# On vérifie que l'institution n'a pas déjà été enregistrée
-		#Si c'est le cas, on fait la jointure
-		if nom == db.query.filter(Institution_Conservation.nom_institution_conservation):
-			db.session.update(Institution_Conservation)
+		#Si c'est le cas, on récupère la données déjà existante
+		entree_institution = Institution_Conservation.query.filter(
+			Institution_Conservation.nom_institution_conservation==nom
+		).count()
+		if entree_institution > 0:
+			entree_institution = Institution_Conservation.query.filter(Institution_Conservation.id_institution_conservation==Lettre.institution_id)
 
 		# On crée une nouvelle lettre dans la base Lettre
 		new_institution = Institution_Conservation(
@@ -179,6 +187,8 @@ class Institution_Conservation(db.Model) :
 			return( True, new_institution)
 
 		except Exception as erreur:
+			# On annule les requêtes de la transaction en cours en cas d'erreurs
+			db.session.rollback()
 			return False, [str(erreur)]
 
 	def to_jsonapi_dict(self):
@@ -224,7 +234,7 @@ class Lettre(db.Model) :
 	correspondance = db.relationship("Destinataire", secondary="correspondance", backref="lettre", lazy="dynamic")
 
 	@staticmethod
-	def ajout_lettre(objet, contresignataire, date, lieu, langue, pronom, cote, statut):
+	def ajout_lettre(objet, contresignataire, date, lieu, langue, pronom, cote, statut, lien, fk_institution, destinataire):
 		"""
 		Rajout de données via le formulaire.
 		Si il y a une erreur, la fonction renvoie False suivi d'une liste d'erreur.
@@ -240,11 +250,17 @@ class Lettre(db.Model) :
 		:param langue: langue d'écriture de la lettre
 		:type langue: string
 		:param pronom: pronom personnel employé dans la lettre
-		:type lieu: string
+		:type pronom: string
 		:param cote: cote de la lettre
-		:type lieu: string
+		:type cote: string
 		:param statut: statut de la lettre, originale ou copie
-		:type lieu: string
+		:type statut: string
+		:param lien: url vers la lettre numérisée
+		:type lien: string
+		:param institution_id: clé étrangère de l'institution de conservation
+		:type institution_id: integer
+		:param correspondance: relation faisant le lien entre la lettre et son/sa destinataire
+		:type correspondance: integer
 		"""
 
 		# Définition des paramètres obligatoires : s'ils manquent, cela crée une liste d'erreurs
@@ -259,8 +275,8 @@ class Lettre(db.Model) :
 			erreurs.append("Le champ cote est vide")
 		if not statut:
 			erreurs.append("Le champ statut est vide")
-		if not statut=="Orig." or statut=="Copie":
-			erreurs.append("Le champ statut ne correspond pas aux données attendues : Orig. ou Copie")
+		#if statut!="Orig." or statut!="Copie":
+			#erreurs.append("Le champ statut ne correspond pas aux données attendues : Orig. ou Copie")
 
 		# Si on a au moins une erreur
 		if len(erreurs) > 0:
@@ -268,7 +284,7 @@ class Lettre(db.Model) :
 
 		# On vérifie que la lettre n'a pas déjà été enregistrée
 		exemplaire_lettre = Lettre.query.filter(
-			db.or_(Lettre.date_envoie_lettre == date, Lettre.cote_lettre == cote)
+			db.and_(Lettre.date_envoie_lettre == date, Lettre.cote_lettre == cote)
 		).count()
 		if exemplaire_lettre > 0:
 			erreurs.append("La lettre a déjà été renseignée dans notre base de données")
@@ -282,7 +298,10 @@ class Lettre(db.Model) :
 			langue_lettre=langue,
 			pronom_personnel_employe_lettre=pronom,
 			cote_lettre=cote,
-			statut_lettre=statut
+			statut_lettre=statut,
+			lien_image_lettre=lien,
+			institution_id=fk_institution,
+			correspondance=destinataire
 		)
 
 		try:
@@ -293,6 +312,8 @@ class Lettre(db.Model) :
 			return( True, new_lettre)
 
 		except Exception as erreur:
+			# On annule les requêtes de la transaction en cours en cas d'erreurs
+			db.session.rollback()
 			return False, [str(erreur)]
 
 

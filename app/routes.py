@@ -156,6 +156,7 @@ def formulaire():
 	listepronom = Lettre.query.with_entities(Lettre.pronom_personnel_employe_lettre).distinct()
 	listecote = Lettre.query.with_entities(Lettre.cote_lettre).distinct()
 	listestatut = Lettre.query.with_entities(Lettre.statut_lettre).distinct()
+	listelien = Lettre.query.with_entities(Lettre.lien_image_lettre).distinct()
 	listetypedestinataire = Destinataire.query.with_entities(Destinataire.type_destinataire).distinct()
 	listetitredestinataire = Destinataire.query.with_entities(Destinataire.titre_destinataire).distinct()
 	listeidentitedestinataire = Destinataire.query.with_entities(Destinataire.identite_destinataire).distinct()
@@ -164,48 +165,48 @@ def formulaire():
 	#Une fois le formulaire envoyé, on passe en méthode http POST
 	if request.method=="POST":
 
-		# On applique la fonction ajout_lettre définie dans le fichier donnees.py
-		status, donnees_lettre = Lettre.ajout_lettre(
-			objet=request.form.get("Objet", None),
-			contresignataire=request.form.get("Contresignataire", None),
+		# On applique la fonction ajout_institution définie dans le fichier donnees.py
+		status, donnees_institution=Institution_Conservation.ajout_institution(
+			nom=request.form.get("Nom", None)
+			)
+
+		if status is True:
+			## On applique la fonction ajout_destinataire définie dans le fichier donnees.py
+			status, donnees_destinataire=Destinataire.ajout_destinataire(
+			type_destinataire=request.form.get("Type_destinataire", None),
+			titre=request.form.get("Titre_destinataire", None),
+			identite=request.form.get("Identite_destinataire", None)	
+		)
+
+		else:
+			flash("Les erreurs suivantes ont été rencontrées : " + ",".join(donnees_institution), "error")
+			return render_template("pages/formulaire.html")
+
+		if status is True:
+			# On applique la fonction ajout_lettre définie dans le fichier donnees.py
+			status, donnees_lettre = Lettre.ajout_lettre(
 			date=request.form.get("Date", None),
 			lieu= request.form.get("Lieu", None),
+			objet=request.form.get("Objet", None),
+			contresignataire=request.form.get("Contresignataire", None),
 			langue=request.form.get("Langue", None),
 			pronom=request.form.get("Pronom", None),
 			cote=request.form.get("Cote", None),
-			statut=request.form.get("Statut", None)
+			statut=request.form.get("Statut", None),
+			fk_institution=Institution_Conservation.query.filter(Institution_Conservation.id_institution_conservation==Lettre.institution_id, Lettre.institution_id==Lettre.institution_id),
+			lien=request.form.get("Lien", None),
+			destinataire=Destinataire.query.filter(db.and_(Destinataire.id_destinataire==Correspondance.destinataire_id, Correspondance.lettre_id==Lettre.id_lettre))
 		)
 
+		else:
+			flash("Les erreurs suivantes ont été rencontrées : " + ",".join(donnees_destinataire), "error")
+			return render_template("pages/formulaire.html")
+				
 		if status is True:
 			flash("Ajout réussi", "success")
 			return redirect(url_for("index_lettres"))
 		else:
 			flash("Les erreurs suivantes ont été rencontrées : " + ",".join(donnees_lettre), "error")
-			return render_template("pages/formulaire.html")
-
-		## On applique la fonction ajout_destinataire définie dans le fichier donnees.py
-		status, donnees_destinataire=Destinataire.ajout_destinataire(
-			type_destinataire=request.form.get("Type_destinataire", None),
-			titre_destinataire=request.form.get("Titre_destinataire", None),
-			identite=request.form.get("Identite_destinataire", None)
-		)
-
-		if status is True:
-			flash("Ajout réussi", "success")
-			return redirect(url_for("index_destinataires"))
-		else:
-			flash("Les erreurs suivantes ont été rencontrées : " + ",".join(donnees_destinataire), "error")
-			return render_template("pages/formulaire.html")
-
-		# On applique la fonction ajout_institution définie dans le fichier donnees.py
-		status, donnees_institution=Institution_Conservation.ajout_institution(
-			nom_institution=request.form.get("Nom_institution", None))
-
-		if status is True:
-			flash("Ajout réussi", "success")
-			return redirect(url_for("index_institutions_conservations"))
-		else:
-			flash("Les erreurs suivantes ont été rencontrées : " + ",".join(donnees_institution), "error")
 			return render_template("pages/formulaire.html")
 
 

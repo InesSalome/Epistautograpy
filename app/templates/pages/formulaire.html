@@ -101,6 +101,17 @@
                      </datalist>
                 </div>
             </div>
+            <div class="form-group row flex-v-center">
+                <div class="col-md-6 col-xs-12">
+                    <strong>Lien vers le texte :</strong>
+                    <input type="text" name="Lien" list="listelien" class="form-control" value="" />
+                    <datalist id="listelien">
+                {% for Lien in listelien %}
+                    <option data-value="test" value="{{listelien.Lien}}">
+                {% endfor %}
+                     </datalist>
+                </div>
+            </div>
         </div>
         <div>
 

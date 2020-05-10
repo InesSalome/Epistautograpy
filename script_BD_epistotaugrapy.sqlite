@@ -33,8 +33,8 @@ CREATE TABLE IF NOT EXISTS DESTINATAIRE (
 CREATE TABLE IF NOT EXISTS INSTITUTION_CONSERVATION (
   id_institution_conservation INTEGER PRIMARY KEY AUTOINCREMENT,
   nom_institution_conservation VARCHAR(45) NOT NULL,
-  latitude_institution_conservation FLOAT NOT NULL,
-  longitude_institution_conservation FLOAT NOT NULL)
+  latitude_institution_conservation FLOAT,
+  longitude_institution_conservation FLOAT)
 ;
 
 -- --------------------------------------------------------
@@ -45,12 +45,12 @@ CREATE TABLE IF NOT EXISTS LETTRE (
   date_envoie_lettre TINYTEXT NOT NULL,
   lieu_ecriture_lettre VARCHAR(45) NOT NULL,
   objet_lettre TINYTEXT NULL,                                  -- Sujet de la lettre et résumé du contenu
-  contresignataire_lettre VARCHAR(45) NULL,
-  langue_lettre VARCHAR(45) NOT NULL,
-  pronom_personnel_employe_lettre VARCHAR(45) NULL,
+  contresignataire_lettre VARCHAR(45) NOT NULL,
+  langue_lettre VARCHAR(45),
+  pronom_personnel_employe_lettre VARCHAR(45),
   cote_lettre VARCHAR(45) NOT NULL,
   statut_lettre VARCHAR(45) NOT NULL,                          -- Pour savoir s'il s'agit d'un original ou d'une copie.
-  institution_id INTEGER,
+  institution_id INTEGER NOT NULL,
   lien_image_lettre TEXT,
   FOREIGN KEY(institution_id) REFERENCES INSTITUTION_CONSERVATION(id_institution_conservation)
   ON DELETE CASCADE ON UPDATE CASCADE
