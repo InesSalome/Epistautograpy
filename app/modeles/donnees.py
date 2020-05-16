@@ -42,7 +42,21 @@ class Correspondance(db.Model):
 	__tablename__= "correspondance"
 	__table_args__ = {'extend_existing': True}
 	destinataire_id = db.Column(db.Integer, db.ForeignKey('destinataire.id_destinataire'), primary_key=True)
-	lettre_id = db.Column(db.Integer, db.ForeignKey('lettre.id_lettre'), primary_key=True)      
+	lettre_id = db.Column(db.Integer, db.ForeignKey('lettre.id_lettre'), primary_key=True)
+
+	def ajout_correspondance(destinataire_id,lettre_id):   
+		"""
+		Retourne un couple d'identifiants pour définir une nouvelle relation lorqu'une nouvelle correpondance est rentrée via le formulaire
+		:param destinataire_id; Id du destinataire
+		:type destinataire_id: integer
+		:param lettre_id; Id de la lettre
+		:type lettre_id: integer
+		:return: tuple d'identifiants
+		:rtype: integers
+		"""   
+
+		destinataire_id=ajout_destinataire
+		lettre_id=ajout_lettre
 
 #Création de notre modèle
 
@@ -56,6 +70,14 @@ class Destinataire(db.Model) :
 	date_deces = db.Column(db.Text)
 	lien_infos_destinataire = db.Column(db.Text)
 	correspondance = db.relationship("Lettre", secondary="correspondance", backref="destinataire", lazy="dynamic")
+
+	def get_id(self):
+		"""
+		Retourne l'id de l'objet actuellement utilisé
+		:return: Id du destinataire
+		:rtype: int
+		"""				
+		return(self.id_destinataire)
 
 	@staticmethod
 	def ajout_destinataire(type_destinataire, titre, identite):
@@ -85,14 +107,14 @@ class Destinataire(db.Model) :
 			return False, erreurs
 
 		# On vérifie que le/la destinataire n'a pas déjà été enregistré(e)
-		# Si c'est le cas, on récupère la données déjà existante
+		# Si c'est le cas, on récupère la données déjà existante pour la mettre à jour
 		entree_destinataire = Destinataire.query.filter(
 			Destinataire.identite_destinataire==identite
 		).count()
 		if entree_destinataire > 0:
-			entree_destinataire = Destinataire.query.filter(Destinataire.id_destinataire==Correspondance.destinataire_id)
+			entree_destinataire=Destinataire.id_destinataire
 
-		# On crée une nouvelle lettre dans la base Lettre
+		# On crée une nouvelle lettre dans la table Destinataire
 		new_destinataire = Destinataire(
 			type_destinataire=type_destinataire,
 			titre_destinataire=titre,
@@ -147,6 +169,14 @@ class Institution_Conservation(db.Model) :
 	latitude_institution_conservation = db.Column(db.Float)
 	longitude_institution_conservation = db.Column(db.Float)
 
+	def get_id(self):
+		"""
+		Retourne l'id de l'objet actuellement utilisé
+		:return: Id de l'institution de conservation
+		:rtype: int
+		"""
+		return(self.id_institution_conservation)
+
 	@staticmethod
 	def ajout_institution(nom):
 		"""
@@ -167,12 +197,13 @@ class Institution_Conservation(db.Model) :
 			return False, erreurs
 
 		# On vérifie que l'institution n'a pas déjà été enregistrée
-		#Si c'est le cas, on récupère la données déjà existante
+		#Si c'est le cas, on récupère la données déjà existante pour les mettre à jour
 		entree_institution = Institution_Conservation.query.filter(
 			Institution_Conservation.nom_institution_conservation==nom
 		).count()
 		if entree_institution > 0:
-			entree_institution = Institution_Conservation.query.filter(Institution_Conservation.id_institution_conservation==Lettre.institution_id)
+			entree_institution=Institution_Conservation.id_institution_conservation
+
 
 		# On crée une nouvelle lettre dans la base Lettre
 		new_institution = Institution_Conservation(
@@ -233,8 +264,16 @@ class Lettre(db.Model) :
 	authorships = db.relationship("User", secondary="authorship", backref="lettre", lazy="dynamic")
 	correspondance = db.relationship("Destinataire", secondary="correspondance", backref="lettre", lazy="dynamic")
 
+	def get_id(self):
+		"""
+		Retourne l'id de l'objet actuellement utilisé
+		:return: Id de la lettre
+		:rtype: int
+		"""
+		return(self.id_lettre)
+
 	@staticmethod
-	def ajout_lettre(objet, contresignataire, date, lieu, langue, pronom, cote, statut, lien, fk_institution, destinataire):
+	def ajout_lettre(objet, contresignataire, date, lieu, langue, pronom, cote, statut, lien):
 		"""
 		Rajout de données via le formulaire.
 		Si il y a une erreur, la fonction renvoie False suivi d'une liste d'erreur.
@@ -259,8 +298,6 @@ class Lettre(db.Model) :
 		:type lien: string
 		:param institution_id: clé étrangère de l'institution de conservation
 		:type institution_id: integer
-		:param correspondance: relation faisant le lien entre la lettre et son/sa destinataire
-		:type correspondance: integer
 		"""
 
 		# Définition des paramètres obligatoires : s'ils manquent, cela crée une liste d'erreurs
@@ -275,8 +312,8 @@ class Lettre(db.Model) :
 			erreurs.append("Le champ cote est vide")
 		if not statut:
 			erreurs.append("Le champ statut est vide")
-		#if statut!="Orig." or statut!="Copie":
-			#erreurs.append("Le champ statut ne correspond pas aux données attendues : Orig. ou Copie")
+		if not statut=="Orig." or statut=="Copie":
+			erreurs.append("Le champ statut ne correspond pas aux données attendues : Orig. ou Copie")
 
 		# Si on a au moins une erreur
 		if len(erreurs) > 0:
@@ -291,17 +328,15 @@ class Lettre(db.Model) :
 
 		# On crée une nouvelle lettre dans la base Lettre
 		new_lettre = Lettre(
-			objet_lettre=objet,
-			contresignataire_lettre=contresignataire,
 			date_envoie_lettre=date,
 			lieu_ecriture_lettre=lieu,
+			objet_lettre=objet,
+			contresignataire_lettre=contresignataire,
 			langue_lettre=langue,
 			pronom_personnel_employe_lettre=pronom,
 			cote_lettre=cote,
 			statut_lettre=statut,
 			lien_image_lettre=lien,
-			institution_id=fk_institution,
-			correspondance=destinataire
 		)
 
 		try:
@@ -355,6 +390,14 @@ class Image_Numerisee(db.Model):
 	url_image_numerisee = db.Column(db.Text)
 	reference_bibliographique_image_numerisee = db.Column(db.Text)
 	lettre_id = db.Column(db.Integer, db.ForeignKey('lettre.id_lettre'))
+
+	def get_id(self):
+		"""
+		Retourne l'id de l'objet actuellement utilisé
+		:return: Id de l'image numérisée
+		:rtype: int
+		"""
+		return(self.id_image_numerisee)
 
 	def to_jsonapi_dict(self):
 		"""
