@@ -36,9 +36,42 @@
                 <div class="col-md-6 col-xs-12">
                     <strong>Identité* :</strong>
                     <input type="text" name="Identite_destinataire" list="listeidentitedestinataire" class="form-control" value="" />
-                    <datalist id="llisteidentitedestinataire">
+                    <datalist id="listeidentitedestinataire">
                 {% for identite in listeidentitedestinataire %}
                     <option data-value="test" value="{{listeidentitedestinataire.identite}}">
+                {% endfor %}
+                     </datalist>
+                </div>
+            </div>
+            <div class="form-group row flex-v-center">
+                <div class="col-md-6 col-xs-12">
+                    <strong>Date de naissance :</strong>
+                    <input type="text" name="Date_Naissance" list="listedatenaissance" class="form-control" value="" />
+                    <datalist id="listedatenaissance">
+                {% for date in listedatenaissance %}
+                    <option data-value="test" value="{{listedatenaissance.date}}">
+                {% endfor %}
+                     </datalist>
+                </div>
+            </div>
+            <div class="form-group row flex-v-center">
+                <div class="col-md-6 col-xs-12">
+                    <strong>Date de décès :</strong>
+                    <input type="text" name="Date_Décès" list="listedatedeces" class="form-control" value="" />
+                    <datalist id="listedatedeces">
+                {% for date in listedatedeces %}
+                    <option data-value="test" value="{{listedatedeces.date}}">
+                {% endfor %}
+                     </datalist>
+                </div>
+            </div>
+            <div class="form-group row flex-v-center">
+                <div class="col-md-6 col-xs-12">
+                    <strong>Lien vers une biographie :</strong>
+                    <input type="text" name="Lien_Bio" list="listelienbio" class="form-control" value="" />
+                    <datalist id="listelienbio">
+                {% for lien in listelienbio %}
+                    <option data-value="test" value="{{listelienbio.lien}}">
                 {% endfor %}
                      </datalist>
                 </div>
@@ -46,7 +79,7 @@
         
 
     <div>
-        <p>Les champs marqués d'une * sont obligatoires. Le champ Type de destinataire attend comme données "institution" ou "noblesse".</p>
+        <p>Les champs marqués d'une * sont obligatoires. Le champ Type de destinataire attend comme données "institution" ou "noblesse". Les champs Date doivent être remplis de la manière suivante : AAAA/MM/JJ.</p>
     </div>
     <div>
         <button type="submit" class="btn btn-primary">Ajouter</button>

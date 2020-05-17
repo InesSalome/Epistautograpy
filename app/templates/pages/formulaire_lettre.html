@@ -108,8 +108,34 @@
                      </datalist>
                 </div>
             </div>
-        </div>
-        <div>
+
+            <div>
+            	<p>Les champs suivants -Institution de conservation et Destinataire- doivent être remplis avec des données déjà enregistrées dans la base. Il faut y inscrire le nom de l'institution de conservation et l'identité du destinataire. Si vous souhaitez ajouter une lettre avec une nouvelle institution et un nouveau destinataire, remplir au préalable les formulaires pour ajouter une institution et un destinataire.
+            </div>
+
+            <div class="form-group row flex-v-center">
+                <div class="col-md-6 col-xs-12">
+                    <strong>Institution de conservation :</strong>
+                    <input type="text" name="Institution" list="listeinstitution" class="form-control" value="" />
+                    <datalist id="listeinstitution">
+                {% for institution in listeinstitution %}
+                    <option data-value="test" value="{{listeinstitution.institution}}">
+                {% endfor %}
+                     </datalist>
+                </div>
+            </div>
+             <div class="form-group row flex-v-center">
+                <div class="col-md-6 col-xs-12">
+                    <strong>Destinataire :</strong>
+                    <input type="text" name="Destinataire" list="listedestinataire" class="form-control" value="" />
+                    <datalist id="listedestinataire">
+                {% for destinataire in listedestinataire %}
+                    <option data-value="test" value="{{listedestinataire.destinataire}}">
+                {% endfor %}
+                     </datalist>
+                </div>
+            </div>
+       
 
 
     <div>
@@ -119,6 +145,5 @@
         <button type="submit" class="btn btn-primary">Ajouter</button>
     </div>
 
-    </div>
 </form>
 {% endblock %}

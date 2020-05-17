@@ -14,7 +14,29 @@
                     <input type="text" name="Nom" list="listenominstitution" class="form-control" value="" />
                     <datalist id="listenominstitution">
                 {% for nom in listenominstitution %}
-                    <option data-value="test" value="{{listenominstitution.nom}}">
+                    <option data-value="test" value="{{listenominstitution.Nom}}">
+                {% endfor %}
+                     </datalist>
+                </div>
+            </div>
+            <div class="form-group row flex-v-center">
+                <div class="col-md-6 col-xs-12">
+                    <strong>Latitude :</strong>
+                    <input type="text" name="Latitude" list="listelatitude" class="form-control" value="" />
+                    <datalist id="listelatitude">
+                {% for latitude in listelatitude %}
+                    <option data-value="test" value="{{listelatitude.latitude}}">
+                {% endfor %}
+                     </datalist>
+                </div>
+            </div>
+            <div class="form-group row flex-v-center">
+                <div class="col-md-6 col-xs-12">
+                    <strong>Longitude :</strong>
+                    <input type="text" name="Longitude" list="listelongitude" class="form-control" value="" />
+                    <datalist id="listelongitude">
+                {% for longitude in listelongitude %}
+                    <option data-value="test" value="{{listelongitude.longitude}}">
                 {% endfor %}
                      </datalist>
                 </div>

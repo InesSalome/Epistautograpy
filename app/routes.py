@@ -172,7 +172,9 @@ def formulaire_lettre():
 		pronom=request.form.get("Pronom", None),
 		cote=request.form.get("Cote", None),
 		statut=request.form.get("Statut", None),
-		lien=request.form.get("Lien", None)
+		lien=request.form.get("Lien", None),
+		institution=request.form.get("Institution", None),
+		destinataire=request.form.get("Destinataire", None)
 		)
 
 		if status is True:
@@ -194,6 +196,9 @@ def formulaire_destinataire():
 	listetypedestinataire = Destinataire.query.with_entities(Destinataire.type_destinataire).distinct()
 	listetitredestinataire = Destinataire.query.with_entities(Destinataire.titre_destinataire).distinct()
 	listeidentitedestinataire = Destinataire.query.with_entities(Destinataire.identite_destinataire).distinct()
+	listedatenaissance	= Destinataire.query.with_entities(Destinataire.date_naissance).distinct()
+	listedatedeces	= Destinataire.query.with_entities(Destinataire.date_deces).distinct()
+	listelienbio = Destinataire.query.with_entities(Destinataire.lien_infos_destinataire).distinct()
 
 	#Une fois le formulaire envoyé, on passe en méthode http POST
 	if request.method=="POST":
@@ -202,7 +207,10 @@ def formulaire_destinataire():
 		status, donnees_destinataire=Destinataire.ajout_destinataire(
 		type_destinataire=request.form.get("Type_destinataire", None),
 		titre=request.form.get("Titre_destinataire", None),
-		identite=request.form.get("Identite_destinataire", None)	
+		identite=request.form.get("Identite_destinataire", None),
+		date_naissance=request.form.get("Date_Naissance", None),
+		date_deces=request.form.get("Date_Deces", None),
+		lien_bio=request.form.get("Lien_Bio", None)
 		)
 
 		if status is True:
@@ -221,13 +229,17 @@ def formulaire_destinataire():
 @app.route("/formulaire_institution", methods=["GET", "POST"])
 def formulaire_institution():	
 	listenominstitution = Institution_Conservation.query.with_entities(Institution_Conservation.nom_institution_conservation).distinct()
+	listelatitude = Institution_Conservation.query.with_entities(Institution_Conservation.latitude_institution_conservation).distinct()
+	listelongitude = Institution_Conservation.query.with_entities(Institution_Conservation.longitude_institution_conservation).distinct()
 
 	#Une fois le formulaire envoyé, on passe en méthode http POST
 	if request.method=="POST":
 
 		# On applique la fonction ajout_institution définie dans le fichier donnees.py
 		status, donnees_institution=Institution_Conservation.ajout_institution(
-			nom=request.form.get("Nom", None)
+			nom=request.form.get("Nom", None),
+			latitude=request.form.get("Latitude", None),
+			longitude=request.form.get("Longitude", None)
 			)
 
 		if status is True:
@@ -238,6 +250,76 @@ def formulaire_institution():
 			return render_template("pages/formulaire_institution.html")
 
 	return render_template("pages/formulaire_institution.html", nom="Epistautograpy", listenominstitution=listenominstitution)
+
+
+@app.route("/suppression_lettre", methods=["POST", "GET"])
+def suppression_lettre():
+	""" 
+	Route pour supprimer une lettre dans la base
+	:return : affichage du template supprimer_lettre.html ou redirection
+	"""
+
+	listenumerolettre = Lettre.query.with_entities(Lettre.id_lettre).distinct()
+
+	if request.method == "POST":
+		status = Lettre.supprimer_lettre(
+            id_lettre=request.form.get("Lettre_a_supprimer", None)
+        )
+
+		if status is True:
+			flash("Suppression réussie !", "success")
+			return redirect("/index_lettres")
+		else:
+			flash("Echec de la suppression...", "danger")
+			return redirect("/index_lettres")
+	else:
+		return render_template("pages/suppression_lettre.html", nom="Epistautograpy", listenumerolettre=listenumerolettre, lettre=lettre)
+
+
+@app.route("/suppression_destinataire", methods=["POST", "GET"])
+def suppression_destinataire():
+	""" 
+	Route pour supprimer un destintaire dans la base
+	:return : affichage du template supprimer_destinataire.html ou redirection
+	"""
+	listedestinataire = Destinataire.query.with_entities(Destinataire.identite_destinataire).distinct()
+
+	if request.method == "POST":
+		statut = Destinataire.supprimer_destinataire(
+			id_destinataire=request.form.get("Destinataire_a_supprimer", None)
+		)
+
+		if statut is True:
+			flash("Suppression réussie !", "success")
+			return redirect("/index_destinataires")
+		else:
+			flash("Echec de la suppression...", "danger")
+			return redirect("/index_destinataires")
+	else:
+		return render_template("pages/suppression_destinataire.html", nom="Epistautograpy", listedestinataire=listedestinataire, destinataire=destinataire)
+
+
+@app.route("/suppression_institution", methods=["POST", "GET"])
+def suppression_institution():
+	""" 
+	Route pour supprimer une institution dans la base
+	:return : affichage du template supprimer_institution.html ou redirection
+	"""
+	listeinstitution = Institution_Conservation.query.with_entities(Institution_Conservation.nom_institution_conservation).distinct()
+
+	if request.method == "POST":
+		statut = Institution_Conservation.supprimer_institution(
+			id_institution_conservation=request.form.get("Institution_a_supprimer", None)
+		)
+
+		if statut is True:
+			flash("Suppression réussie !", "success")
+			return redirect("/index_institutions_conservations")
+		else:
+			flash("Echec de la suppression...", "danger")
+			return redirect("/index_institutions_conservations")
+	else:
+		return render_template("pages/suppression_institution.html", nom="Epistautograpy", listeinstitution=listeinstitution, institution_conservation=institution)
 
 
 @app.route("/recherche", methods=["GET","POST"])

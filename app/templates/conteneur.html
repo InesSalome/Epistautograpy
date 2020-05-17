@@ -47,6 +47,15 @@
                 <a id="link" class="nav-link" href="{{url_for('formulaire_institution')}}">Formulaire Institution</a>
               </li>
               <li class="nav-item">
+                <a id="link" class="nav-link" href="{{url_for('suppression_lettre')}}">Suppression Lettre</a>
+              </li>
+              <li class="nav-item">
+                <a id="link" class="nav-link" href="{{url_for('suppression_destinataire')}}">Suppression Destinataire</a>
+              </li>
+              <li class="nav-item">
+                <a id="link" class="nav-link" href="{{url_for('suppression_institution')}}">Suppression Institution</a>
+              </li>
+              <li class="nav-item">
                 <a id="link" class="nav-link" href="{{url_for('deconnexion')}}">Déconnexion ({{current_user.user_nom}})</a>
               </li>
             {% endif %}

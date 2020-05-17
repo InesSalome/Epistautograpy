@@ -38,6 +38,7 @@ class Authorship(db.Model):
 			"on": self.authorship_date
 		}
 
+
 class Correspondance(db.Model):
 	__tablename__= "correspondance"
 	__table_args__ = {'extend_existing': True}
@@ -69,7 +70,7 @@ class Destinataire(db.Model) :
 	date_naissance = db.Column(db.Text)
 	date_deces = db.Column(db.Text)
 	lien_infos_destinataire = db.Column(db.Text)
-	correspondance = db.relationship("Lettre", secondary="correspondance", backref="destinataire", lazy="dynamic")
+	correspondance = db.relationship("Lettre", secondary="correspondance", backref="destinataire", lazy="dynamic", cascade='all, delete, delete-orphan', single_parent="True")
 
 	def get_id(self):
 		"""
@@ -80,7 +81,7 @@ class Destinataire(db.Model) :
 		return(self.id_destinataire)
 
 	@staticmethod
-	def ajout_destinataire(type_destinataire, titre, identite):
+	def ajout_destinataire(type_destinataire, titre, identite, date_naissance, date_deces, lien_bio):
 		"""
 		Rajout de données via le formulaire.
 		S'il y a une erreur, la fonction renvoie False suivi d'une liste d'erreur.
@@ -101,24 +102,26 @@ class Destinataire(db.Model) :
 			erreurs.append("Le champ identite est vide")
 		if not type_destinataire=="institution" or type_destinataire=="noblesse":
 			erreurs.append("Le champ identite ne correspond pas aux données attendues : institution ou noblesse.")
+		#On vérifie que la longueur des caractères des dates ne dépasse pas la limite de 10 (format AAAA-MM-JJ)
+		if date_naissance==True and date_deces==True:
+			if not len(date_naissance)==10 and len(date_deces)==10:
+				erreurs.append("Les dates doivent être écrites au format suivant : AAAA-MM-JJ")   
+		# On vérifie que le/la destinataire n'a pas déjà été enregistré(e)
+		if identite==Destinataire.identite_destinataire:
+			erreurs.append("Le/La destinataire a déjà été enregistré(e) dans la base de données")
 
 		# Si on a au moins une erreur
 		if len(erreurs) > 0:
 			return False, erreurs
 
-		# On vérifie que le/la destinataire n'a pas déjà été enregistré(e)
-		# Si c'est le cas, on récupère la données déjà existante pour la mettre à jour
-		entree_destinataire = Destinataire.query.filter(
-			Destinataire.identite_destinataire==identite
-		).count()
-		if entree_destinataire > 0:
-			entree_destinataire=Destinataire.id_destinataire
-
 		# On crée une nouvelle lettre dans la table Destinataire
 		new_destinataire = Destinataire(
 			type_destinataire=type_destinataire,
 			titre_destinataire=titre,
-			identite_destinataire=identite
+			identite_destinataire=identite,
+			date_naissance=date_naissance,
+			date_deces=date_deces,
+			lien_infos_destinataire=lien_bio
 		)
 
 		try:
@@ -131,6 +134,25 @@ class Destinataire(db.Model) :
 		except Exception as erreur:
 			# On annule les requêtes de la transaction en cours en cas d'erreurs
 			db.session.rollback()
+			return False, [str(erreur)]
+
+	@staticmethod
+	def supprimer_destinataire(id_destinataire):
+		"""
+		Fonction qui supprime un destinataire
+		:param id_destinataire: id du destinataire
+		:return: Booléen
+		"""
+		destinataire_a_supprimer = Destinataire.query.get(id_destinataire)
+	# récupération d'une collection dans la BDD
+
+		try:
+			db.session.delete(delete_collection)
+		# suppression de la collection de la BDD
+			db.session.commit()
+			return True
+
+		except Exception as erreur:
 			return False, [str(erreur)]
 
 	def to_jsonapi_dict(self):
@@ -178,7 +200,7 @@ class Institution_Conservation(db.Model) :
 		return(self.id_institution_conservation)
 
 	@staticmethod
-	def ajout_institution(nom):
+	def ajout_institution(nom, latitude, longitude):
 		"""
 		Rajout de données via le formulaire.
 		S'il y a une erreur, la fonction renvoie False suivi d'une liste d'erreur.
@@ -191,23 +213,19 @@ class Institution_Conservation(db.Model) :
 		erreurs = []
 		if not nom:
 			erreurs.append("Le champ nom est vide")
+		# On vérifie que l'institution n'a pas déjà été enregistrée
+		if nom==Institution_Conservation.nom_institution_conservation:
+			erreurs.append("L'institution a déjà été enregistrée dans la base de données")
 
 		# Si on a au moins une erreur
 		if len(erreurs) > 0:
 			return False, erreurs
 
-		# On vérifie que l'institution n'a pas déjà été enregistrée
-		#Si c'est le cas, on récupère la données déjà existante pour les mettre à jour
-		entree_institution = Institution_Conservation.query.filter(
-			Institution_Conservation.nom_institution_conservation==nom
-		).count()
-		if entree_institution > 0:
-			entree_institution=Institution_Conservation.id_institution_conservation
-
-
 		# On crée une nouvelle lettre dans la base Lettre
 		new_institution = Institution_Conservation(
-			nom_institution_conservation=nom
+			nom_institution_conservation=nom,
+			latitude_institution_conservation=latitude,
+			longitude_institution_conservation=longitude
 		)
 
 		try:
@@ -220,6 +238,26 @@ class Institution_Conservation(db.Model) :
 		except Exception as erreur:
 			# On annule les requêtes de la transaction en cours en cas d'erreurs
 			db.session.rollback()
+			return False, [str(erreur)]
+
+
+	@staticmethod
+	def supprimer_institution(id_institution_conservation):
+		"""
+		Fonction qui supprime une institution
+		:param id_institution: id de l'institution
+		:return: Booléen
+		"""
+		institution_a_supprimer = Institution_Conservation.query.get(id_institution_conservation)
+	# récupération d'une collection dans la BDD
+
+		try:
+			db.session.delete(delete_collection)
+		# suppression de la collection de la BDD
+			db.session.commit()
+			return True
+
+		except Exception as erreur:
 			return False, [str(erreur)]
 
 	def to_jsonapi_dict(self):
@@ -262,7 +300,7 @@ class Lettre(db.Model) :
 	institution_id = db.Column(db.Integer, db.ForeignKey('institution_conservation.id_institution_conservation'))
 	lien_image_lettre = db.Column(db.Text)
 	authorships = db.relationship("User", secondary="authorship", backref="lettre", lazy="dynamic")
-	correspondance = db.relationship("Destinataire", secondary="correspondance", backref="lettre", lazy="dynamic")
+	correspondance = db.relationship("Destinataire", secondary="correspondance", backref="lettre", lazy="dynamic", cascade='all, delete, delete-orphan', single_parent="True")
 
 	def get_id(self):
 		"""
@@ -273,7 +311,7 @@ class Lettre(db.Model) :
 		return(self.id_lettre)
 
 	@staticmethod
-	def ajout_lettre(objet, contresignataire, date, lieu, langue, pronom, cote, statut, lien):
+	def ajout_lettre(objet, contresignataire, date, lieu, langue, pronom, cote, statut, lien, institution, destinataire):
 		"""
 		Rajout de données via le formulaire.
 		Si il y a une erreur, la fonction renvoie False suivi d'une liste d'erreur.
@@ -312,19 +350,28 @@ class Lettre(db.Model) :
 			erreurs.append("Le champ cote est vide")
 		if not statut:
 			erreurs.append("Le champ statut est vide")
-		if not statut=="Orig." or statut=="Copie":
-			erreurs.append("Le champ statut ne correspond pas aux données attendues : Orig. ou Copie")
+		#if statut!="Orig." or statut!="Copie":
+			#erreurs.append("Le champ statut ne correspond pas aux données attendues : Orig. ou Copie")
+		# On vérifie que la lettre n'a pas déjà été enregistrée
+		if date==Lettre.date_envoie_lettre and cote==Lettre.cote_lettre:
+			erreurs.append("La lettre a déjà été renseignée dans notre base de données")
 
 		# Si on a au moins une erreur
 		if len(erreurs) > 0:
 			return False, erreurs
 
-		# On vérifie que la lettre n'a pas déjà été enregistrée
-		exemplaire_lettre = Lettre.query.filter(
-			db.and_(Lettre.date_envoie_lettre == date, Lettre.cote_lettre == cote)
-		).count()
-		if exemplaire_lettre > 0:
-			erreurs.append("La lettre a déjà été renseignée dans notre base de données")
+		#On vérifie que l'instituion et le destinataire ont déjà été enregistrés dans la base
+		#En faisant les liens adéquats entre la lettre, son institution de conservation et son/sa destinataire
+		if institution == True :
+			if institution == Institution_Conservation.query.filter(Institution_Conservation.nom_institution_conservation):
+				Lettre.institution_id = Institution_Conservation.query.get(id_institution_conservation)
+			else:
+				return False,[str("L'institution de conservation n'a pas été enregistrée préalablement")]
+		if destinataire == True :
+			if destinataire == Destinataire.query.filter(Destinataire.identite_destinataire):
+				Lettre.correspondance = Lettre.query.get(db.and_(Lettre.id_lettre==Correspondance.lettre_id, Correspondance.destinataire_id==Destinataire.id_destinataire))
+			else:
+				return False, [str("Le ou la destinataire n'a pas été enregistré préalablement")]
 
 		# On crée une nouvelle lettre dans la base Lettre
 		new_lettre = Lettre(
@@ -337,6 +384,8 @@ class Lettre(db.Model) :
 			cote_lettre=cote,
 			statut_lettre=statut,
 			lien_image_lettre=lien,
+			institution_id=institution,
+			correspondance=destinataire
 		)
 
 		try:
@@ -349,6 +398,24 @@ class Lettre(db.Model) :
 		except Exception as erreur:
 			# On annule les requêtes de la transaction en cours en cas d'erreurs
 			db.session.rollback()
+			return False, [str(erreur)]
+
+	@staticmethod
+	def supprimer_lettre(id_lettre):
+		"""
+		Fonction qui supprime une lettre
+		:param id_lettre: id de la lettre
+		:return: Booléen
+		"""
+		lettre_a_supprimer = Lettre.query.get(id_lettre)
+
+		try:
+			db.session.delete(delete_collection)
+		# suppression de la collection de la BDD
+			db.session.commit()
+			return True
+
+		except Exception as erreur:
 			return False, [str(erreur)]
 
 
