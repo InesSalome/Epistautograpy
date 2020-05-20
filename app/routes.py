@@ -252,6 +252,103 @@ def formulaire_institution():
 	return render_template("pages/formulaire_institution.html", nom="Epistautograpy", listenominstitution=listenominstitution)
 
 
+@app.route("/modification_lettre", methods=["POST", "GET"])
+def modification_lettre():
+	""" 
+	Route permettant de modifier les données d'une lettre
+	:param work_id: ID de l'oeuvre récupérée depuis la page oeuvre
+	:return: redirection ou template update-work.html
+	:rtype: template
+	"""
+	
+	if request.method == "GET":
+		miseajour_lettre = Lettre.query.get(id_lettre)
+		return render_template("pages/modification_lettre.html", miseajour_lettre=miseajour_lettre)
+
+	else:
+		status, donnees_lettre = Lettre.miseajour_lettre(
+			id_lettre=id_lettre,
+			date=request.form.get("date", None),
+			lieu=request.form.get("lieu", None),
+			objet=request.form.get("objet", None),
+			contresignataire=request.form.get("contresignataire", None),
+			langue=request.form.get("langue", None),
+			pronom=request.form.get("pronom", None),
+			cote=request.form.get("cote", None),
+			statut=request.form.get("Statut", None),
+			url=request.form.get("url", None)
+			)
+
+		if status is True:
+			flash("Modification réussie !", "success")
+			return redirect("/index_lettres")
+		else:
+			flash("Les erreurs suivantes ont été rencontrées : " + ", ".join(donnees_lettre), "danger")
+			miseajour_lettre = Lettre.query.get(id_lettre)
+			return render_template("pages/modification_lettre.html", nom="Epistautograpy", miseajour_lettre=miseajour_lettre)
+
+@app.route("/modification_destinataire", methods=["POST", "GET"])
+def modification_destinataire():
+	""" 
+	Route permettant de modifier les données d'une lettre
+	:param work_id: ID de l'oeuvre récupérée depuis la page oeuvre
+	:return: redirection ou template update-work.html
+	:rtype: template
+	"""
+	
+	if request.method == "GET":
+		miseajour_destinataire = Destinataire.query.get(id_destinataire)
+		return render_template("pages/modification_destinataire.html", miseajour_destinataire=miseajour_destinataire)
+
+	else:
+		status, donnees_destinataire = Destinataire.miseajour_destinataire(
+			id_destinataire=id_destinataire,
+			type_destinataire=request.form.get("type", None),
+			titre=request.form.get("titre", None),
+			identite=request.form.get("identite", None),
+			date_naissance=request.form.get("date_naissance", None),
+			date_deces=request.form.get("date_deces", None),
+			lien_bio=request.form.get("lien", None),
+			)
+
+		if status is True:
+			flash("Modification réussie !", "success")
+			return redirect("/index_destinataires")
+		else:
+			flash("Les erreurs suivantes ont été rencontrées : " + ", ".join(donnees_destinataire), "danger")
+			miseajour_destinataire = Destinataire.query.get(id_destinataire)
+			return render_template("pages/modification_destinataire.html", nom="Epistautograpy", miseajour_destinataire=miseajour_destinataire)
+
+@app.route("/modification_institution", methods=["POST", "GET"])
+def modification_institution():
+	""" 
+	Route permettant de modifier les données d'une institution
+	:param id_institution_conservation: id de l'institution
+	:return: redirection ou template update-work.html
+	:rtype: template
+	"""
+	
+	if request.method == "GET":
+		miseajour_institution = Institution_Conservation.query.get(id_institution_conservation)
+		return render_template("pages/modification_institution.html", miseajour_institution=miseajour_institution)
+
+	else:
+		status, donnees_institution = Institution_Conservation.miseajour_institution(
+			id_institution_conservation=id_institution_conservation,
+			nom=request.form.get("nom", None),
+			latitude=request.form.get("latitude", None),
+			longitude=request.form.get("longitude", None)
+			)
+
+		if status is True:
+			flash("Modification réussie !", "success")
+			return redirect("/index_institutions_conservations")
+		else:
+			flash("Les erreurs suivantes ont été rencontrées : " + ", ".join(donnees_institution), "danger")
+			miseajour_institution = Institution_Conservation.query.get(id_institution_conservation)
+			return render_template("pages/modification_institution.html", nom="Epistautograpy", miseajour_institution=miseajour_institution)
+
+
 @app.route("/suppression_lettre", methods=["POST", "GET"])
 def suppression_lettre():
 	""" 
@@ -263,8 +360,8 @@ def suppression_lettre():
 
 	if request.method == "POST":
 		status = Lettre.supprimer_lettre(
-            id_lettre=request.form.get("Lettre_a_supprimer", None)
-        )
+			id_lettre=request.form.get("Lettre_a_supprimer", None)
+		)
 
 		if status is True:
 			flash("Suppression réussie !", "success")

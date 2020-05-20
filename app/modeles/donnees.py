@@ -137,6 +137,64 @@ class Destinataire(db.Model) :
 			return False, [str(erreur)]
 
 	@staticmethod
+	def miseajour_destinataire(id_destinataire, type_destinataire, titre, identite, date_naissance, date_deces, lien_bio):
+		"""
+		Fonction qui permet de modifier les données d'un destinataire dans la base de données
+		:param id_destinataire: id du destinataire
+		:param type: type de destinataire : institution ou noblesse
+		:param titre: titre de noblesse
+		:param identite: nom de la personne ou de l'institution
+		:param date_naissance: date de naissance de la personne
+		:param date_deces: date de décès de la personne
+		:param lien_bio: URL vers une page de biographie
+		:return: Booléen
+		"""
+		errors=[]
+		if not type_destinataire:
+			errors.append("Le champ Type de destinataire est vide")
+		if not type_destinataire=="noblesse" or type_destinataire=="institution":
+			errors.append("Le champ Type de destinataire ne correspond pas aux données attendues : institution ou noblesse")
+		if type_destinataire=="noblesse":
+			if not titre:
+				errors.append("Le champ Titre du destinataire est vide")
+
+		if len(errors) > 0:
+			return False, errors
+
+		# récupération du destinataire dans la base de données
+		miseajour_destinataire = Destinataire.query.get(id_destinataire)
+		
+		if  miseajour_destinataire.type_destinataire == type_destinataire \
+			and  miseajour_destinataire.titre_destinataire == titre \
+			and  miseajour_destinataire.identite_destinataire == identite \
+			and  miseajour_destinataire.date_naissance == date_naissance \
+			and  miseajour_destinataire.date_deces == date_deces \
+			and  miseajour_destinataire.lien_infos_destinataire == lien_bio :
+			errors.append("Aucune modification n'a été réalisée")
+		# vérification qu'au moins un champ est modifié
+
+		if len(errors) > 0:
+			return False, errors
+		
+		else:
+			 miseajour_destinataire.type_destinataire == type_destinataire
+			 miseajour_destinataire.titre_destinataire == titre 
+			 miseajour_destinataire.identite_destinataire == identite 
+			 miseajour_destinataire.date_naissance == date_naissance 
+			 miseajour_destinataire.date_deces == date_deces 
+			 miseajour_destinataire.lien_infos_destinataire == lien_bio
+		# mise à jour de la collection
+
+		try:
+			db.session.add(miseajour_destinataire)
+		# ajout des modifications à la BDD
+			db.session.commit()
+			return True, miseajour_destinataire
+
+		except Exception as erreur:
+			return False, [str(erreur)]
+
+	@staticmethod
 	def supprimer_destinataire(id_destinataire):
 		"""
 		Fonction qui supprime un destinataire
@@ -240,6 +298,49 @@ class Institution_Conservation(db.Model) :
 			db.session.rollback()
 			return False, [str(erreur)]
 
+	@staticmethod
+	def miseajour_institution(id_institution_conservation, nom, latitude, longitude):
+		"""
+		Fonction qui permet de modifier les données d'une institution dans la base de données
+		:param id_institution_conservation: id de l'institution
+		:param nom: nom de l'institution
+		:param latitude: latitude de l'emplacement de l'institution
+		:param longitude:longitude de l'emplacement de l'institution
+		:return: Booléen
+		"""
+		errors=[]
+		if not nom:
+			errors.append("Le champ Nom de l'institution est vide")
+		
+		if len(errors) > 0:
+			return False, errors
+
+		# récupération du destinataire dans la base de données
+		miseajour_institution = Institution_Conservation.query.get(id_institution_conservation)
+		
+		if  miseajour_institution.nom_institution_conservation == nom \
+			and  miseajour_institution.latitude_institution_conservation == latitude \
+			and  miseajour_institution.longitude_institution_conservation == longitude :
+			errors.append("Aucune modification n'a été réalisée")
+		# vérification qu'au moins un champ est modifié
+
+		if len(errors) > 0:
+			return False, errors
+		
+		else:
+			 miseajour_institution.nom_institution_conservation == nom 
+			 miseajour_institution.latitude_institution_conservation == latitude 
+			 miseajour_institution.longitude_institution_conservation == longitude
+		# mise à jour de la collection
+
+		try:
+			db.session.add(miseajour_institution)
+		# ajout des modifications à la BDD
+			db.session.commit()
+			return True, miseajour_institution
+
+		except Exception as erreur:
+			return False, [str(erreur)]
 
 	@staticmethod
 	def supprimer_institution(id_institution_conservation):
@@ -398,6 +499,71 @@ class Lettre(db.Model) :
 		except Exception as erreur:
 			# On annule les requêtes de la transaction en cours en cas d'erreurs
 			db.session.rollback()
+			return False, [str(erreur)]
+
+	@staticmethod
+	def miseajour_lettre(id_lettre, date, lieu, objet, contresignataire, langue, pronom, cote, statut, lien_lettre):
+		"""
+		Fonction qui permet de modifier les données d'une lettre dans la base de données
+		:param id_lettre: id de la lettre
+		:param date: date d'envoie de la lettre
+		:param lieu: lieu d'envoie de la lettre
+		:param objet: objet de la lettre
+		:param contresignataire: contresignataire de la lettre
+		:param langue: langue de la lettre
+		:param pronom: pronom personnel employé dans la lettre
+		:param cote: cote de la lettre
+		:param statut: statut de la lettre
+		:param lien_lettre: lien vers la lettre numérisée
+		:return: Booléen
+		"""
+		errors=[]
+		if not date:
+			errors.append("Le champ Date d'envoie de la lettre est vide")
+		if not contresignataire:
+			errors.append("Le champ Nom du contresignataire est vide")
+		
+		if len(errors) > 0:
+			return False, errors
+
+		# récupération du destinataire dans la base de données
+		miseajour_lettre = Lettre.query.get(id_lettre)
+		
+		if  miseajour_lettre.date_envoie_lettre == date \
+			and  miseajour_lettre.lieu_ecriture_lettre == lieu \
+			and  miseajour_lettre.objet_lettre == objet \
+			and  miseajour_lettre.contresignataire_lettre == contresignataire \
+			and  miseajour_lettre.langue_lettre == langue \
+			and  miseajour_lettre.pronom_personnel_employe_lettre == pronom \
+			and  miseajour_lettre.cote_lettre == cote \
+			and  miseajour_lettre.statut_lettre == statut \
+			and  miseajour_lettre.lien_image_lettre == lien_lettre :
+
+			errors.append("Aucune modification n'a été réalisée")
+		# vérification qu'au moins un champ est modifié
+
+		if len(errors) > 0:
+			return False, errors
+		
+		else:
+			miseajour_lettre.date_envoie_lettre == date
+			miseajour_lettre.lieu_ecriture_lettre == lieu 
+			miseajour_lettre.objet_lettre == objet 
+			miseajour_lettre.contresignataire_lettre == contresignataire 
+			miseajour_lettre.langue_lettre == langue 
+			miseajour_lettre.pronom_personnel_employe_lettre == pronom 
+			miseajour_lettre.cote_lettre == cote 
+			miseajour_lettre.statut_lettre == statut 
+			miseajour_lettre.lien_image_lettre == lien_lettre
+		# mise à jour de la collection
+
+		try:
+			db.session.add(miseajour_lettre)
+		# ajout des modifications à la BDD
+			db.session.commit()
+			return True, miseajour_lettre
+
+		except Exception as erreur:
 			return False, [str(erreur)]
 
 	@staticmethod

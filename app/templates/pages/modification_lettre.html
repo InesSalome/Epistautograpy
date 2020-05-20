@@ -1,0 +1,74 @@
+{% extends "conteneur.html" %}
+
+{% block titre %}| Modification d'une lettre {%endblock%}
+
+{% block corps %}
+
+<div>
+    <center>
+      <h2>Modifier une lettre</h2>
+      <p>Complétez le formulaire et cliquez sur "Modifier" pour modifier les données relatives à la lettre</p>
+    </center>
+</div>
+<form class="form" method="POST" action="{{url_for('modification_lettre', id_lettre=miseajour_lettre.id_lettre)}}" style="text-align: center">
+  <div class="form-group row">
+    <label for="register-login" class="col-sm-2 col-form-label">Date d'envoie de la lettre</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" name="date" value="{{miseajour_lettre.date_envoie_lettre}}">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="register-nom" class="col-sm-2 col-form-label">Lieu d'écriture de la lettre</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" name="lieu" value="{{miseajour_lettre.lieu_ecriture_lettre}}">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="register-nom" class="col-sm-2 col-form-label">Objet de la lettre</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" name="objet" value="{{miseajour_lettre.objet_lettre}}">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="register-email" class="col-sm-2 col-form-label">Nom du contresignataire</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" name="contresignataire" value="{{miseajour_lettre.contresignataire_lettre}}">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="register-password" class="col-sm-2 col-form-label">Langue</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" name="langue" value="{{miseajour_lettre.langue_lettre}}">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="register-password" class="col-sm-2 col-form-label">Pronom personnel employé</label>
+    <div class="col-sm-10">
+      <input class="form-control" name="pronom"value="{{miseajour_lettre.pronom_personnel_employe_lettre}}">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="register-password" class="col-sm-2 col-form-label">Cote</label>
+    <div class="col-sm-10">
+      <input class="form-control" name="cote"value="{{miseajour_lettre.cote_lettre}}">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="register-password" class="col-sm-2 col-form-label">Statut</label>
+    <div class="col-sm-10">
+      <input class="form-control" name="Statut" value="{{miseajour_lettre.statut_lettre}}">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="register-password" class="col-sm-2 col-form-label">URL vers la lettre numérisée</label>
+    <div class="col-sm-10">
+      <input class="form-control" name="url" value="{{miseajour_lettre.lien_image_lettre}}">
+    </div>
+  </div>
+
+  <div>
+    <button type="submit" class="btn btn-primary">Modifier</button>
+  </div>
+</form>
+
+{% endblock %}
