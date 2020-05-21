@@ -262,12 +262,12 @@ def modification_lettre():
 	"""
 	
 	if request.method == "GET":
-		miseajour_lettre = Lettre.query.get(id_lettre)
+		miseajour_lettre = Lettre.query.filter(Lettre.id_lettre)
 		return render_template("pages/modification_lettre.html", miseajour_lettre=miseajour_lettre)
 
 	else:
 		status, donnees_lettre = Lettre.miseajour_lettre(
-			id_lettre=id_lettre,
+			id_lettre=Lettre.query.filter(Lettre.id_lettre),
 			date=request.form.get("date", None),
 			lieu=request.form.get("lieu", None),
 			objet=request.form.get("objet", None),
@@ -276,7 +276,7 @@ def modification_lettre():
 			pronom=request.form.get("pronom", None),
 			cote=request.form.get("cote", None),
 			statut=request.form.get("Statut", None),
-			url=request.form.get("url", None)
+			lien_lettre=request.form.get("url", None)
 			)
 
 		if status is True:
@@ -284,7 +284,7 @@ def modification_lettre():
 			return redirect("/index_lettres")
 		else:
 			flash("Les erreurs suivantes ont été rencontrées : " + ", ".join(donnees_lettre), "danger")
-			miseajour_lettre = Lettre.query.get(id_lettre)
+			miseajour_lettre = Lettre.query.filter(Lettre.id_lettre)
 			return render_template("pages/modification_lettre.html", nom="Epistautograpy", miseajour_lettre=miseajour_lettre)
 
 @app.route("/modification_destinataire", methods=["POST", "GET"])
@@ -297,12 +297,12 @@ def modification_destinataire():
 	"""
 	
 	if request.method == "GET":
-		miseajour_destinataire = Destinataire.query.get(id_destinataire)
+		miseajour_destinataire = Destinataire.query.filter(Destinataire.id_destinataire)
 		return render_template("pages/modification_destinataire.html", miseajour_destinataire=miseajour_destinataire)
 
 	else:
 		status, donnees_destinataire = Destinataire.miseajour_destinataire(
-			id_destinataire=id_destinataire,
+			id_destinataire=Destinataire.query.filter(Destinataire.id_destinataire),
 			type_destinataire=request.form.get("type", None),
 			titre=request.form.get("titre", None),
 			identite=request.form.get("identite", None),
@@ -316,7 +316,7 @@ def modification_destinataire():
 			return redirect("/index_destinataires")
 		else:
 			flash("Les erreurs suivantes ont été rencontrées : " + ", ".join(donnees_destinataire), "danger")
-			miseajour_destinataire = Destinataire.query.get(id_destinataire)
+			miseajour_destinataire = Destinataire.query.filter(Destinataire.id_destinataire)
 			return render_template("pages/modification_destinataire.html", nom="Epistautograpy", miseajour_destinataire=miseajour_destinataire)
 
 @app.route("/modification_institution", methods=["POST", "GET"])
@@ -329,12 +329,12 @@ def modification_institution():
 	"""
 	
 	if request.method == "GET":
-		miseajour_institution = Institution_Conservation.query.get(id_institution_conservation)
+		miseajour_institution = Institution_Conservation.query.filter(Institution_Conservation.id_institution_conservation)
 		return render_template("pages/modification_institution.html", miseajour_institution=miseajour_institution)
 
 	else:
 		status, donnees_institution = Institution_Conservation.miseajour_institution(
-			id_institution_conservation=id_institution_conservation,
+			id_institution_conservation=Institution_Conservation.query.filter(Institution_Conservation.id_institution_conservation),
 			nom=request.form.get("nom", None),
 			latitude=request.form.get("latitude", None),
 			longitude=request.form.get("longitude", None)
@@ -345,7 +345,7 @@ def modification_institution():
 			return redirect("/index_institutions_conservations")
 		else:
 			flash("Les erreurs suivantes ont été rencontrées : " + ", ".join(donnees_institution), "danger")
-			miseajour_institution = Institution_Conservation.query.get(id_institution_conservation)
+			miseajour_institution = Institution_Conservation.query.filter(Institution_Conservation.id_institution_conservation)
 			return render_template("pages/modification_institution.html", nom="Epistautograpy", miseajour_institution=miseajour_institution)
 
 
@@ -357,6 +357,7 @@ def suppression_lettre():
 	"""
 
 	listenumerolettre = Lettre.query.with_entities(Lettre.id_lettre).distinct()
+	suppression_lettre = Lettre.query.filter(Lettre.id_lettre)
 
 	if request.method == "POST":
 		status = Lettre.supprimer_lettre(
@@ -380,10 +381,11 @@ def suppression_destinataire():
 	:return : affichage du template supprimer_destinataire.html ou redirection
 	"""
 	listedestinataire = Destinataire.query.with_entities(Destinataire.identite_destinataire).distinct()
+	suppression_destinataire = Destinataire.query.filter(Destinataire.identite_destinataire)
 
 	if request.method == "POST":
 		statut = Destinataire.supprimer_destinataire(
-			id_destinataire=request.form.get("Destinataire_a_supprimer", None)
+			nom_destinataire=request.form.get("Destinataire_a_supprimer", None)
 		)
 
 		if statut is True:
@@ -403,10 +405,11 @@ def suppression_institution():
 	:return : affichage du template supprimer_institution.html ou redirection
 	"""
 	listeinstitution = Institution_Conservation.query.with_entities(Institution_Conservation.nom_institution_conservation).distinct()
+	suppression_institution = Institution_Conservation.query.filter(Institution_Conservation.nom_institution_conservation)
 
 	if request.method == "POST":
 		statut = Institution_Conservation.supprimer_institution(
-			id_institution_conservation=request.form.get("Institution_a_supprimer", None)
+			nom_institution_conservation=request.form.get("Institution_a_supprimer", None)
 		)
 
 		if statut is True:

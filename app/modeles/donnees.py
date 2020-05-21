@@ -152,7 +152,7 @@ class Destinataire(db.Model) :
 		errors=[]
 		if not type_destinataire:
 			errors.append("Le champ Type de destinataire est vide")
-		if not type_destinataire=="noblesse" or type_destinataire=="institution":
+		if  type_destinataire!="noblesse" or  type_destinataire!="institution":
 			errors.append("Le champ Type de destinataire ne correspond pas aux données attendues : institution ou noblesse")
 		if type_destinataire=="noblesse":
 			if not titre:
@@ -162,14 +162,14 @@ class Destinataire(db.Model) :
 			return False, errors
 
 		# récupération du destinataire dans la base de données
-		miseajour_destinataire = Destinataire.query.get(id_destinataire)
+		miseajour_destinataire = Destinataire.query.filter(Destinataire.id_destinataire)
 		
-		if  miseajour_destinataire.type_destinataire == type_destinataire \
-			and  miseajour_destinataire.titre_destinataire == titre \
-			and  miseajour_destinataire.identite_destinataire == identite \
-			and  miseajour_destinataire.date_naissance == date_naissance \
-			and  miseajour_destinataire.date_deces == date_deces \
-			and  miseajour_destinataire.lien_infos_destinataire == lien_bio :
+		if  type_destinataire == Destinataire.type_destinataire\
+			and  titre == Destinataire.titre_destinataire \
+			and  identite == Destinataire.identite_destinataire \
+			and  date_naissance == Destinataire.date_naissance \
+			and  date_deces == Destinataire.date_deces \
+			and  lien_bio == Destinataire.lien_infos_destinataire :
 			errors.append("Aucune modification n'a été réalisée")
 		# vérification qu'au moins un champ est modifié
 
@@ -177,12 +177,12 @@ class Destinataire(db.Model) :
 			return False, errors
 		
 		else:
-			 miseajour_destinataire.type_destinataire == type_destinataire
-			 miseajour_destinataire.titre_destinataire == titre 
-			 miseajour_destinataire.identite_destinataire == identite 
-			 miseajour_destinataire.date_naissance == date_naissance 
-			 miseajour_destinataire.date_deces == date_deces 
-			 miseajour_destinataire.lien_infos_destinataire == lien_bio
+			 type_destinataire == Destinataire.type_destinataire
+			 titre == Destinataire.titre_destinataire 
+			 identite == Destinataire.identite_destinataire 
+			 date_naissance == Destinataire.date_naissance 
+			 date_deces == Destinataire.date_deces
+			 lien_bio == Destinataire.lien_infos_destinataire
 		# mise à jour de la collection
 
 		try:
@@ -195,17 +195,17 @@ class Destinataire(db.Model) :
 			return False, [str(erreur)]
 
 	@staticmethod
-	def supprimer_destinataire(id_destinataire):
+	def supprimer_destinataire(nom_destinataire):
 		"""
 		Fonction qui supprime un destinataire
 		:param id_destinataire: id du destinataire
 		:return: Booléen
 		"""
-		destinataire_a_supprimer = Destinataire.query.get(id_destinataire)
+		nom_destinataire = Destinataire.query.filter(Destinataire.identite_destinataire)
 	# récupération d'une collection dans la BDD
 
 		try:
-			db.session.delete(delete_collection)
+			db.session.delete(supprimer_destinataire)
 		# suppression de la collection de la BDD
 			db.session.commit()
 			return True
@@ -316,11 +316,11 @@ class Institution_Conservation(db.Model) :
 			return False, errors
 
 		# récupération du destinataire dans la base de données
-		miseajour_institution = Institution_Conservation.query.get(id_institution_conservation)
+		miseajour_institution = Institution_Conservation.query.filter(Institution_Conservation.id_institution_conservation)
 		
-		if  miseajour_institution.nom_institution_conservation == nom \
-			and  miseajour_institution.latitude_institution_conservation == latitude \
-			and  miseajour_institution.longitude_institution_conservation == longitude :
+		if  nom == Institution_Conservation.nom_institution_conservation \
+			and  latitude == Institution_Conservation.latitude_institution_conservation \
+			and  longitude == Institution_Conservation.longitude_institution_conservation :
 			errors.append("Aucune modification n'a été réalisée")
 		# vérification qu'au moins un champ est modifié
 
@@ -328,9 +328,9 @@ class Institution_Conservation(db.Model) :
 			return False, errors
 		
 		else:
-			 miseajour_institution.nom_institution_conservation == nom 
-			 miseajour_institution.latitude_institution_conservation == latitude 
-			 miseajour_institution.longitude_institution_conservation == longitude
+			 nom == Institution_Conservation.nom_institution_conservation 
+			 latitude ==  Institution_Conservation.latitude_institution_conservation
+			 longitude == Institution_Conservation.longitude_institution_conservation
 		# mise à jour de la collection
 
 		try:
@@ -343,17 +343,17 @@ class Institution_Conservation(db.Model) :
 			return False, [str(erreur)]
 
 	@staticmethod
-	def supprimer_institution(id_institution_conservation):
+	def supprimer_institution(nom_institution_conservation):
 		"""
 		Fonction qui supprime une institution
 		:param id_institution: id de l'institution
 		:return: Booléen
 		"""
-		institution_a_supprimer = Institution_Conservation.query.get(id_institution_conservation)
+		nom_institution_conservation = Institution_Conservation.query.filter(Institution_Conservation.nom_institution_conservation)
 	# récupération d'une collection dans la BDD
 
 		try:
-			db.session.delete(delete_collection)
+			db.session.delete(supprimer_institution)
 		# suppression de la collection de la BDD
 			db.session.commit()
 			return True
@@ -522,22 +522,24 @@ class Lettre(db.Model) :
 			errors.append("Le champ Date d'envoie de la lettre est vide")
 		if not contresignataire:
 			errors.append("Le champ Nom du contresignataire est vide")
+		if not cote:
+			errors.append("Le champ Cote est vide")
 		
 		if len(errors) > 0:
 			return False, errors
 
 		# récupération du destinataire dans la base de données
-		miseajour_lettre = Lettre.query.get(id_lettre)
+		miseajour_lettre = Lettre.query.filter(Lettre.id_lettre)
 		
-		if  miseajour_lettre.date_envoie_lettre == date \
-			and  miseajour_lettre.lieu_ecriture_lettre == lieu \
-			and  miseajour_lettre.objet_lettre == objet \
-			and  miseajour_lettre.contresignataire_lettre == contresignataire \
-			and  miseajour_lettre.langue_lettre == langue \
-			and  miseajour_lettre.pronom_personnel_employe_lettre == pronom \
-			and  miseajour_lettre.cote_lettre == cote \
-			and  miseajour_lettre.statut_lettre == statut \
-			and  miseajour_lettre.lien_image_lettre == lien_lettre :
+		if  date == Lettre.date_envoie_lettre \
+			and  lieu == Lettre.lieu_ecriture_lettre \
+			and  objet == Lettre.objet_lettre \
+			and  contresignataire == Lettre.contresignataire_lettre \
+			and  langue == Lettre.langue_lettre \
+			and  pronom == Lettre.pronom_personnel_employe_lettre \
+			and  cote == Lettre.cote_lettre \
+			and  statut == Lettre.statut_lettre \
+			and  lien_lettre == Lettre.lien_image_lettre :
 
 			errors.append("Aucune modification n'a été réalisée")
 		# vérification qu'au moins un champ est modifié
@@ -546,15 +548,15 @@ class Lettre(db.Model) :
 			return False, errors
 		
 		else:
-			miseajour_lettre.date_envoie_lettre == date
-			miseajour_lettre.lieu_ecriture_lettre == lieu 
-			miseajour_lettre.objet_lettre == objet 
-			miseajour_lettre.contresignataire_lettre == contresignataire 
-			miseajour_lettre.langue_lettre == langue 
-			miseajour_lettre.pronom_personnel_employe_lettre == pronom 
-			miseajour_lettre.cote_lettre == cote 
-			miseajour_lettre.statut_lettre == statut 
-			miseajour_lettre.lien_image_lettre == lien_lettre
+			date == Lettre.date_envoie_lettre
+			lieu == Lettre.lieu_ecriture_lettre
+			objet == Lettre.objet_lettre 
+			contresignataire == Lettre.contresignataire_lettre 
+			langue == Lettre.langue_lettre 
+			pronom == Lettre.pronom_personnel_employe_lettre 
+			cote == Lettre.cote_lettre 
+			statut == Lettre.statut_lettre 
+			lien_lettre == Lettre.lien_image_lettre
 		# mise à jour de la collection
 
 		try:
@@ -573,10 +575,10 @@ class Lettre(db.Model) :
 		:param id_lettre: id de la lettre
 		:return: Booléen
 		"""
-		lettre_a_supprimer = Lettre.query.get(id_lettre)
+		id_lettre = Lettre.query.filter(Lettre.id_lettre)
 
 		try:
-			db.session.delete(delete_collection)
+			db.session.delete(supprimer_lettre)
 		# suppression de la collection de la BDD
 			db.session.commit()
 			return True

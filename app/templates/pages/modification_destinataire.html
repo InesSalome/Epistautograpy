@@ -4,49 +4,50 @@
 
 {% block corps %}
 
-<div>
-    <center>
-      <h2>Modifier un destinataire</h2>
-      <p>Complétez le formulaire et cliquez sur "Modifier" pour modifier les données relatives au destinataire</p>
-    </center>
-</div>
-<form class="form" method="POST" action="{{url_for('modification_destinataire', id_destinataire=miseajour_destinataire.id_destinataire)}}" style="text-align: center">
-  <div class="form-group row">
-    <label for="register-login" class="col-sm-2 col-form-label">Type de destinataire</label>
-    <div class="col-sm-10">
+      <h1>Modifier un destinataire</h1>
+      <p>Complétez le formulaire et cliquez sur "Modifier" pour modifier les données relatives au destinataire.</p>
+
+<form class="form dropdown " method="POST" action="{{url_for('modification_destinataire', id_destinataire=miseajour_destinataire.id_destinataire)}}" style="text-align: center">
+  <div class="form-group row flex-v-center">
+    <label class="col-sm-2 col-form-label"><strong>Type de destinataire* :</strong></label>
+    <div class="col-md-6 col-xs-12">
       <input type="text" class="form-control" name="type" value="{{miseajour_destinataire.type_destinataire}}">
     </div>
   </div>
-  <div class="form-group row">
-    <label for="register-nom" class="col-sm-2 col-form-label">Titre du destinataire</label>
-    <div class="col-sm-10">
+  <div class="form-group row flex-v-center">
+    <label class="col-sm-2 col-form-label"><strong>Titre du destinataire :</strong></label>
+    <div class="col-md-6 col-xs-12">
       <input type="text" class="form-control" name="titre" value="{{miseajour_destinataire.titre_destinataire}}">
     </div>
   </div>
-  <div class="form-group row">
-    <label for="register-nom" class="col-sm-2 col-form-label">Identité du destinataire</label>
-    <div class="col-sm-10">
+  <div class="form-group row flex-v-center">
+    <label class="col-sm-2 col-form-label"><strong>Identité du destinataire* :</strong></label>
+    <div class="col-md-6 col-xs-12">
       <input type="text" class="form-control" name="identite" value="{{miseajour_destinataire.identite_destinataire}}">
     </div>
   </div>
-  <div class="form-group row">
-    <label for="register-email" class="col-sm-2 col-form-label">Date de naissance</label>
-    <div class="col-sm-10">
+  <div class="form-group row flex-v-center">
+    <label class="col-sm-2 col-form-label"><strong>Date de naissance :</strong></label>
+    <div class="col-md-6 col-xs-12">
       <input type="text" class="form-control" name="date_naissance" value="{{miseajour_destinataire.date_naissance}}">
     </div>
   </div>
-  <div class="form-group row">
-    <label for="register-password" class="col-sm-2 col-form-label">Date de décès</label>
-    <div class="col-sm-10">
+  <div class="form-group row flex-v-center">
+    <label class="col-sm-2 col-form-label"><strong>Date de décès :</strong></label>
+    <div class="col-md-6 col-xs-12">
       <input type="text" class="form-control" name="date_deces" value="{{miseajour_destinataire.date_deces}}">
     </div>
   </div>
-  <div class="form-group row">
-    <label for="register-password" class="col-sm-2 col-form-label">Lien vers une biographie</label>
-    <div class="col-sm-10">
+  <div class="form-group row flex-v-center">
+    <label class="col-sm-2 col-form-label"><strong>Lien vers une biographie :</strong></label>
+    <div class="col-md-6 col-xs-12">
       <input class="form-control" name="lien" value="{{miseajour_destinataire.lien_infos_destinataire}}">
     </div>
   </div>
+
+  <div>
+        <p>Les champs marqués d'une * sont obligatoires. Le champ Type de destinataire attend comme données "institution" ou "noblesse". Les champs Date doivent être remplis de la manière suivante : AAAA/MM/JJ.</p>
+    </div>
 
   <div>
     <button type="submit" class="btn btn-primary">Modifier</button>

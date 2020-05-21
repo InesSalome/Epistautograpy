@@ -2879,6 +2879,16 @@ tbody.collapse.show {
   position: relative;
 }
 
+.dropdown a::after:hover{
+  position: relative;
+  display: block;
+}
+
+.dropdown-toggle {
+display: none;
+color: #d22100;
+}
+
 .dropdown-toggle::after {
   display: inline-block;
   width: 0;
@@ -2890,16 +2900,22 @@ tbody.collapse.show {
   border-right: 0.3em solid transparent;
   border-bottom: 0;
   border-left: 0.3em solid transparent;
+  color: #d22100;
 }
 
 .dropdown-toggle:empty::after {
   margin-left: 0;
 }
 
+.dropdown-toggle:hover {
+  display: block;
+  color: #d22100;
+}
+
 .dropdown-menu {
   position: absolute;
   top: 100%;
-  left: 0;
+  left: none;
   z-index: 1000;
   display: none;
   float: left;
@@ -2907,13 +2923,25 @@ tbody.collapse.show {
   padding: 0.5rem 0;
   margin: 0.125rem 0 0;
   font-size: 1rem;
-  color: #212529;
+  color: #d22100;
+  background-color: #fff;
   text-align: left;
   list-style: none;
-  background-color: #fff;
   background-clip: padding-box;
   border: 1px solid rgba(0, 0, 0, 0.15);
   border-radius: 0.25rem;
+}
+
+.dropdown-menu a:hover > li {
+  display:block;
+  position: relative;
+  color: #d22100;
+}
+ 
+
+.dropdown-menu:hover {
+  position: absolute;
+  color: #d22100;
 }
 
 .dropup .dropdown-menu {
@@ -2932,6 +2960,7 @@ tbody.collapse.show {
   border-right: 0.3em solid transparent;
   border-bottom: 0.3em solid;
   border-left: 0.3em solid transparent;
+  color: #d22100;
 }
 
 .dropup .dropdown-toggle:empty::after {
@@ -2951,7 +2980,7 @@ tbody.collapse.show {
   padding: 0.25rem 1.5rem;
   clear: both;
   font-weight: 400;
-  color: #212529;
+  color: #d22100;
   text-align: inherit;
   white-space: nowrap;
   background: none;
@@ -2959,7 +2988,7 @@ tbody.collapse.show {
 }
 
 .dropdown-item:focus, .dropdown-item:hover {
-  color: #16181b;
+  color: #d22100;
   text-decoration: none;
   background-color: #f8f9fa;
 }
@@ -3153,7 +3182,7 @@ tbody.collapse.show {
 [data-toggle="buttons"] > .btn-group > .btn input[type="checkbox"] {
   position: absolute;
   clip: rect(0, 0, 0, 0);
-  pointer-events: none;
+  pointer-events: all;
 }
 
 .input-group {

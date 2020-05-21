@@ -13,18 +13,18 @@
                 <li><a id="link" href="{{url_for('index_destinataires')}}">le nom du destinataire</a></li>
                 <li><a id="link" href="{{url_for('index_contresignataires')}}">le nom du contresignataire</a></li>
             </ul>
-         La collection de lettres ici accessible est amenée à être enrichie, alors n'hésitez pas !</p><br/>
-            <p>Pour enrichir la base, il est nécessaire de vous inscrire en remplissant les champs suivants :
-                <ul>
+         La collection de lettres ici accessible est amenée à être enrichie, alors n'hésitez pas ! Il vous suffit de vous inscrire et de remplir les formulaires dédiés.</p><br/>
+
+         <p>Pour vous inscrire, <a id="link" href="{{url_for('inscription')}}">cliquez ici</a>. Les informations suivantes vous seront demandées :</p>
+                   <ul>
                     <li>un login</li>
                     <li>un nom</li>
                     <li>un email</li>
                     <li>un mot de passe</li>
                 </ul></p>
-            <p>Pour vous inscrire, <a id="link" href="{{url_for('inscription')}}">cliquez ici</a>.</p>
         <p>
             {% if lettres %}
-                Pour l'instant, {{lettres|length}} lettres sont enregistrées.
+                {{lettres|length}} lettres sont désormais enregistrées.
             {% else %}
                 La base de données est en cours de constitution.
             {% endif %}
