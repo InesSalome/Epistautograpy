@@ -1,15 +1,17 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
-#Import de Flask et de la fonction render_template depuis le 
-#module flask.
+#Import de Flask et de la fonction render_template depuis le
+#module flask
 from flask import Flask, render_template
-#Import de SQLAlchemy depuis la version flask_sqlalchemy
+
+#Import de SQLAlchemy depuis la version flask_sqlalchemy, qui permet d'interagir avec la base de données
 from flask_sqlalchemy import SQLAlchemy
+
 #Import d'un package pour faciliter la migration de la base de données en cas de modifications
 #de la structure des données
 from flask_migrate import Migrate
+
 #Import du package pour gérer les sessions utilisateurs
 from flask_login import LoginManager
+
 #Import du module pour faire des transactions sécurisées
 from .constantes import SECRET_KEY
 
@@ -31,21 +33,26 @@ app = Flask(
 	template_folder=templates,
 	static_folder=statics
 )
-#Configuration du secret
+
+#Configuration du secret pour sécuriser les transactions
 app.config['SECRET_KEY'] = SECRET_KEY
+
 #Configuration de la base de données 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///./epistautograpy.db'
+
 #Configuration pour signaler les modifications dans la base de données
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-#Initiation de l'objet SQLAlchemy avec la variable application tout en
-#le stockant dans la variable db.
+
+#Initiation de l'objet SQLAlchemy
 db = SQLAlchemy(app)
+
+#Initation de l'objet Migrate
 migrate = Migrate(app, db)
 
-# On met en place la gestion d'utilisateur-rice-s
+# On met en place la gestion d'utilisateurs.rices
 login = LoginManager(app)
 
-#Import des pages correspondantes depuis le dossier routes.
+#Import des pages correspondantes depuis le fichier routes.py
 from .routes import accueil, index_lettres, index_dates, index_destinataires, index_contresignataires, index_institutions_conservations, formulaire_lettre, formulaire_destinataire, formulaire_institution, modification_lettre, modification_destinataire, modification_institution, suppression_lettre, suppression_destinataire, suppression_institution, recherche, rechercheavancee, lettre, date, destinataire, contresignataire, institution, inscription, connexion, deconnexion, cgu, about
 
 #Fonction pour créer toutes les tables et qu'elles soient reconnues lors du lancement de l'application

@@ -1,4 +1,4 @@
-#Page pour créer des transactions sécurisées
+#Fichier pour créer des transactions sécurisées
 from warnings import warn
 
 #Nombre de résultats par page

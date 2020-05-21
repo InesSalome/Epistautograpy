@@ -1,4 +1,4 @@
-#Fichier qui permet d'utiliser ce qui est dans l'application Epistautograpy.
+#Fichier qui permet de lancer l'application Epistautograpy.
 from app.app import app, init_db
 
 #Lancement d'un serveur de test. On met une condition pour vérifier

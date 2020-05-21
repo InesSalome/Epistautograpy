@@ -1,10 +1,11 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
 #Import d'informations si besoin depuis le fichier concerné.
 from .. app import db
+#Import de url_for pour construire des liens internes à l'application
 from flask import url_for
+#Module datetime pour pouvoir spécfier un format de date
 import datetime
-from sqlalchemy import create_engine, Column, Integer, String,update
+#Import de fonctions pour faire fonctionner la base de données
+from sqlalchemy import create_engine, Column, Integer, String, update
 
 
 #Tables pour faire les jointures
@@ -45,19 +46,7 @@ class Correspondance(db.Model):
 	destinataire_id = db.Column(db.Integer, db.ForeignKey('destinataire.id_destinataire'), primary_key=True)
 	lettre_id = db.Column(db.Integer, db.ForeignKey('lettre.id_lettre'), primary_key=True)
 
-	def ajout_correspondance(destinataire_id,lettre_id):   
-		"""
-		Retourne un couple d'identifiants pour définir une nouvelle relation lorqu'une nouvelle correpondance est rentrée via le formulaire
-		:param destinataire_id; Id du destinataire
-		:type destinataire_id: integer
-		:param lettre_id; Id de la lettre
-		:type lettre_id: integer
-		:return: tuple d'identifiants
-		:rtype: integers
-		"""   
-
-		destinataire_id=ajout_destinataire
-		lettre_id=ajout_lettre
+	
 
 #Création de notre modèle
 
@@ -75,7 +64,7 @@ class Destinataire(db.Model) :
 	def get_id(self):
 		"""
 		Retourne l'id de l'objet actuellement utilisé
-		:return: Id du destinataire
+		:returns: Id du destinataire
 		:rtype: int
 		"""				
 		return(self.id_destinataire)
@@ -86,12 +75,18 @@ class Destinataire(db.Model) :
 		Rajout de données via le formulaire.
 		S'il y a une erreur, la fonction renvoie False suivi d'une liste d'erreur.
 		Sinon, elle renvoie True et les données sont enregistrées dans la base.
-		:param type: type de destinataire, institution ou noblesse
-		:type type: string
+		:param type_destinataire: type de destinataire, institution ou noblesse
+		:type type_destinataire: str
 		:param titre: titre assigné à un destinataire issu de la noblesse
-		:type titre: string
+		:type titre: str
 		:param identite: nom du destinataire ou de l'institution à qui s'adresse la lettre
-		:type identite: string
+		:type identite: str
+		:param date_naissance: date de naissance du destinataire
+		:type date_naissance: str
+		:param date_deces: date de deces du destinataire
+		:type date_deces: str
+		:param lien_bio: URL vers une page de biographie
+		:type lien_bio: str	
 		"""
 
 		# Définition des paramètres obligatoires : s'ils manquent, cela crée une liste d'erreurs
@@ -100,7 +95,7 @@ class Destinataire(db.Model) :
 			erreurs.append("Le champ type de destinataire est vide")
 		if not identite:
 			erreurs.append("Le champ identite est vide")
-		if not type_destinataire=="institution" or type_destinataire=="noblesse":
+		if type_destinataire!="institution" or type_destinataire!="noblesse":
 			erreurs.append("Le champ identite ne correspond pas aux données attendues : institution ou noblesse.")
 		#On vérifie que la longueur des caractères des dates ne dépasse pas la limite de 10 (format AAAA-MM-JJ)
 		if date_naissance==True and date_deces==True:
@@ -141,13 +136,21 @@ class Destinataire(db.Model) :
 		"""
 		Fonction qui permet de modifier les données d'un destinataire dans la base de données
 		:param id_destinataire: id du destinataire
-		:param type: type de destinataire : institution ou noblesse
+		:type id_destinataire: int
+		:param type_destinataire : institution ou noblesse
+		:type type_destinataire : str
 		:param titre: titre de noblesse
+		:type titre: str
 		:param identite: nom de la personne ou de l'institution
+		:type identite: str
 		:param date_naissance: date de naissance de la personne
+		:type date_naissance: str
 		:param date_deces: date de décès de la personne
+		:type date_deces: str
 		:param lien_bio: URL vers une page de biographie
-		:return: Booléen
+		:type lien_bio: str
+		:returns: Ajout de données dans la base ou refus en cas d'erreurs
+		:rtype: Booléen
 		"""
 		errors=[]
 		if not type_destinataire:
@@ -164,6 +167,7 @@ class Destinataire(db.Model) :
 		# récupération du destinataire dans la base de données
 		miseajour_destinataire = Destinataire.query.filter(Destinataire.id_destinataire)
 		
+		# vérification qu'au moins un champ est modifié
 		if  type_destinataire == Destinataire.type_destinataire\
 			and  titre == Destinataire.titre_destinataire \
 			and  identite == Destinataire.identite_destinataire \
@@ -171,46 +175,53 @@ class Destinataire(db.Model) :
 			and  date_deces == Destinataire.date_deces \
 			and  lien_bio == Destinataire.lien_infos_destinataire :
 			errors.append("Aucune modification n'a été réalisée")
-		# vérification qu'au moins un champ est modifié
 
 		if len(errors) > 0:
 			return False, errors
 		
 		else:
+			# mise à jour des données
 			 type_destinataire == Destinataire.type_destinataire
 			 titre == Destinataire.titre_destinataire 
 			 identite == Destinataire.identite_destinataire 
 			 date_naissance == Destinataire.date_naissance 
 			 date_deces == Destinataire.date_deces
 			 lien_bio == Destinataire.lien_infos_destinataire
-		# mise à jour de la collection
 
 		try:
+			# On les ajoute au transport vers la base de données
 			db.session.add(miseajour_destinataire)
-		# ajout des modifications à la BDD
+			# On envoie le paquet
 			db.session.commit()
 			return True, miseajour_destinataire
 
 		except Exception as erreur:
+			# On annule les requêtes de la transaction en cours en cas d'erreurs
+			db.session.rollback()
 			return False, [str(erreur)]
 
 	@staticmethod
 	def supprimer_destinataire(nom_destinataire):
 		"""
 		Fonction qui supprime un destinataire
-		:param id_destinataire: id du destinataire
-		:return: Booléen
+		:param nom_destinataire: identité du destinataire
+		:type nom_destinataire: str
+		:returns: Suppression des données ou refus en cas d'erreurs
+		:rtype: Booléen
 		"""
+		# récupération du destinataire dans la base de données
 		nom_destinataire = Destinataire.query.filter(Destinataire.identite_destinataire)
-	# récupération d'une collection dans la BDD
+	
 
 		try:
+			#Suppression du destinataire dans la base de données
 			db.session.delete(supprimer_destinataire)
-		# suppression de la collection de la BDD
 			db.session.commit()
 			return True
 
 		except Exception as erreur:
+			# On annule les requêtes de la transaction en cours en cas d'erreurs
+			db.session.rollback()
 			return False, [str(erreur)]
 
 	def to_jsonapi_dict(self):
@@ -252,7 +263,7 @@ class Institution_Conservation(db.Model) :
 	def get_id(self):
 		"""
 		Retourne l'id de l'objet actuellement utilisé
-		:return: Id de l'institution de conservation
+		:returns: Id de l'institution de conservation
 		:rtype: int
 		"""
 		return(self.id_institution_conservation)
@@ -264,7 +275,13 @@ class Institution_Conservation(db.Model) :
 		S'il y a une erreur, la fonction renvoie False suivi d'une liste d'erreur.
 		Sinon, elle renvoie True et les données sont enregistrées dans la base.
 		:param nom: nom de l'institution
-		:type nom: string
+		:type nom: str
+		:param latitude: latitude de l'institution
+		:type latitude: float
+		:param longitude: longitude de l'institution
+		:type longitude: float
+		:returns: Ajout de données dans la base ou refus en cas d'erreurs
+		:rtype: Booléen
 		"""
 
 		# Définition des paramètres obligatoires : s'ils manquent, cela crée une liste d'erreurs
@@ -303,10 +320,15 @@ class Institution_Conservation(db.Model) :
 		"""
 		Fonction qui permet de modifier les données d'une institution dans la base de données
 		:param id_institution_conservation: id de l'institution
+		:typ id_institution_conservation: int
 		:param nom: nom de l'institution
+		:type nom: str
 		:param latitude: latitude de l'emplacement de l'institution
+		:type latitude: float
 		:param longitude:longitude de l'emplacement de l'institution
-		:return: Booléen
+		:type longitude: float
+		:returns: Ajout de données dans la base ou refus en cas d'erreurs
+		:rtype: Booléen
 		"""
 		errors=[]
 		if not nom:
@@ -315,46 +337,53 @@ class Institution_Conservation(db.Model) :
 		if len(errors) > 0:
 			return False, errors
 
-		# récupération du destinataire dans la base de données
+		# récupération de l'institution dans la base de données
 		miseajour_institution = Institution_Conservation.query.filter(Institution_Conservation.id_institution_conservation)
 		
+		# vérification qu'au moins un champ est modifié
 		if  nom == Institution_Conservation.nom_institution_conservation \
 			and  latitude == Institution_Conservation.latitude_institution_conservation \
 			and  longitude == Institution_Conservation.longitude_institution_conservation :
 			errors.append("Aucune modification n'a été réalisée")
-		# vérification qu'au moins un champ est modifié
 
 		if len(errors) > 0:
 			return False, errors
 		
 		else:
+			#Mise à jour des données
 			 nom == Institution_Conservation.nom_institution_conservation 
 			 latitude ==  Institution_Conservation.latitude_institution_conservation
 			 longitude == Institution_Conservation.longitude_institution_conservation
-		# mise à jour de la collection
+
 
 		try:
+			# On les ajoute au transport vers la base de données
 			db.session.add(miseajour_institution)
-		# ajout des modifications à la BDD
+			# On envoie le paquet
 			db.session.commit()
 			return True, miseajour_institution
 
 		except Exception as erreur:
+			# On annule les requêtes de la transaction en cours en cas d'erreurs
+			db.session.rollback()
 			return False, [str(erreur)]
 
 	@staticmethod
 	def supprimer_institution(nom_institution_conservation):
 		"""
 		Fonction qui supprime une institution
-		:param id_institution: id de l'institution
-		:return: Booléen
+		:param nom_institution_conservation: nom de l'institution
+		:type nom_institution_conservation: str
+		:returns: Suppression des données ou refus en cas d'erreurs
+		:rtype: Booléen
 		"""
+
+		# récupération d'une institution dans la base de données
 		nom_institution_conservation = Institution_Conservation.query.filter(Institution_Conservation.nom_institution_conservation)
-	# récupération d'une collection dans la BDD
 
 		try:
+			#Suppression de l'institution dans la base de données
 			db.session.delete(supprimer_institution)
-		# suppression de la collection de la BDD
 			db.session.commit()
 			return True
 
@@ -412,31 +441,35 @@ class Lettre(db.Model) :
 		return(self.id_lettre)
 
 	@staticmethod
-	def ajout_lettre(objet, contresignataire, date, lieu, langue, pronom, cote, statut, lien, institution, destinataire):
+	def ajout_lettre(objet, contresignataire, date, lieu, langue, pronom, cote, statut, lien, institution_id, destinataire):
 		"""
 		Rajout de données via le formulaire.
-		Si il y a une erreur, la fonction renvoie False suivi d'une liste d'erreur.
+		S'il y a une erreur, la fonction renvoie False suivi d'une liste d'erreur.
 		Sinon, elle renvoie True et les données sont enregistrées dans la base.
 		:param objet: Objet de la lettre
-		:type objet: string
+		:type objet: str
 		:param contresignataire: Nom du contresigataire de la lettre
-		:type contresignataire: string
+		:type contresignataire: str
 		:param date: date d'envoie de la lettre
-		:type date: string
+		:type date: str
 		:param lieu: lieu d'envoie de la lettre
-		:type lieu: string
+		:type lieu: str
 		:param langue: langue d'écriture de la lettre
-		:type langue: string
+		:type langue: str
 		:param pronom: pronom personnel employé dans la lettre
-		:type pronom: string
+		:type pronom: str
 		:param cote: cote de la lettre
-		:type cote: string
+		:type cote: str
 		:param statut: statut de la lettre, originale ou copie
-		:type statut: string
+		:type statut: str
 		:param lien: url vers la lettre numérisée
-		:type lien: string
+		:type lien: str
 		:param institution_id: clé étrangère de l'institution de conservation
-		:type institution_id: integer
+		:type institution_id: int
+		:param destinataire: tuple regroupant les id de la lettre et du destianataire qui sont liés par une correspondance
+		:type destinataire: int
+		:returns: Ajout de données dans la base ou refus en cas d'erreurs
+		:rtype: Booléen
 		"""
 
 		# Définition des paramètres obligatoires : s'ils manquent, cela crée une liste d'erreurs
@@ -451,9 +484,9 @@ class Lettre(db.Model) :
 			erreurs.append("Le champ cote est vide")
 		if not statut:
 			erreurs.append("Le champ statut est vide")
-		#if statut!="Orig." or statut!="Copie":
-			#erreurs.append("Le champ statut ne correspond pas aux données attendues : Orig. ou Copie")
-		# On vérifie que la lettre n'a pas déjà été enregistrée
+		if statut!="Orig." or statut!="Copie":
+			erreurs.append("Le champ statut ne correspond pas aux données attendues : Orig. ou Copie")
+		#On vérifie que la lettre n'a pas déjà été enregistrée
 		if date==Lettre.date_envoie_lettre and cote==Lettre.cote_lettre:
 			erreurs.append("La lettre a déjà été renseignée dans notre base de données")
 
@@ -506,17 +539,30 @@ class Lettre(db.Model) :
 		"""
 		Fonction qui permet de modifier les données d'une lettre dans la base de données
 		:param id_lettre: id de la lettre
+		:type id_lettre: int
 		:param date: date d'envoie de la lettre
+		:type date: str
 		:param lieu: lieu d'envoie de la lettre
+		:type lieu: str
 		:param objet: objet de la lettre
+		:type objet: str
 		:param contresignataire: contresignataire de la lettre
+		:type contresignataire: str
 		:param langue: langue de la lettre
+		:type langue: str
 		:param pronom: pronom personnel employé dans la lettre
+		:type pronom: str
 		:param cote: cote de la lettre
+		:type cote: str
 		:param statut: statut de la lettre
+		:type statut: str
 		:param lien_lettre: lien vers la lettre numérisée
-		:return: Booléen
+		:type lien_lettre: str
+		:returns: Ajout de données dans la base ou refus en cas d'erreurs
+		:rtype: Booléen
 		"""
+
+		# Définition des paramètres obligatoires : s'ils manquent, cela crée une liste d'erreurs
 		errors=[]
 		if not date:
 			errors.append("Le champ Date d'envoie de la lettre est vide")
@@ -528,9 +574,10 @@ class Lettre(db.Model) :
 		if len(errors) > 0:
 			return False, errors
 
-		# récupération du destinataire dans la base de données
+		# récupération de la lettre dans la base de données
 		miseajour_lettre = Lettre.query.filter(Lettre.id_lettre)
 		
+		# vérification qu'au moins un champ est modifié
 		if  date == Lettre.date_envoie_lettre \
 			and  lieu == Lettre.lieu_ecriture_lettre \
 			and  objet == Lettre.objet_lettre \
@@ -542,12 +589,12 @@ class Lettre(db.Model) :
 			and  lien_lettre == Lettre.lien_image_lettre :
 
 			errors.append("Aucune modification n'a été réalisée")
-		# vérification qu'au moins un champ est modifié
 
 		if len(errors) > 0:
 			return False, errors
 		
 		else:
+			# Mise à jour des données
 			date == Lettre.date_envoie_lettre
 			lieu == Lettre.lieu_ecriture_lettre
 			objet == Lettre.objet_lettre 
@@ -557,15 +604,17 @@ class Lettre(db.Model) :
 			cote == Lettre.cote_lettre 
 			statut == Lettre.statut_lettre 
 			lien_lettre == Lettre.lien_image_lettre
-		# mise à jour de la collection
 
 		try:
+			# On l'ajoute au transport vers la base de données
 			db.session.add(miseajour_lettre)
-		# ajout des modifications à la BDD
+			# On envoie le paquet
 			db.session.commit()
 			return True, miseajour_lettre
 
 		except Exception as erreur:
+			# On annule les requêtes de la transaction en cours en cas d'erreurs
+			db.session.rollback()
 			return False, [str(erreur)]
 
 	@staticmethod
@@ -573,13 +622,17 @@ class Lettre(db.Model) :
 		"""
 		Fonction qui supprime une lettre
 		:param id_lettre: id de la lettre
-		:return: Booléen
+		:type id_lettre: int
+		:returns: Suppression des données ou refus en cas d'erreurs
+		:rtype: Booléen
 		"""
+
+		# récupération d'une lettre dans la base de données
 		id_lettre = Lettre.query.filter(Lettre.id_lettre)
 
 		try:
+			# suppression de la lettre de la base de données
 			db.session.delete(supprimer_lettre)
-		# suppression de la collection de la BDD
 			db.session.commit()
 			return True
 
@@ -629,7 +682,7 @@ class Image_Numerisee(db.Model):
 	def get_id(self):
 		"""
 		Retourne l'id de l'objet actuellement utilisé
-		:return: Id de l'image numérisée
+		:returns: Id de l'image numérisée
 		:rtype: int
 		"""
 		return(self.id_image_numerisee)

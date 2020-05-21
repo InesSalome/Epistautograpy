@@ -1,10 +1,8 @@
 #Gestion des erreurs les plus courantes
 
 from flask import render_template
-#Grâce à render_template, on relie les templates aux routes
 
 from ..app import app
-# On importe l'application provenant du fichier app.py
 
 #En cas de page introuvable : 
 @app.errorhandler(404)
