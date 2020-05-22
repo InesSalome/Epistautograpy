@@ -54,6 +54,7 @@ login = LoginManager(app)
 
 #Import des pages correspondantes depuis le fichier routes.py
 from .routes import accueil, index_lettres, index_dates, index_destinataires, index_contresignataires, index_institutions_conservations, formulaire_lettre, formulaire_destinataire, formulaire_institution, modification_lettre, modification_destinataire, modification_institution, suppression_lettre, suppression_destinataire, suppression_institution, recherche, rechercheavancee, lettre, date, destinataire, contresignataire, institution, inscription, connexion, deconnexion, cgu, about
+from .gestion_erreurs import not_found, gone, internal_server_error
 
 #Fonction pour créer toutes les tables et qu'elles soient reconnues lors du lancement de l'application
 def init_db():

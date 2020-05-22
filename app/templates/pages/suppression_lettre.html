@@ -5,29 +5,29 @@
 {% block corps %}
 <br/>
 <header>
-    <h3>Suppression de la lettre n°
-        <form>
-            <input type="text" name="Lettre_a_supprimer" list="listenumerolettre" class="form-control" value="" />
-                    <datalist id="listenumerolettre">
-                    {% for Lettre in listenumerolettre %}
-                    <option data-value="test" value="{{listenumerolettre.Lettre}}">
-                    {% endfor %}
-                     </datalist>
-                 </form>
-             </h3>
+	<h3>Suppression de la lettre n°
+		<form>
+			<input type="text" name="Lettre_a_supprimer" list="listenumerolettre" class="form-control" value="" />
+					<datalist id="listenumerolettre">
+					{% for Lettre in listenumerolettre %}
+					<option data-value="test" value="{{listenumerolettre.Lettre}}">
+					{% endfor %}
+					 </datalist>
+		</form>
+	 </h3>
 </header>
 <br/>
 <br/>
 <form method="POST" action="{{url_for('suppression_lettre')}}" style="text-align:center">
-    <div>
-       <p>Êtes-vous certain.e de vouloir supprimer cette lettre ?</p>
-    <div>
-    <br/>
-    <div>
-        <button type="submit">Confirmer</button>
-    </div>
-    <br/>
-    <br/>
-    <br/>
+	<div>
+	   <p value="{{suppression_lettre}}">Êtes-vous certain.e de vouloir supprimer cette lettre ?</p>
+	<div>
+	<br/>
+	<div>
+		<button type="submit">Confirmer</button>
+	</div>
+	<br/>
+	<br/>
+	<br/>
  </form>
 {% endblock %}

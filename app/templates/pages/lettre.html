@@ -11,17 +11,21 @@
         <dl>
             <dt>Date</dt><dd>{{lettre.date_envoie_lettre}}</dd>
             <dt>Lieu</dt><dd>{{lettre.lieu_ecriture_lettre}}</dd>
-             {% if lettre.destinataire %}
+
+            {% if lettre.destinataire %}
             <dt>Destinataire</dt><dd><a id="link" href="{{url_for('destinataire', id_destinataire=destinataire.id_destinataire)}}">{{destinataire.identite_destinataire}}</a></dd>
             {% endif %}
+
             <dt>Contresignataire</dt><dd><a id="link" href="{{url_for('contresignataire', contresignataire_lettre=lettre.contresignataire_lettre)}}">{{lettre.contresignataire_lettre}}</a></dd>
             <dt>Langue</dt><dd>{{lettre.langue_lettre}}</dd>
             <dt>Pronom personnel employé</dt><dd>{{lettre.pronom_personnel_employe_lettre}}</dd>
             <dt>Cote</dt><dd>{{lettre.cote_lettre}}</dd>
             <dt>Statut</dt><dd>{{lettre.statut_lettre}}</dd>
+
             {% if lettre.institution_id %}
             <dt>Institution de conservation</dt><dd><a id="link" href="{{url_for('institution', id_institution_conservation=institution_conservation.id_institution_conservation)}}">{{institution_conservation.nom_institution_conservation}}</a></dd>
             {% endif %}
+
             <dt>Lien vers le texte numérisé</dt><dd><a id="link" href="{{lettre.lien_image_lettre}}", target="blank">{{lettre.lien_image_lettre}}</a></dd>
             <dt>Référence bibliographique du texte numérisé</dt><dd>{{image_numerisee.reference_bibliographique_image_numerisee}}</dd>
         </dl>
@@ -29,6 +33,6 @@
         <ul>
         <li><a id="link" href="{{url_for('index_lettres')}}">Retour à l'index des lettres recensés</a></li>
         <li><a id="link" href="{{url_for('accueil')}}">Retour à la page d'accueil</a></li>
-    </ul>
+        </ul>
     </body>
     {% endblock %}

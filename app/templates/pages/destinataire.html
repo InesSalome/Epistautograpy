@@ -6,11 +6,12 @@
         {% endblock %}
  
     {% block corps %}
+
         <h1>{{destinataire.identite_destinataire}}</h1>
         {% if destinataire.titre_destinataire %}
         <h3>{{destinataire.titre_destinataire}}</h3>
         {% endif %}
-
+        <!-- Si les images pour illuster la page destinataire ont ici été placées dans le dossier images dans static, nous sommes conscients qu'il serait plus propre, surtout si le nombre de destinataires est amené à augmenter, de les placer ditectement dans la base de données pour pouvoir les appeler avec des requêtes sql. -->
         {% if destinataire.identite_destinataire=="Jean Galéas Sforza" %}
             <div class="view z-depth-1-half">
                 <img src="{{url_for('static', filename='images/portrait_Jean_Galeas_Sforza.jpg')}}" class="img-fluid" alt=""/>
@@ -73,7 +74,8 @@
         
 
         <ul>
-        <li><a id="link" href="{{url_for('index_lettres')}}">Retour à l'index des lettres recensés</a></li>
-        <li><a id="link" href="{{url_for('accueil')}}">Retour à la page d'accueil</a></li>
+            <li><a id="link" href="{{url_for('index_lettres')}}">Retour à l'index des lettres recensés</a></li>
+            <li><a id="link" href="{{url_for('accueil')}}">Retour à la page d'accueil</a></li>
         </ul>
+
     {% endblock %}

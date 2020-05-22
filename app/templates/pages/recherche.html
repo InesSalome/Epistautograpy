@@ -3,7 +3,7 @@
 {% block titre %}| {{titre}}{%endblock%}
 
 {% block corps %}
-
+	<!-- Lien vers le formulaire défini dans le dossier partials. -->
 	{% include "partials/recherche.html" %}
 
 		{% if resultats %}
@@ -13,7 +13,7 @@
 								<li><a id="link" href="{{url_for('lettre', id_lettre=lettre.id_lettre)}}">Lettre n°{{lettre.id_lettre}}</a></li>
 						{% endfor %}
 				</ul>
-
+				<!-- Définition de la pagination. -->
 				<nav aria-label="research-pagination">
 					<ul class="pagination">
 						{%- for page in resultats.iter_pages() %}

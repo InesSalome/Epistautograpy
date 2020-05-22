@@ -13,14 +13,14 @@
                     <option data-value="test" value="{{listedestinataire.Destinataire}}">
                     {% endfor %}
                      </datalist>
-                 </form>
-             </h3>
+        </form>
+    </h3>
 </header>
 <br/>
 <br/>
 <form method="POST" action="{{url_for('suppression_destinataire')}}" style="text-align:center">
     <div>
-       <p>Êtes-vous certain.e de vouloir supprimer ce destinataire ?</p>
+       <p value="{{suppression_destinataire}}">Êtes-vous certain.e de vouloir supprimer ce destinataire ?</p>
     <div>
     <br/>
     <div>

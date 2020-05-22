@@ -13,14 +13,14 @@
                     <option data-value="test" value="{{llistenominstitution.Institution}}">
                     {% endfor %}
                      </datalist>
-                 </form>
-             </h3>
+        </form>
+    </h3>
 </header>
 <br/>
 <br/>
 <form method="POST" action="{{url_for('suppression_institution')}}" style="text-align:center">
     <div>
-       <p>Êtes-vous certain.e de vouloir supprimer cette institution ?</p>
+       <p value="{{suppression_institution}}">Êtes-vous certain.e de vouloir supprimer cette institution ?</p>
     <div>
     <br/>
     <div>
