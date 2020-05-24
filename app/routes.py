@@ -219,8 +219,7 @@ def formulaire_lettre():
 		cote=request.form.get("Cote", None),
 		statut=request.form.get("Statut", None),
 		lien=request.form.get("Lien", None),
-		institution=request.form.get("Institution", None),
-		destinataire=request.form.get("Destinataire", None)
+		institution=request.form.get("Institution", None)
 		)
 
 		if status is True:

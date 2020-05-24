@@ -32,6 +32,7 @@ class Authorship(db.Model):
 	user_id = db.Column(db.Integer, db.ForeignKey('user.id_user'))
 	date_authorship = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 	user = db.relationship("User", back_populates="authorships")
+	lettre = db.relationship("Lettre", back_populates="authorships_lettre")
 
 	def author_to_json(self):
 		return {
@@ -116,7 +117,7 @@ class Destinataire(db.Model) :
 			identite_destinataire=identite,
 			date_naissance=date_naissance,
 			date_deces=date_deces,
-			lien_infos_destinataire=lien_bio
+			lien_infos_destinataire=lien_bio,
 		)
 
 		try:
@@ -154,12 +155,12 @@ class Destinataire(db.Model) :
 		"""
 		errors=[]
 		if not type_destinataire:
-			errors.append("Le champ Type de destinataire est vide")
-		if  type_destinataire!="noblesse" or  type_destinataire!="institution":
-			errors.append("Le champ Type de destinataire ne correspond pas aux données attendues : institution ou noblesse")
+			errors.append("Le champ Type de destinataire est vide.")
+		#if  type_destinataire!="noblesse" or  type_destinataire!="institution":
+			#errors.append("Le champ Type de destinataire ne correspond pas aux données attendues : institution ou noblesse")
 		if type_destinataire=="noblesse":
 			if not titre:
-				errors.append("Le champ Titre du destinataire est vide")
+				errors.append("Le champ Titre du destinataire est vide.")
 
 		if len(errors) > 0:
 			return False, errors
@@ -287,10 +288,14 @@ class Institution_Conservation(db.Model) :
 		# Définition des paramètres obligatoires : s'ils manquent, cela crée une liste d'erreurs
 		erreurs = []
 		if not nom:
-			erreurs.append("Le champ nom est vide")
+			erreurs.append("Le champ nom est vide.")
+		if not latitude:
+			erreurs.append("Le champ latitude est vide.")
+		if not longitude:
+			erreurs.append("Le champ longitude est vide.")
 		# On vérifie que l'institution n'a pas déjà été enregistrée
 		if nom==Institution_Conservation.nom_institution_conservation:
-			erreurs.append("L'institution a déjà été enregistrée dans la base de données")
+			erreurs.append("L'institution a déjà été enregistrée dans la base de données.")
 
 		# Si on a au moins une erreur
 		if len(erreurs) > 0:
@@ -308,7 +313,7 @@ class Institution_Conservation(db.Model) :
 			db.session.add(new_institution)
 			# On envoie le paquet
 			db.session.commit()
-			return( True, new_institution)
+			return(True, new_institution)
 
 		except Exception as erreur:
 			# On annule les requêtes de la transaction en cours en cas d'erreurs
@@ -332,7 +337,7 @@ class Institution_Conservation(db.Model) :
 		"""
 		errors=[]
 		if not nom:
-			errors.append("Le champ Nom de l'institution est vide")
+			errors.append("Le champ Nom de l'institution est vide.")
 		
 		if len(errors) > 0:
 			return False, errors
@@ -429,8 +434,8 @@ class Lettre(db.Model) :
 	statut_lettre = db.Column(db.String(45))
 	institution_id = db.Column(db.Integer, db.ForeignKey('institution_conservation.id_institution_conservation'))
 	lien_image_lettre = db.Column(db.Text)
-	authorships = db.relationship("User", secondary="authorship", backref="lettre", lazy="dynamic")
-	correspondance = db.relationship("Destinataire", secondary="correspondance", backref="lettre", lazy="dynamic", cascade='all, delete, delete-orphan', single_parent="True")
+	authorships_lettre = db.relationship("Authorship", back_populates="lettre")
+	correspondance = db.relationship("Destinataire", secondary="correspondance", backref="lettre", lazy="dynamic", cascade="all, delete, delete-orphan", single_parent="True")
 
 	def get_id(self):
 		"""
@@ -441,7 +446,7 @@ class Lettre(db.Model) :
 		return(self.id_lettre)
 
 	@staticmethod
-	def ajout_lettre(objet, contresignataire, date, lieu, langue, pronom, cote, statut, lien, institution_id, destinataire):
+	def ajout_lettre(objet, contresignataire, date, lieu, langue, pronom, cote, statut, lien):
 		"""
 		Rajout de données via le formulaire.
 		S'il y a une erreur, la fonction renvoie False suivi d'une liste d'erreur.
@@ -475,20 +480,20 @@ class Lettre(db.Model) :
 		# Définition des paramètres obligatoires : s'ils manquent, cela crée une liste d'erreurs
 		erreurs = []
 		if not contresignataire:
-			erreurs.append("Le champ contresignataire est vide")
+			erreurs.append("Le champ contresignataire est vide.")
 		if not date:
-			erreurs.append("Le champ date est vide")
+			erreurs.append("Le champ date est vide.")
 		if not lieu:
-			erreurs.append("Le champ lieu est vide")
+			erreurs.append("Le champ lieu est vide.")
 		if not cote:
-			erreurs.append("Le champ cote est vide")
+			erreurs.append("Le champ cote est vide.")
 		if not statut:
-			erreurs.append("Le champ statut est vide")
+			erreurs.append("Le champ statut est vide.")
 		if statut!="Orig." or statut!="Copie":
-			erreurs.append("Le champ statut ne correspond pas aux données attendues : Orig. ou Copie")
+			erreurs.append("Le champ statut ne correspond pas aux données attendues : Orig. ou Copie.")
 		#On vérifie que la lettre n'a pas déjà été enregistrée
 		if date==Lettre.date_envoie_lettre and cote==Lettre.cote_lettre:
-			erreurs.append("La lettre a déjà été renseignée dans notre base de données")
+			erreurs.append("La lettre a déjà été renseignée dans notre base de données.")
 
 		# Si on a au moins une erreur
 		if len(erreurs) > 0:
@@ -500,12 +505,12 @@ class Lettre(db.Model) :
 			if institution == Institution_Conservation.query.filter(Institution_Conservation.nom_institution_conservation):
 				Lettre.institution_id = Institution_Conservation.query.get(id_institution_conservation)
 			else:
-				return False,[str("L'institution de conservation n'a pas été enregistrée préalablement")]
+				return False,[str("L'institution de conservation n'a pas été enregistrée préalablement.")]
 		if destinataire == True :
 			if destinataire == Destinataire.query.filter(Destinataire.identite_destinataire):
 				Lettre.correspondance = Lettre.query.get(db.and_(Lettre.id_lettre==Correspondance.lettre_id, Correspondance.destinataire_id==Destinataire.id_destinataire))
 			else:
-				return False, [str("Le ou la destinataire n'a pas été enregistré préalablement")]
+				return False, [str("Le ou la destinataire n'a pas été enregistré préalablement.")]
 
 		# On crée une nouvelle lettre dans la base Lettre
 		new_lettre = Lettre(
@@ -517,9 +522,7 @@ class Lettre(db.Model) :
 			pronom_personnel_employe_lettre=pronom,
 			cote_lettre=cote,
 			statut_lettre=statut,
-			lien_image_lettre=lien,
-			institution_id=institution,
-			correspondance=destinataire
+			lien_image_lettre=lien
 		)
 
 		try:
@@ -565,11 +568,11 @@ class Lettre(db.Model) :
 		# Définition des paramètres obligatoires : s'ils manquent, cela crée une liste d'erreurs
 		errors=[]
 		if not date:
-			errors.append("Le champ Date d'envoie de la lettre est vide")
+			errors.append("Le champ Date d'envoie de la lettre est vide.")
 		if not contresignataire:
-			errors.append("Le champ Nom du contresignataire est vide")
+			errors.append("Le champ Nom du contresignataire est vide.")
 		if not cote:
-			errors.append("Le champ Cote est vide")
+			errors.append("Le champ Cote est vide.")
 		
 		if len(errors) > 0:
 			return False, errors
@@ -588,7 +591,7 @@ class Lettre(db.Model) :
 			and  statut == Lettre.statut_lettre \
 			and  lien_lettre == Lettre.lien_image_lettre :
 
-			errors.append("Aucune modification n'a été réalisée")
+			errors.append("Aucune modification n'a été réalisée.")
 
 		if len(errors) > 0:
 			return False, errors
