@@ -32,7 +32,7 @@ Epistautograpy est une application web permettant de naviguer dans une collectio
 
 ## Description des fonctionnalités de l'application
 
-Epistautograpy permet de consulter des lettres de Charles VIII grâce à des recherches simples ou avancées. Les filtres ont été pensés pour pouvoir mieux visualiser quelles lettres ont été contresignées par quel secrétaire, mais aussi quel destinatire est le plus sollicité, à quelle date, etc. L'application propose donc l'accès à :
+Epistautograpy permet de consulter des lettres de Charles VIII grâce à des recherches simples ou avancées. Les filtres ont été pensés pour pouvoir mieux visualiser quelles lettres ont été contresignées par quel secrétaire, mais aussi quel destinataire est le plus sollicité, à quelle date, etc. L'application propose donc l'accès à :
 
 * un index des dates d'envoie des lettres
 * un index des destinataires
@@ -40,7 +40,7 @@ Epistautograpy permet de consulter des lettres de Charles VIII grâce à des rec
 * un index des institutions de conservation
 * bien évidemment, un index des lettres recensées
 
-Il est aussi possible pour les utilisateurs de s'inscrire et de participer à l'enrichissement des lettres répertoriées en remplissant un formulaire. 
+Il est aussi possible pour les utilisateurs de s'inscrire et de participer à l'enrichissement des lettres répertoriées en remplissant un formulaire, en modifiant des données ou en en supprimant. 
 
 __Développement du projet__
 
