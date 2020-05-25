@@ -44,21 +44,21 @@
 							</li>
 							<li class="nav-item dropdown">
 					<a class="nav-link dropdown-toggle" data-toggle="dropdown" role="btn-outline-info" aria-haspopup="true" aria-expanded="false">Formulaires</a>
-								<a id="link" class="dropdown-item" href="{{url_for('formulaire_lettre')}}">Formulaire Lettre</a>
-								<a id="link" class="dropdown-item" href="{{url_for('formulaire_destinataire')}}">Formulaire Destinataire</a>
-								<a id="link" class="dropdown-item" href="{{url_for('formulaire_institution')}}">Formulaire Institution</a>
+								<a id="link" class="dropdown-item" href="{{url_for('formulaire_lettre')}}"><button class="btn btn-outline-info" type="submit">Formulaire Lettre</button></a>
+								<a id="link" class="dropdown-item" href="{{url_for('formulaire_destinataire')}}"><button class="btn btn-outline-info" type="submit">Formulaire Destinataire</button></a>
+								<a id="link" class="dropdown-item" href="{{url_for('formulaire_institution')}}"><button class="btn btn-outline-info" type="submit">Formulaire Institution</button></a>
 			 </li>
 			 <li class="nav-item dropdown">
 					<a class="nav-link dropdown-toggle" data-toggle="dropdown">Modifications</a>
-								<a id="link" class="dropdown-item" href="{{url_for('modification_lettre')}}">Modifier Lettre</a>
-										<a id="link" class="dropdown-item" href="{{url_for('modification_destinataire')}}">Modifier Destinataire</a>
-								<a id="link" class="dropdown-item" href="{{url_for('modification_institution')}}">Modifier Institution</a>
+								<a id="link" class="dropdown-item" href="{{url_for('modification_lettre')}}"><button class="btn btn-outline-info" type="submit">Modifier Lettre</button></a>
+										<a id="link" class="dropdown-item" href="{{url_for('modification_destinataire')}}"><button class="btn btn-outline-info" type="submit">Modifier Destinataire</button></a>
+								<a id="link" class="dropdown-item" href="{{url_for('modification_institution')}}"><button class="btn btn-outline-info" type="submit">Modifier Institution</button></a>
 			 </li>
 			 <li class="nav-item dropdown">
 					<a class="nav-link dropdown-toggle" data-toggle="dropdown">Suppressions</a>
-								<a id="link" class="dropdown-item" href="{{url_for('suppression_lettre')}}">Suppression Lettre</a>
-										<a id="link" class="dropdown-item" href="{{url_for('suppression_destinataire')}}">Suppression Destinataire</a>
-								<a id="link" class="dropdown-item" href="{{url_for('suppression_institution')}}">Suppression Institution</a>
+								<a id="link" class="dropdown-item" href="{{url_for('suppression_lettre')}}"><button class="btn btn-outline-info" type="submit">Suppression Lettre</button></a>
+										<a id="link" class="dropdown-item" href="{{url_for('suppression_destinataire')}}"><button class="btn btn-outline-info" type="submit">Suppression Destinataire</button></a>
+								<a id="link" class="dropdown-item" href="{{url_for('suppression_institution')}}"><button class="btn btn-outline-info" type="submit">Suppression Institution</button></a>
 			 </li>
 							<li class="nav-item">
 								<a id="link" class="nav-link" href="{{url_for('deconnexion')}}">Déconnexion ({{current_user.user_nom}})</a>

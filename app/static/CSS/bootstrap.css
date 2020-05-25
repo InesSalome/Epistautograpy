@@ -226,7 +226,7 @@ a {
 }
 
 a:hover {
-  color: #0056b3;
+  color: #fff;
   text-decoration: underline;
 }
 
@@ -2310,6 +2310,7 @@ select.form-control-lg:not([size]):not([multiple]), .input-group-lg > select.for
 
 .btn:not([disabled]):not(.disabled):active, .btn:not([disabled]):not(.disabled).active {
   background-image: none;
+  background-color: #FFFFFF
 }
 
 a.btn.disabled,
@@ -2793,12 +2794,12 @@ fieldset[disabled] a.btn {
 
 .btn-link {
   font-weight: 400;
-  color: #007bff;
+  color: #fff;
   background-color: transparent;
 }
 
 .btn-link:hover {
-  color: #0056b3;
+  color: #fff;
   text-decoration: underline;
   background-color: transparent;
   border-color: transparent;
@@ -2810,7 +2811,7 @@ fieldset[disabled] a.btn {
 }
 
 .btn-link:disabled, .btn-link.disabled {
-  color: #868e96;
+  color: #fff;
 }
 
 .btn-lg, .btn-group-lg > .btn {
@@ -2996,7 +2997,7 @@ color: #d22100;
 .dropdown-item.active, .dropdown-item:active {
   color: #fff;
   text-decoration: none;
-  background-color: #007bff;
+  background-color: #fff;
 }
 
 .dropdown-item.disabled, .dropdown-item:disabled {
