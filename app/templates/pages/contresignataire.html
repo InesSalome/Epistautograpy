@@ -10,9 +10,13 @@
             
         <dl>
             <dt>Lettres signées</dt>
-                                    <ul>
-                                        <li><a id="link" href="{{url_for('index_lettres')}}">{{lettres_signees}}</a></li>
-                                    </ul>
+            <dd>
+                <ul>
+                    {% for lettre in lettres_signees %}
+                        <li><a id="link" href="{{url_for('lettre', id_lettre=lettre.id_lettre)}}">lettre n°{{lettre.id_lettre}}</a></li>
+                    {% endfor %}
+                </ul>
+            </dd>
         </dl>
 
         <ul>
