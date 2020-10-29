@@ -7,21 +7,6 @@ import datetime
 #Import de fonctions pour faire fonctionner la base de données
 from sqlalchemy import create_engine, Column, Integer, String, update
 
-
-#Tables pour faire les jointures
-
-Correspondance = db.Table('correspondance',
-	db.Column('destinataire_id', db.Integer, db.ForeignKey('destinataire.id_destinataire'), primary_key=True),
-	db.Column('lettre_id', db.Integer, db.ForeignKey('lettre.id_lettre'), primary_key=True)
-	)
-
-Authorship = db.Table('authorship',
-	db.Column('id_authorship', db.Integer, nullable=True, autoincrement=True, primary_key=True),
-	db.Column('user_id', db.Integer, db.ForeignKey('user.id_user')),
-	db.Column('lettre_id', db.Integer, db.ForeignKey('lettre.id_lettre')),
-	db.Column('date_authorship',db.DateTime, default=datetime.datetime.utcnow)
-	)
-
 #Tables de relation
 
 class Authorship(db.Model):
@@ -635,11 +620,12 @@ class Lettre(db.Model) :
 
 		try:
 			# suppression de la lettre de la base de données
-			db.session.delete(supprimer_lettre)
+			db.session.delete(id_lettre)
 			db.session.commit()
 			return True
 
 		except Exception as erreur:
+			# raise erreur
 			return False, [str(erreur)]
 
 

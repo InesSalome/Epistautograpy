@@ -189,11 +189,33 @@ def institution(id_institution_conservation):
 #La page est disponible à la fois pour les méthodes HTTP GET et POST
 @app.route("/formulaire_lettre", methods=["GET", "POST"])
 def formulaire_lettre():
-	"""
-	Création d'une page de formulaire pour ajouter une lettre dans la base de données
+	""" Création d'une page de formulaire pour ajouter une lettre dans la base de données
+
 	:returns: création de la page
 	:rtype: page html du formulaire souhaité
 	"""
+	# Une fois le formulaire envoyé, on passe en méthode http POST
+	if request.method == "POST":
+		# On applique la fonction ajout_lettre définie dans le fichier donnees.py
+		status, donnees_lettre = Lettre.ajout_lettre(
+			date=request.form.get("Date", None),
+			lieu= request.form.get("Lieu", None),
+			objet=request.form.get("Objet", None),
+			contresignataire=request.form.get("Contresignataire", None),
+			langue=request.form.get("Langue", None),
+			pronom=request.form.get("Pronom", None),
+			cote=request.form.get("Cote", None),
+			statut=request.form.get("Statut", None),
+			lien=request.form.get("Lien", None),
+			institution=request.form.get("Institution", None)
+		)
+
+		if status is True:
+			flash("Ajout réussi", "success")
+			return redirect(url_for("index_lettres"))
+		else:
+			flash("Les erreurs suivantes ont été rencontrées : " + ",".join(donnees_lettre), "error")
+
 	listeobjetlettre = Lettre.query.with_entities(Lettre.objet_lettre).distinct()
 	listedatelettre = Lettre.query.with_entities(Lettre.date_envoie_lettre).distinct()
 	listelieulettre = Lettre.query.with_entities(Lettre.lieu_ecriture_lettre).distinct()
@@ -203,33 +225,6 @@ def formulaire_lettre():
 	listecote = Lettre.query.with_entities(Lettre.cote_lettre).distinct()
 	listestatut = Lettre.query.with_entities(Lettre.statut_lettre).distinct()
 	listelien = Lettre.query.with_entities(Lettre.lien_image_lettre).distinct()
-
-
-	#Une fois le formulaire envoyé, on passe en méthode http POST
-	if request.method=="POST":
-
-		# On applique la fonction ajout_lettre définie dans le fichier donnees.py
-		status, donnees_lettre = Lettre.ajout_lettre(
-		date=request.form.get("Date", None),
-		lieu= request.form.get("Lieu", None),
-		objet=request.form.get("Objet", None),
-		contresignataire=request.form.get("Contresignataire", None),
-		langue=request.form.get("Langue", None),
-		pronom=request.form.get("Pronom", None),
-		cote=request.form.get("Cote", None),
-		statut=request.form.get("Statut", None),
-		lien=request.form.get("Lien", None),
-		institution=request.form.get("Institution", None)
-		)
-
-		if status is True:
-			flash("Ajout réussi", "success")
-			return redirect(url_for("index_lettres"))
-
-		else:
-			flash("Les erreurs suivantes ont été rencontrées : " + ",".join(donnees_lettre), "error")
-			return render_template("pages/formulaire_lettre.html")
-
 
 	return render_template("pages/formulaire_lettre.html", nom="Epistautograpy", listeobjetlettre=listeobjetlettre, listedatelettre=listedatelettre,
 		listelieulettre=listelieulettre, listecontresignataire=listecontresignataire, listelangue=listelangue,
@@ -411,8 +406,7 @@ def suppression_lettre():
 	:retype: page html
 	"""
 
-	listenumerolettre = Lettre.query.with_entities(Lettre.id_lettre).distinct()
-	suppression_lettre = Lettre.query.filter(Lettre.id_lettre)
+	lettres = Lettre.query.all()
 
 	if request.method == "POST":
 		# On applique la fonction supprimer_lettre définie dans le fichier donnees.py
@@ -427,7 +421,7 @@ def suppression_lettre():
 			flash("Echec de la suppression...", "danger")
 			return redirect("/index_lettres")
 	else:
-		return render_template("pages/suppression_lettre.html", nom="Epistautograpy", listenumerolettre=listenumerolettre, lettre=lettre)
+		return render_template("pages/suppression_lettre.html", nom="Epistautograpy", lettres=lettres)
 
 
 @app.route("/suppression_destinataire", methods=["POST", "GET"])
