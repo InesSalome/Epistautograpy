@@ -1,0 +1,186 @@
+{% extends "conteneur.html" %}
+
+{% block titre %}| Formulaire{%endblock%}
+
+{% block corps %}
+
+<h1>Formulaire</h1>
+<p>Complétez le formulaire et cliquez sur Ajouter.</p>
+<form class="form dropdown " method="POST" action="{{url_for('formulaire')}}">
+        <div>
+            <div class="col-md-12">
+                <div class="col-md-12">
+                    <h4>Lettre</h4>
+                </div>
+            </div>
+            <div class="form-group row flex-v-center">
+                <div class="col-md-6 col-xs-12">
+                    <strong>Objet* :</strong>
+                    <input type="text" name="Objet" list="listeobjetlettre" class="form-control" value="" />
+                    <datalist id="listeobjetlettre">
+                {% for Objet in listeobjetlettre %}
+                    <option data-value="test" value="{{listeobjetlettre.Objet}}">
+                {% endfor %}
+                     </datalist>
+                </div>
+            </div>
+            <div class="form-group row flex-v-center">
+                <div class="col-md-6 col-xs-12">
+                    <strong>Date* :</strong>
+                    <input type="text" name="Date" list="listedatelettre" class="form-control" value="" />
+                    <datalist id="listedatelettre">
+                {% for Date in listedatelettre %}
+                    <option data-value="test" value="{{listedatelettre.Date}}">
+                {% endfor %}
+                     </datalist>
+                </div>
+            </div>
+            <div class="form-group row flex-v-center">
+                <div class="col-md-6 col-xs-12">
+                    <strong>Lieu* :</strong>
+                    <input type="text" name="Lieu" list="listelieulettre" class="form-control" value="" />
+                    <datalist id="listelieulettre">
+                {% for Lieu in listelieulettre %}
+                    <option data-value="test" value="{{listelieulettre.Lieu}}">
+                {% endfor %}
+                     </datalist>
+                </div>
+            </div>
+            <div class="form-group row flex-v-center">
+                <div class="col-md-6 col-xs-12">
+                    <strong>Contresignataire* :</strong>
+                    <input type="text" name="Contresignataire" list="listecontresignataire" class="form-control" value="" />
+                    <datalist id="listecontresignataire">
+                {% for Contresignataire in listecontresignataire %}
+                    <option data-value="test" value="{{listecontresignataire.Contresignataire}}">
+                {% endfor %}
+                     </datalist>
+                </div>
+            </div>
+            <div class="form-group row flex-v-center">
+                <div class="col-md-6 col-xs-12">
+                    <strong>Langue :</strong>
+                    <input type="text" name="Langue" list="listelangue" class="form-control" value="" />
+                    <datalist id="listelangue">
+                {% for Langue in listelangue %}
+                    <option data-value="test" value="{{listelangue.Langue}}">
+                {% endfor %}
+                     </datalist>
+                </div>
+            </div>
+            <div class="form-group row flex-v-center">
+                <div class="col-md-6 col-xs-12">
+                    <strong>Pronom :</strong>
+                    <input type="text" name="Pronom" list="listepronom" class="form-control" value="" />
+                    <datalist id="listepronom">
+                {% for Pronom in listepronom %}
+                    <option data-value="test" value="{{listepronom.Pronom}}">
+                {% endfor %}
+                     </datalist>
+                </div>
+            </div>
+            <div class="form-group row flex-v-center">
+                <div class="col-md-6 col-xs-12">
+                    <strong>Cote* :</strong>
+                    <input type="text" name="Cote" list="listecote" class="form-control" value="" />
+                     <datalist id="listecote">
+                {% for Cote in listecote %}
+                    <option data-value="test" value="{{listecote.Cote}}">
+                {% endfor %}
+                     </datalist>
+                </div>
+            </div>
+            <div class="form-group row flex-v-center">
+                <div class="col-md-6 col-xs-12">
+                    <strong>Statut* :</strong>
+                    <input type="text" name="Statut" list="listestatut" class="form-control" value="" />
+                    <datalist id="listestatut">
+                {% for Statut in listestatut %}
+                    <option data-value="test" value="{{listestatut.Statut}}">
+                {% endfor %}
+                     </datalist>
+                </div>
+            </div>
+            <div class="form-group row flex-v-center">
+                <div class="col-md-6 col-xs-12">
+                    <strong>Lien vers le texte :</strong>
+                    <input type="text" name="Lien" list="listelien" class="form-control" value="" />
+                    <datalist id="listelien">
+                {% for Lien in listelien %}
+                    <option data-value="test" value="{{listelien.Lien}}">
+                {% endfor %}
+                     </datalist>
+                </div>
+            </div>
+        </div>
+        <div>
+
+            <div class="col-md-12">
+                <div class="col-md-12">
+                    <h4>Destinataire</h4>
+                </div>
+            </div>
+            <div class="form-group row flex-v-center">
+                <div class="col-md-6 col-xs-12">
+                    <strong>Type de destinataire* :</strong>
+                   <input type="text" name="Type_destinataire" list="listetypedestinataire" class="form-control" value="" />
+                    <datalist id="listetypedestinataire">
+                {% for type in listetypedestinataire %}
+                    <option data-value="test" value="{{listetypedestinataire.type}}">
+                {% endfor %}
+                     </datalist>
+                </div>
+            </div>
+            <div class="form-group row flex-v-center">
+                <div class="col-md-6 col-xs-12">
+                    <strong>Titre destinataire :</strong>
+                     <input type="text" name="Titre_destinataire" list="listetitredestinataire" class="form-control" value="" />
+                    <datalist id="listetitredestinataire">
+                {% for titre in listetitredestinataire %}
+                    <option data-value="test" value="{{listetitredestinataire.titre}}">
+                {% endfor %}
+                     </datalist>
+                </div>
+            </div>
+            <div class="form-group row flex-v-center">
+                <div class="col-md-6 col-xs-12">
+                    <strong>Identité* :</strong>
+                    <input type="text" name="Identite_destinataire" list="listeidentitedestinataire" class="form-control" value="" />
+                    <datalist id="llisteidentitedestinataire">
+                {% for identite in listeidentitedestinataire %}
+                    <option data-value="test" value="{{listeidentitedestinataire.identite}}">
+                {% endfor %}
+                     </datalist>
+                </div>
+            </div>
+        </div>
+        <div>
+
+            <div class="col-md-12">
+                <div class="col-md-12">
+                    <h4>Institution</h4>
+                </div>
+            </div>
+            <div class="form-group row flex-v-center">
+                <div class="col-md-6 col-xs-12">
+                    <strong>Nom* :</strong>
+                    <input type="text" name="Nom" list="listenominstitution" class="form-control" value="" />
+                    <datalist id="listenominstitution">
+                {% for nom in listenominstitution %}
+                    <option data-value="test" value="{{listenominstitution.nom}}">
+                {% endfor %}
+                     </datalist>
+                </div>
+            </div>
+        </div>
+
+    <div>
+        <p>Les champs marqués d'une * sont obligatoires. Le champ Statut attend comme données "Orig." pour original ou "Copie". Le champ Type de destinataire attend comme données "institution" ou "noblesse". Le champ Date doit être rempli de la manière suivante : AAAA/MM/JJ.</p>
+    </div>
+    <div>
+        <button type="submit" class="btn btn-primary">Ajouter</button>
+    </div>
+
+    </div>
+</form>
+{% endblock %}

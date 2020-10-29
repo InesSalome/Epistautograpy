@@ -1,0 +1,43 @@
+{% extends "conteneur.html" %}
+
+{% block titre %}| {{titre}}{%endblock%}
+
+{% block corps %}
+	<!-- Lien vers le formulaire défini dans le dossier partials. -->
+	{% include "partials/recherche.html" %}
+
+		{% if resultats %}
+		<h1>{{resultats.total}} résultats répondent à votre requête :</h1>
+				<ul>
+						{% for lettre in resultats.items %}
+								<li><a id="link" href="{{url_for('lettre', id_lettre=lettre.id_lettre)}}">Lettre n°{{lettre.id_lettre}}</a></li>
+						{% endfor %}
+				</ul>
+				<!-- Définition de la pagination. -->
+				<nav aria-label="research-pagination">
+					<ul class="pagination">
+						{%- for page in resultats.iter_pages() %}
+							{% if page %}
+
+							{% if page != resultats.page %}
+								<li class="page-item">
+										<a id="link" class="page-link" href="{{ url_for('recherche', keyword=keyword, resultats=resultats, page=page) }}">{{page}}</a>
+								</li>
+							{% else %}
+								<li class="page-item active disabled">
+									<a id="link" class="page-link">{{page}} <span class="sr-only">(actuelle)</span></a>
+								</li>
+							{% endif %}
+
+							{% else %}
+								<li class="page-item disabled">
+									<a id="link" class="page-link">...</a>
+								</li>
+							{% endif %}
+
+						{%- endfor %}
+					</ul>
+				</nav>
+		{% endif %}
+
+{% endblock %}

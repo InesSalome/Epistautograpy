@@ -1,0 +1,25 @@
+{% extends "conteneur.html" %}
+
+        {% block titre %}
+            {%if institution %}| Institution : {{institution.nom_institution_conservation}} {% endif %}
+        {% endblock %}
+ 
+    {% block corps %}
+        <h1>{{institution.nom_institution_conservation}}</h1>
+            
+        <dl>
+            <dt>Lettres conservées</dt>
+                                    <ul>
+                                        <li><a id="link" href="{{url_for('index_lettres')}}">{{lettres_conservees}}</a></li>
+                                    </ul>
+            <dt>latitude</dt><dd>{{institution.latitude_institution_conservation}}</dd>
+            <dt>longitude</dt><dd>{{institution.longitude_institution_conservation}}</dd>
+            <dt>Lien vers une carte de géolocalisation API</dt><dd></dd>
+        </dl>
+
+        <ul>
+        <li><a id="link" href="{{url_for('index_lettres')}}">Retour à l'index des lettres recensés</a></li>
+        <li><a id="link" href="{{url_for('accueil')}}">Retour à la page d'accueil</a></li>
+        </ul>
+    </body>
+    {% endblock %}

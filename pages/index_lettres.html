@@ -1,0 +1,19 @@
+{% extends "conteneur.html" %}
+
+{% block corps %}
+
+<h1>Lettres</h1>
+
+    {% if lettres %}
+    <p>Pour lors, la base recense {{lettres|length}} lettres :</p>
+        <ul>
+            {% for lettre in lettres %}
+            <li><a id="link" href="{{url_for('lettre', id_lettre=lettre.id_lettre)}}">lettre n°{{lettre.id_lettre}}</a></li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>La base de données est en cours de constitution</p>
+    {% endif %}
+    <p><a id="link" href="{{url_for('accueil')}}">Retour à la page d'accueil</a></p>
+
+{% endblock %}

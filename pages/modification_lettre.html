@@ -1,0 +1,76 @@
+{% extends "conteneur.html" %}
+
+{% block titre %}| Modification d'une lettre {%endblock%}
+
+{% block corps %}
+
+
+      <h1>Modifier une lettre</h1>
+      <p>Complétez le formulaire et cliquez sur "Modifier" pour modifier les données relatives à la lettre.</p>
+
+<form class="form dropdown" method="POST" action="{{url_for('modification_lettre', id_lettre=miseajour_lettre.id_lettre)}}" style="text-align: center">
+  <div class="form-group row flex-v-center">
+    <label class="col-sm-2 col-form-label"><strong>Date d'envoie de la lettre* :</strong></label>
+    <div class="col-md-6 col-xs-12">
+      <input type="text" class="form-control" name="date" value="{{miseajour_lettre.date_envoie_lettre}}">
+    </div>
+  </div>
+  <div class="form-group row flex-v-center">
+    <label class="col-sm-2 col-form-label"><strong>Lieu d'écriture de la lettre :</strong></label>
+    <div class="col-md-6 col-xs-12">
+      <input type="text" class="form-control" name="lieu" value="{{miseajour_lettre.lieu_ecriture_lettre}}">
+    </div>
+  </div>
+  <div class="form-group row flex-v-center">
+    <label class="col-sm-2 col-form-label"><strong>Objet de la lettre :</strong></label>
+    <div class="col-md-6 col-xs-12">
+      <input type="text" class="form-control" name="objet" value="{{miseajour_lettre.objet_lettre}}">
+    </div>
+  </div>
+  <div class="form-group row flex-v-center">
+    <label class="col-sm-2 col-form-label"><strong>Nom du contresignataire* :</strong></label>
+    <div class="col-md-6 col-xs-12">
+      <input type="text" class="form-control" name="contresignataire" value="{{miseajour_lettre.contresignataire_lettre}}">
+    </div>
+  </div>
+  <div class="form-group row flex-v-center">
+    <label class="col-sm-2 col-form-label"><strong>Langue :</strong></label>
+    <div class="col-md-6 col-xs-12">
+      <input type="text" class="form-control" name="langue" value="{{miseajour_lettre.langue_lettre}}">
+    </div>
+  </div>
+  <div class="form-group row flex-v-center">
+    <label class="col-sm-2 col-form-label"><strong>Pronom personnel employé :</strong></label>
+    <div class="col-md-6 col-xs-12">
+      <input class="form-control" name="pronom"value="{{miseajour_lettre.pronom_personnel_employe_lettre}}">
+    </div>
+  </div>
+  <div class="form-group row flex-v-center">
+    <label class="col-sm-2 col-form-label"><strong>Cote* :</strong></label>
+    <div class="col-md-6 col-xs-12">
+      <input class="form-control" name="cote"value="{{miseajour_lettre.cote_lettre}}">
+    </div>
+  </div>
+  <div class="form-group row flex-v-center">
+    <label class="col-sm-2 col-form-label"><strong>Statut :</strong></label>
+    <div class="col-md-6 col-xs-12">
+      <input class="form-control" name="Statut" value="{{miseajour_lettre.statut_lettre}}">
+    </div>
+  </div>
+  <div class="form-group row flex-v-center">
+    <label class="col-sm-2 col-form-label"><strong>URL vers la lettre numérisée :</strong></label>
+    <div class="col-md-6 col-xs-12">
+      <input class="form-control" name="url" value="{{miseajour_lettre.lien_image_lettre}}">
+    </div>
+  </div>
+
+  <div>
+        <p>Les champs marqués d'une * sont obligatoires. Le champ Type de destinataire attend comme données "Orig." ou "Copie". Les champs Date doivent être remplis de la manière suivante : AAAA/MM/JJ.</p>
+    </div>
+
+  <div>
+    <button type="submit" class="btn btn-primary">Modifier</button>
+  </div>
+</form>
+
+{% endblock %}

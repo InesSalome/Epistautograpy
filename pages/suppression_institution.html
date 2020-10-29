@@ -1,0 +1,33 @@
+{% extends "conteneur.html" %}
+
+{% block titre %}| Suppression de l'institution de conservation {{institution_conservation.nom_institution_conservation}}{%endblock%}
+
+{% block corps %}
+<br/>
+<header>
+    <h3>Suppression de l'institution
+        <form>
+            <input type="text" name="Institution_a_supprimer" list="listenominstitution" class="form-control" value="" />
+                    <datalist id="listenominstitution">
+                    {% for Institution in listenominstitution %}
+                    <option data-value="test" value="{{llistenominstitution.Institution}}">
+                    {% endfor %}
+                     </datalist>
+        </form>
+    </h3>
+</header>
+<br/>
+<br/>
+<form method="POST" action="{{url_for('suppression_institution')}}" style="text-align:center">
+    <div>
+       <p value="{{suppression_institution}}">Êtes-vous certain.e de vouloir supprimer cette institution ?</p>
+    <div>
+    <br/>
+    <div>
+        <button type="submit">Confirmer</button>
+    </div>
+    <br/>
+    <br/>
+    <br/>
+ </form>
+{% endblock %}

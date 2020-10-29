@@ -1,0 +1,26 @@
+{% extends "conteneur.html" %}
+
+
+    {% block titre %}
+        {%if contresignataire %}|Contresignataire : {{contresignataire.contresignataire_lettre}} {% endif %}
+    {% endblock %}
+ 
+    {% block corps %}
+        <h2>{{contresignataire.contresignataire_lettre}}</h2>
+            
+        <dl>
+            <dt>Lettres signées</dt>
+            <dd>
+                <ul>
+                    {% for lettre in lettres_signees %}
+                        <li><a id="link" href="{{url_for('lettre', id_lettre=lettre.id_lettre)}}">lettre n°{{lettre.id_lettre}}</a></li>
+                    {% endfor %}
+                </ul>
+            </dd>
+        </dl>
+
+        <ul>
+            <li><a id="link" href="{{url_for('index_lettres')}}">Retour à l'index des lettres recensés</a></li>
+            <li><a id="link" href="{{url_for('accueil')}}">Retour à la page d'accueil</a></li>
+        </ul>
+    {% endblock %}

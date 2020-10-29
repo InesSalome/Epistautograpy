@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+	<head>
+			<meta charset="UTF-8">
+			<!-- Le bloc titre est complété avec les informations spécifiques à chaque page. -->
+				<title>Epistautograpy {%block titre %}{%endblock%}</title>
+				<!-- On fait un lien vers le fichier css.html pour le design défini grâce le framework Bootrsap. -->
+			{% include "partials/css.html" %}
+			 <!-- On fait un lien vers le fichier metadata.html qui contient les métadonnées de l'application. -->
+				{% include "partials/metadata.html" %}
+				<!-- Définition du design pour le header des différentes pages du site -->
+			<style type="text/css">
+						#banner  {
+								background-position: top center;
+								padding:10vh;
+								background-image: url({{url_for("static", filename="images/lettre_patente.jpg")}});
+								background-size: cover, auto;
+						}
+				</style>
+	</head>
+
+	<body>
+		<!-- Mise en place de la barre de navigation. -->
+				<nav class="navbar navbar-expand-md navbar-dark bg-dark justify-content-between" role="navigation">
+						<span><a id="link" class="navbar-brand" href="{{url_for('accueil')}}"><img src="{{url_for('static', filename='images/sceau.jpg')}}" width="45" height="45" class="d-inline-block align-top" alt="logo"/></span>Epistautograpy</a>
+				<div class="container-fluid">
+						<ul class="navbar-nav mr-auto">
+						<!-- Fonctionnalités disponibles si l'utilisateur ou l'utilisatrice n'est pas connecté.e. -->
+						{% if not current_user.is_authenticated %}
+						<li class="nav-item">
+								<a id="link" class="nav-link" href="{{url_for('index_lettres')}}">Index des lettres</a>
+							</li>
+								<li class="nav-item">
+								<a id="link" class="nav-link" href="{{url_for('rechercheavancee')}}">Recherche avancée</a>
+							</li>
+							<li class="nav-item">
+								<a id="link" class="nav-link" href="{{url_for('inscription')}}">Inscription</a>
+							</li>
+							<li class="nav-item">
+								<a id="link" class="nav-link" href="{{url_for('connexion')}}">Connexion</a>
+							</li>
+						<!-- Fonctionnalités disponibles si l'utilisateur ou l'utilisatrice est connecté.e. -->
+						{% else %}
+								<li class="nav-item">
+								<a id="link" class="nav-link" href="{{url_for('rechercheavancee')}}">Recherche avancée</a>
+							</li>
+							<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" data-toggle="dropdown" role="btn-outline-info" aria-haspopup="true" aria-expanded="false">Formulaires</a>
+								<a id="link" class="dropdown-item" href="{{url_for('formulaire_lettre')}}"><button class="btn btn-outline-info" type="submit">Formulaire Lettre</button></a>
+								<a id="link" class="dropdown-item" href="{{url_for('formulaire_destinataire')}}"><button class="btn btn-outline-info" type="submit">Formulaire Destinataire</button></a>
+								<a id="link" class="dropdown-item" href="{{url_for('formulaire_institution')}}"><button class="btn btn-outline-info" type="submit">Formulaire Institution</button></a>
+			 </li>
+			 <li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" data-toggle="dropdown">Modifications</a>
+								<a id="link" class="dropdown-item" href="{{url_for('modification_lettre')}}"><button class="btn btn-outline-info" type="submit">Modifier Lettre</button></a>
+										<a id="link" class="dropdown-item" href="{{url_for('modification_destinataire')}}"><button class="btn btn-outline-info" type="submit">Modifier Destinataire</button></a>
+								<a id="link" class="dropdown-item" href="{{url_for('modification_institution')}}"><button class="btn btn-outline-info" type="submit">Modifier Institution</button></a>
+			 </li>
+			 <li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" data-toggle="dropdown">Suppressions</a>
+								<a id="link" class="dropdown-item" href="{{url_for('suppression_lettre')}}"><button class="btn btn-outline-info" type="submit">Suppression Lettre</button></a>
+										<a id="link" class="dropdown-item" href="{{url_for('suppression_destinataire')}}"><button class="btn btn-outline-info" type="submit">Suppression Destinataire</button></a>
+								<a id="link" class="dropdown-item" href="{{url_for('suppression_institution')}}"><button class="btn btn-outline-info" type="submit">Suppression Institution</button></a>
+			 </li>
+							<li class="nav-item">
+								<a id="link" class="nav-link" href="{{url_for('deconnexion')}}">Déconnexion ({{current_user.user_nom}})</a>
+							</li>
+						{% endif %}
+						</ul>
+						<ul class="navbar-nav ml-auto">
+							<li class="nav-item">
+						<a id="link" class="nav-link" href="{{url_for('about')}}">À propos</a>
+					</li>
+				</ul>
+			</div>
+			</nav>
+
+			<!-- Mise en place du bouton pour la recherche rapide -->
+			<div class="jumbotron jumbotron-fluid" style="height: 250px"  id="banner">
+				<form class="form-inline" action="{{url_for('recherche')}}" method="GET">
+							<input class="form-control" type="search" name="keyword" placeholder="Recherche rapide" aria-label="Recherche">
+							<button class="btn btn-outline-info" type="submit">Rechercher</button>
+					</form>
+			</div>
+
+			<!-- Le bloc qui suit la barre de navigation est à compléter selon les informations spécifiques à chaque page. -->
+				{% block afternav %}{%endblock%}
+
+				<div class="container">
+					<!-- Bloc pour les messages d'erreurs. -->
+						{% with messages = get_flashed_messages(with_categories=true) %}
+								{% if messages %}
+								<div class="row">
+										<div class="col">
+												{% for category, message in messages %}
+												<div class="alert alert-{{category}}" role="alert">{{ message }}</div>
+												{% endfor %}
+										</div>
+								</div>
+								{% endif %}
+						{% endwith %}
+
+						<div class="row">
+								<div class="col">
+								<!-- Le bloc corps est à compléter selon les informations spécifiques à chaque page. -->
+								{% block corps%}{%endblock%}
+								</div>
+						</div>
+				</div>
+		</body>
+
+		<!-- Définition du design pour le footer de chaques page. -->
+		<footer class="page-footer font-small lighten-3 pt-3 text-white bg-dark"> 
+			<div class="container">
+				<div class="row">
+						<div class="col-lg-2 col-md-2 mb-2">
+						<!--Image-->
+							<div class="view z-depth-1-half">
+								<img id="plume_encrier" src="{{url_for('static', filename='images/plume_encrier.jpg')}}" class="img-fluid" alt=""/>
+								<a href="">
+								<div class="mask rgba-white-light"></div>
+							</a>
+							</div>
+						</div>
+						<div class="col-lg-2 col-md-2 mb-2">
+						<!--Image-->
+							<div class="view z-depth-1-half">
+								<img id="signature" src="{{url_for('static', filename='images/signature.jpg')}}" class="img-fluid" alt=""/>
+								<a href="">
+								<div class="mask rgba-white-light"></div>
+								</a>
+							</div>
+						</div>
+						<div class="col-lg-2 col-md-2 mb-2">
+						<!--Image-->
+							<div class="view z-depth-1-half">
+								<img id="portrait_Charles_VIII" src="{{url_for('static', filename='images/portrait_Charles_VIII.jpg')}}" class="img-fluid" alt=""/>
+								<a href="">
+								<div class="mask rgba-white-light"></div>
+								</a>
+							</div>
+					</div>
+				</div>
+			</div>
+			<!-- Copyright -->
+				<div class="footer-copyright text-center py-3">
+						<p>© Epistautograpy - TNAH, promotion 2020 - <a id="link" class="nav-link" href="{{url_for('cgu')}}">CGU</a><p/>
+						<a id="link" href="http://www.chartes.psl.eu/fr/cursus/master-technologies-numeriques-appliquees-histoire"><img src="http://www.chartes.psl.eu/sites/all/themes/enc_base/images/public/logo-ecole-nationale-des-chartes-header.png" class="img-fluid" alt="" width="150"></a>
+				</div>
+		</footer>
+
+</html>
