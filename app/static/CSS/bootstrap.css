@@ -219,14 +219,14 @@ sup {
 }
 
 a {
-  color: #007bff;
+  color: #d22100;
   text-decoration: none;
   background-color: transparent;
   -webkit-text-decoration-skip: objects;
 }
 
 a:hover {
-  color: #fff;
+  color: #d22100;
   text-decoration: underline;
 }
 
@@ -2877,11 +2877,11 @@ tbody.collapse.show {
 
 .dropup,
 .dropdown {
-  position: relative;
+  position: absolute;
 }
 
 .dropdown a::after:hover{
-  position: relative;
+  position: absolute;
   display: block;
 }
 
@@ -2891,9 +2891,9 @@ color: #d22100;
 }
 
 .dropdown-toggle::after {
-  display: inline-block;
-  width: 0;
-  height: 0;
+  display: none;
+  width: auto;
+  height: auto;
   margin-left: 0.255em;
   vertical-align: 0.255em;
   content: "";
@@ -2935,7 +2935,7 @@ color: #d22100;
 
 .dropdown-menu a:hover > li {
   display:block;
-  position: relative;
+  position: absolute;
   color: #d22100;
 }
  
@@ -2951,9 +2951,9 @@ color: #d22100;
 }
 
 .dropup .dropdown-toggle::after {
-  display: inline-block;
-  width: 0;
-  height: 0;
+  display: none;
+  width: auto;
+  height: auto;
   margin-left: 0.255em;
   vertical-align: 0.255em;
   content: "";
@@ -2976,7 +2976,7 @@ color: #d22100;
 }
 
 .dropdown-item {
-  display: block;
+  display: none;
   width: 100%;
   padding: 0.25rem 1.5rem;
   clear: both;
@@ -2989,6 +2989,7 @@ color: #d22100;
 }
 
 .dropdown-item:focus, .dropdown-item:hover {
+  display:block;
   color: #d22100;
   text-decoration: none;
   background-color: #f8f9fa;
@@ -3581,6 +3582,7 @@ color: #d22100;
 }
 
 .nav-tabs .nav-link:focus, .nav-tabs .nav-link:hover {
+  color: #d22100;
   border-color: #e9ecef #e9ecef #ddd;
 }
 
@@ -3610,7 +3612,7 @@ color: #d22100;
 .nav-pills .nav-link.active,
 .nav-pills .show > .nav-link {
   color: #d22100;
-  background-color: #007bff;
+  background-color: transparent;
 }
 
 .nav-fill .nav-item {
@@ -4387,13 +4389,13 @@ color: #d22100;
   padding: 0.5rem 0.75rem;
   margin-left: -1px;
   line-height: 1.25;
-  color: #007bff;
+  color: #d22100;
   background-color: #fff;
   border: 1px solid #ddd;
 }
 
 .page-link:focus, .page-link:hover {
-  color: #0056b3;
+  color: #d22100;
   text-decoration: none;
   background-color: #e9ecef;
   border-color: #ddd;
@@ -8418,7 +8420,7 @@ a.text-dark:focus, a.text-dark:hover {
   visibility: hidden !important;
 }
 
-#link {
+a.link {
   color: #d22100;
 }
 
