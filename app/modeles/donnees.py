@@ -151,7 +151,7 @@ class Destinataire(db.Model) :
 			return False, errors
 
 		# récupération du destinataire dans la base de données
-		miseajour_destinataire = Destinataire.query.filter(Destinataire.id_destinataire)
+		miseajour_destinataire = Destinataire.query.filter(Destinataire.identite_destinataire)
 		
 		# vérification qu'au moins un champ est modifié
 		if  type_destinataire == Destinataire.type_destinataire\
@@ -186,6 +186,8 @@ class Destinataire(db.Model) :
 			db.session.rollback()
 			return False, [str(erreur)]
 
+
+
 	@staticmethod
 	def supprimer_destinataire(nom_destinataire):
 		"""
@@ -196,18 +198,16 @@ class Destinataire(db.Model) :
 		:rtype: Booléen
 		"""
 		# récupération du destinataire dans la base de données
-		nom_destinataire = Destinataire.query.filter(Destinataire.identite_destinataire)
-	
+		nom_destinataire = Destinataire.query.filter(Destinataire.identite_destinataire)	
 
 		try:
 			#Suppression du destinataire dans la base de données
-			db.session.delete(supprimer_destinataire)
+			db.session.delete(nom_destinataire)
 			db.session.commit()
 			return True
 
 		except Exception as erreur:
-			# On annule les requêtes de la transaction en cours en cas d'erreurs
-			db.session.rollback()
+			# raise erreur
 			return False, [str(erreur)]
 
 	def to_jsonapi_dict(self):
@@ -320,6 +320,9 @@ class Institution_Conservation(db.Model) :
 		:returns: Ajout de données dans la base ou refus en cas d'erreurs
 		:rtype: Booléen
 		"""
+
+		nom = Institution_Conservation.query.filter(Institution_Conservation.nom_institution_conservation)
+
 		errors=[]
 		if not nom:
 			errors.append("Le champ Nom de l'institution est vide.")
@@ -328,7 +331,7 @@ class Institution_Conservation(db.Model) :
 			return False, errors
 
 		# récupération de l'institution dans la base de données
-		miseajour_institution = Institution_Conservation.query.filter(Institution_Conservation.id_institution_conservation)
+		miseajour_institution = Institution_Conservation.query.filter(Institution_Conservation.nom_institution_conservation)
 		
 		# vérification qu'au moins un champ est modifié
 		if  nom == Institution_Conservation.nom_institution_conservation \
@@ -358,8 +361,9 @@ class Institution_Conservation(db.Model) :
 			db.session.rollback()
 			return False, [str(erreur)]
 
+
 	@staticmethod
-	def supprimer_institution(nom_institution_conservation):
+	def supprimer_institution(nom_institution):
 		"""
 		Fonction qui supprime une institution
 		:param nom_institution_conservation: nom de l'institution
@@ -369,15 +373,16 @@ class Institution_Conservation(db.Model) :
 		"""
 
 		# récupération d'une institution dans la base de données
-		nom_institution_conservation = Institution_Conservation.query.filter(Institution_Conservation.nom_institution_conservation)
+		nom_institution = Institution_Conservation.query.filter(Institution_Conservation.nom_institution_conservation)
 
 		try:
 			#Suppression de l'institution dans la base de données
-			db.session.delete(supprimer_institution)
+			db.session.delete(nom_institution)
 			db.session.commit()
 			return True
 
 		except Exception as erreur:
+			# raise erreur
 			return False, [str(erreur)]
 
 	def to_jsonapi_dict(self):
@@ -563,7 +568,7 @@ class Lettre(db.Model) :
 			return False, errors
 
 		# récupération de la lettre dans la base de données
-		miseajour_lettre = Lettre.query.filter(Lettre.id_lettre)
+		Lettre_a_modifier = Lettre.query.filter(Lettre.id_lettre)
 		
 		# vérification qu'au moins un champ est modifié
 		if  date == Lettre.date_envoie_lettre \
