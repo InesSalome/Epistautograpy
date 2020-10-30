@@ -11,7 +11,9 @@
         <dl>
             <dt>Lettres envoyées</dt>
                             <ul>
-                                <li><a id="link" href="{{url_for('index_lettres')}}">{{lettres}}</a></li>
+                                 {% for lettre in lettres %}
+                                <li><a id="link" href="{{url_for('lettre', id_lettre=lettre.id_lettre)}}">lettre n°{{lettre.id_lettre}}</a></li>
+                                {% endfor %}
                             </ul>
         </dl>
        

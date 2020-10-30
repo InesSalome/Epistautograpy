@@ -1,33 +1,25 @@
 {% extends "conteneur.html" %}
 
-{% block titre %}| Suppression du destinataire{{destinataire.identite_destinataire}}{%endblock%}
+{% block titre %}| Suppression d'un.e destinataire{%endblock%}
 
 {% block corps %}
 <br/>
 <header>
-   <h3>Suppression du destinataire
-        <form>
-            <input type="text" name="Destinataire_a_supprimer" list="listedestinataire" class="form-control" value="" />
-                    <datalist id="listedestinataire">
-                    {% for Destinataire in listedestinataire %}
-                    <option data-value="test" value="{{listedestinataire.Destinataire}}">
-                    {% endfor %}
-                     </datalist>
-        </form>
-    </h3>
+    <h3>Suppression de destinataires</h3>
 </header>
-<br/>
-<br/>
 <form method="POST" action="{{url_for('suppression_destinataire')}}" style="text-align:center">
     <div>
-       <p value="{{suppression_destinataire}}">Êtes-vous certain.e de vouloir supprimer ce destinataire ?</p>
-    <div>
-    <br/>
-    <div>
-        <button type="submit">Confirmer</button>
+        <select name="Destinataire_a_supprimer">
+            {% for destinataire in destinataires %}
+            <option value="{{destinataire.identite_destinataire}}">{{destinataire.identite_destinataire}}</option>
+            {% endfor %}
+        </select>
     </div>
-    <br/>
-    <br/>
-    <br/>
+    <div>
+       <p value="{{suppression_destinataire}}">Êtes-vous certain.e de vouloir supprimer ce.tte destinataire ?</p>
+    <div>
+    <div>
+        <button type="submit" class="btn btn-primary">Confirmer</button>
+    </div>
  </form>
 {% endblock %}

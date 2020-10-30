@@ -5,6 +5,11 @@
 {% block corps %}
 
       <h1>Modifier une institution</h1>
+      <div>Modifier l'institution suivante : <select name="miseajour_institution">
+      {% for institution in institutions %}
+      <option value="{{institution.nom_institution_conservation}}">{{institution.nom_institution_conservation}}</option>
+      {% endfor %}
+    </select></div>
       <p>Complétez le formulaire et cliquez sur "Modifier" pour modifier les données relatives à l'institution.</p>
 
 <form class="form dropdown" method="POST" action="{{url_for('modification_institution', id_institution_conservation=miseajour_institution.id_institution_conservation)}}" style="text-align: center">

@@ -6,6 +6,11 @@
 
 
       <h1>Modifier une lettre</h1>
+      <div>Modifier la lettre n°<select name="miseajour_lettre">
+      {% for lettre in lettres %}
+      <option value="{{lettre.id_lettre}}">{{lettre.id_lettre}}</option>
+      {% endfor %}
+    </select></div>
       <p>Complétez le formulaire et cliquez sur "Modifier" pour modifier les données relatives à la lettre.</p>
 
 <form class="form dropdown" method="POST" action="{{url_for('modification_lettre', id_lettre=miseajour_lettre.id_lettre)}}" style="text-align: center">

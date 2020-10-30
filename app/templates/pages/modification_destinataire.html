@@ -5,6 +5,11 @@
 {% block corps %}
 
       <h1>Modifier un destinataire</h1>
+      <div>Modifier le.la destinataire suivant.e : <select name="Destinataire_a_modifier">
+      {% for destinataire in destinataires %}
+      <option value="{{destinataire.identite_destinataire}}">{{destinataire.identite_destinataire}}</option>
+      {% endfor %}
+    </select></div>
       <p>Complétez le formulaire et cliquez sur "Modifier" pour modifier les données relatives au destinataire.</p>
 
 <form class="form dropdown " method="POST" action="{{url_for('modification_destinataire', id_destinataire=miseajour_destinataire.id_destinataire)}}" style="text-align: center">

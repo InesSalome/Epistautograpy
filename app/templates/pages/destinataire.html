@@ -7,9 +7,9 @@
  
     {% block corps %}
 
-        <h1>{{destinataire.identite_destinataire}}</h1>
+        <h2>{{destinataire.identite_destinataire}}</h2>
         {% if destinataire.titre_destinataire %}
-        <h3>{{destinataire.titre_destinataire}}</h3>
+        <h4>{{destinataire.titre_destinataire}}</h4>
         {% endif %}
         <!-- Si les images pour illuster la page destinataire ont ici été placées dans le dossier images dans static, nous sommes conscients qu'il serait plus propre, surtout si le nombre de destinataires est amené à augmenter, de les placer ditectement dans la base de données pour pouvoir les appeler avec des requêtes sql. -->
         {% if destinataire.identite_destinataire=="Jean Galéas Sforza" %}
@@ -47,7 +47,9 @@
             <dt>Décès</dt><dd>{{destinataire.date_deces}}</dd>
             {% endif %}
             <dt>Lettre(s) reçue(s)</dt><ul>
-                                            <li><a id="link" href="{{url_for('index_lettres')}}">{{lettres_recues}}</a></li>
+                {% for lettre in lettres_recues %}
+                                            <li><a id="link" href="{{url_for('lettre', id_lettre=lettre.id_lettre)}}">lettre n°{{lettre.id_lettre}}</a></li>
+                                            {% endfor %}
                                         </ul>
             {% if destinataire.lien_infos_destinataire %}
             <dt>Lien vers la biographie de Wikipedia</dt><dd><a id="link" href="{{destinataire.lien_infos_destinataire}}", target="blank">{{destinataire.lien_infos_destinataire}}</a></dd>
@@ -74,6 +76,8 @@
         
 
         <ul>
+            <li><a id="link" href="{{url_for('modification_destinataire')}}">Modifier le.la destinataire</a></li>
+            <li><a id="link" href="{{url_for('suppression_destinataire')}}">Supprimer le.la destinataire</a></li>
             <li><a id="link" href="{{url_for('index_lettres')}}">Retour à l'index des lettres recensés</a></li>
             <li><a id="link" href="{{url_for('accueil')}}">Retour à la page d'accueil</a></li>
         </ul>
