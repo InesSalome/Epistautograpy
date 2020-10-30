@@ -309,14 +309,17 @@ def modification_lettre():
 	:rtype: page html
 	"""
 	
+	lettres = Lettre.query.all()
+
 	if request.method == "GET":
 		miseajour_lettre = Lettre.query.filter(Lettre.id_lettre)
-		return render_template("pages/modification_lettre.html", miseajour_lettre=miseajour_lettre)
+		return render_template("pages/modification_lettre.html", nom="Epistautograpy", miseajour_lettre=miseajour_lettre, lettres=lettres)
 	#Si on est en méthode HTTP POST
 	else:
 		# On applique la fonction miseajour_lettre définie dans le fichier donnees.py
 		status, donnees_lettre = Lettre.miseajour_lettre(
-			id_lettre=Lettre.query.filter(Lettre.id_lettre),
+			miseajour_lettre=request.form.get("Lettre_a_modifier", None),
+			id_lettre=request.form.filter(Lettre.id_lettre),
 			date=request.form.get("date", None),
 			lieu=request.form.get("lieu", None),
 			objet=request.form.get("objet", None),
@@ -333,8 +336,8 @@ def modification_lettre():
 			return redirect("/index_lettres")
 		else:
 			flash("Les erreurs suivantes ont été rencontrées : " + ", ".join(donnees_lettre), "danger")
-			miseajour_lettre = Lettre.query.filter(Lettre.id_lettre)
-			return render_template("pages/modification_lettre.html", nom="Epistautograpy", miseajour_lettre=miseajour_lettre)
+			miseajour_lettre = Lettre.query.get(id_lettre)
+			return render_template("pages/modification_lettre.html", nom="Epistautograpy", miseajour_lettre=miseajour_lettre, lettres=lettres)
 
 @app.route("/modification_destinataire", methods=["POST", "GET"])
 def modification_destinataire():
@@ -343,14 +346,17 @@ def modification_destinataire():
 	:returns: redirection vers l'index des destinataires ou template modification_destinataire.html
 	:rtype: page html
 	"""
+
+	destinataires = Destinataire.query.all()
 	
 	if request.method == "GET":
 		miseajour_destinataire = Destinataire.query.filter(Destinataire.id_destinataire)
-		return render_template("pages/modification_destinataire.html", miseajour_destinataire=miseajour_destinataire)
+		return render_template("pages/modification_destinataire.html", miseajour_destinataire=miseajour_destinataire, destinataires=destinataires)
 	#Si on est en méthode HTTP POST
 	else:
 		# On applique la fonction miseajour_destinataire définie dans le fichier donnees.py
 		status, donnees_destinataire = Destinataire.miseajour_destinataire(
+			miseajour_destinataire=request.form.get("Destinataire_a_modifier", None),
 			id_destinataire=Destinataire.query.filter(Destinataire.id_destinataire),
 			type_destinataire=request.form.get("type", None),
 			titre=request.form.get("titre", None),
@@ -366,7 +372,7 @@ def modification_destinataire():
 		else:
 			flash("Les erreurs suivantes ont été rencontrées : " + ", ".join(donnees_destinataire), "danger")
 			miseajour_destinataire = Destinataire.query.filter(Destinataire.id_destinataire)
-			return render_template("pages/modification_destinataire.html", nom="Epistautograpy", miseajour_destinataire=miseajour_destinataire)
+			return render_template("pages/modification_destinataire.html", nom="Epistautograpy", miseajour_destinataire=miseajour_destinataire, destinataires=destinataires)
 
 @app.route("/modification_institution", methods=["POST", "GET"])
 def modification_institution():
@@ -375,15 +381,17 @@ def modification_institution():
 	:returns: redirection vers l'index des institutions ou template modification_institution.html
 	:rtype: page html
 	"""
-	
+	institutions = Institution_Conservation.query.all()
+
 	if request.method == "GET":
 		miseajour_institution = Institution_Conservation.query.filter(Institution_Conservation.id_institution_conservation)
-		return render_template("pages/modification_institution.html", miseajour_institution=miseajour_institution)
+		return render_template("pages/modification_institution.html", miseajour_institution=miseajour_institution, institutions=institutions)
 	#Si on est en méthode HTTP POST
 	else:
 		# On applique la fonction miseajour_institution définie dans le fichier donnees.py
 		status, donnees_institution = Institution_Conservation.miseajour_institution(
-			id_institution_conservation=Institution_Conservation.query.filter(Institution_Conservation.id_institution_conservation),
+			miseajour_institution=request.form.get("Institution_a_modifier", None),
+			id_institution_conservation=request.form.filter(Institution_Conservation.id_institution_conservation),
 			nom=request.form.get("nom", None),
 			latitude=request.form.get("latitude", None),
 			longitude=request.form.get("longitude", None)
@@ -395,7 +403,7 @@ def modification_institution():
 		else:
 			flash("Les erreurs suivantes ont été rencontrées : " + ", ".join(donnees_institution), "danger")
 			miseajour_institution = Institution_Conservation.query.filter(Institution_Conservation.id_institution_conservation)
-			return render_template("pages/modification_institution.html", nom="Epistautograpy", miseajour_institution=miseajour_institution)
+			return render_template("pages/modification_institution.html", nom="Epistautograpy", miseajour_institution=miseajour_institution, institutions=institutions)
 
 
 @app.route("/suppression_lettre", methods=["POST", "GET"])
@@ -431,23 +439,22 @@ def suppression_destinataire():
 	:returns : affichage du template supprimer_destinataire.html ou redirection vers l'index correspondant
 	:retype: page html
 	"""
-	listedestinataire = Destinataire.query.with_entities(Destinataire.identite_destinataire).distinct()
-	suppression_destinataire = Destinataire.query.filter(Destinataire.identite_destinataire)
+	destinataires = Destinataire.query.all()
 
 	if request.method == "POST":
 		# On applique la fonction supprimer_destinataire définie dans le fichier donnees.py
-		statut = Destinataire.supprimer_destinataire(
+		status = Destinataire.supprimer_destinataire(
 			nom_destinataire=request.form.get("Destinataire_a_supprimer", None)
 		)
 
-		if statut is True:
+		if status is True:
 			flash("Suppression réussie !", "success")
 			return redirect("/index_destinataires")
 		else:
 			flash("Echec de la suppression...", "danger")
 			return redirect("/index_destinataires")
 	else:
-		return render_template("pages/suppression_destinataire.html", nom="Epistautograpy", listedestinataire=listedestinataire, destinataire=destinataire)
+		return render_template("pages/suppression_destinataire.html", nom="Epistautograpy", destinataires=destinataires)
 
 
 @app.route("/suppression_institution", methods=["POST", "GET"])
@@ -457,23 +464,22 @@ def suppression_institution():
 	:returns : affichage du template supprimer_institution.html ou redirection vers l'index correspondant
 	:retype: page html
 	"""
-	listeinstitution = Institution_Conservation.query.with_entities(Institution_Conservation.nom_institution_conservation).distinct()
-	suppression_institution = Institution_Conservation.query.filter(Institution_Conservation.nom_institution_conservation)
+	institutions = Institution_Conservation.query.all()
 
 	if request.method == "POST":
 		# On applique la fonction supprimer_institution définie dans le fichier donnees.py
-		statut = Institution_Conservation.supprimer_institution(
-			nom_institution_conservation=request.form.get("Institution_a_supprimer", None)
+		status = Institution_Conservation.supprimer_institution(
+			nom_institution=request.form.get("Institution_a_supprimer", None)
 		)
 
-		if statut is True:
+		if status is True:
 			flash("Suppression réussie !", "success")
 			return redirect("/index_institutions_conservations")
 		else:
 			flash("Echec de la suppression...", "danger")
 			return redirect("/index_institutions_conservations")
 	else:
-		return render_template("pages/suppression_institution.html", nom="Epistautograpy", listeinstitution=listeinstitution, institution_conservation=institution)
+		return render_template("pages/suppression_institution.html", nom="Epistautograpy", institutions=institutions)
 
 
 @app.route("/recherche", methods=["GET","POST"])
