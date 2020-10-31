@@ -114,8 +114,6 @@ html {
 
 article, aside, dialog, figcaption, figure, footer, header, hgroup, main, nav, section {
   display: block;
-  position: absolute;
-  width: 100%;
 }
 
 body {
@@ -221,14 +219,14 @@ sup {
 }
 
 a {
-  color: #d22100;
+  color: #007bff;
   text-decoration: none;
   background-color: transparent;
   -webkit-text-decoration-skip: objects;
 }
 
 a:hover {
-  color: #d22100;
+  color: #fff;
   text-decoration: underline;
 }
 
@@ -2893,9 +2891,9 @@ color: #d22100;
 }
 
 .dropdown-toggle::after {
-  display: none;
-  width: auto;
-  height: auto;
+  display: inline-block;
+  width: 0;
+  height: 0;
   margin-left: 0.255em;
   vertical-align: 0.255em;
   content: "";
@@ -2916,7 +2914,7 @@ color: #d22100;
 }
 
 .dropdown-menu {
-  position: relative;
+  position: absolute;
   top: 100%;
   left: none;
   z-index: 1000;
@@ -2943,7 +2941,7 @@ color: #d22100;
  
 
 .dropdown-menu:hover {
-  position: relative;
+  position: absolute;
   color: #d22100;
 }
 
@@ -2953,9 +2951,9 @@ color: #d22100;
 }
 
 .dropup .dropdown-toggle::after {
-  display: none;
-  width: auto;
-  height: auto;
+  display: inline-block;
+  width: 0;
+  height: 0;
   margin-left: 0.255em;
   vertical-align: 0.255em;
   content: "";
@@ -2978,7 +2976,7 @@ color: #d22100;
 }
 
 .dropdown-item {
-  display: none;
+  display: block;
   width: 100%;
   padding: 0.25rem 1.5rem;
   clear: both;
@@ -2991,7 +2989,6 @@ color: #d22100;
 }
 
 .dropdown-item:focus, .dropdown-item:hover {
-  display:block;
   color: #d22100;
   text-decoration: none;
   background-color: #f8f9fa;
@@ -3584,7 +3581,6 @@ color: #d22100;
 }
 
 .nav-tabs .nav-link:focus, .nav-tabs .nav-link:hover {
-  color: #d22100;
   border-color: #e9ecef #e9ecef #ddd;
 }
 
@@ -3614,7 +3610,7 @@ color: #d22100;
 .nav-pills .nav-link.active,
 .nav-pills .show > .nav-link {
   color: #d22100;
-  background-color: transparent;
+  background-color: #007bff;
 }
 
 .nav-fill .nav-item {
@@ -3758,7 +3754,7 @@ color: #d22100;
         flex-direction: row;
   }
   .navbar-expand-sm .navbar-nav .dropdown-menu {
-    position: relative;
+    position: absolute;
   }
   .navbar-expand-sm .navbar-nav .dropdown-menu-right {
     right: 0;
@@ -3808,7 +3804,7 @@ color: #d22100;
         flex-direction: row;
   }
   .navbar-expand-md .navbar-nav .dropdown-menu {
-    position: relative;
+    position: absolute;
   }
   .navbar-expand-md .navbar-nav .dropdown-menu-right {
     right: 0;
@@ -3858,7 +3854,7 @@ color: #d22100;
         flex-direction: row;
   }
   .navbar-expand-lg .navbar-nav .dropdown-menu {
-    position: relative;
+    position: absolute;
   }
   .navbar-expand-lg .navbar-nav .dropdown-menu-right {
     right: 0;
@@ -3908,7 +3904,7 @@ color: #d22100;
         flex-direction: row;
   }
   .navbar-expand-xl .navbar-nav .dropdown-menu {
-    position: relative;
+    position: absolute;
   }
   .navbar-expand-xl .navbar-nav .dropdown-menu-right {
     right: 0;
@@ -3957,7 +3953,7 @@ color: #d22100;
 }
 
 .navbar-expand .navbar-nav .dropdown-menu {
-  position: relative;
+  position: absolute;
 }
 
 .navbar-expand .navbar-nav .dropdown-menu-right {
@@ -4391,13 +4387,13 @@ color: #d22100;
   padding: 0.5rem 0.75rem;
   margin-left: -1px;
   line-height: 1.25;
-  color: #d22100;
+  color: #007bff;
   background-color: #fff;
   border: 1px solid #ddd;
 }
 
 .page-link:focus, .page-link:hover {
-  color: #d22100;
+  color: #0056b3;
   text-decoration: none;
   background-color: #e9ecef;
   border-color: #ddd;
@@ -8422,7 +8418,7 @@ a.text-dark:focus, a.text-dark:hover {
   visibility: hidden !important;
 }
 
-a.link {
+#link {
   color: #d22100;
 }
 
@@ -8442,5 +8438,4 @@ a.link {
   left: 75px;
   bottom: 5px;
 }
-
 /*# sourceMappingURL=bootstrap.css.map */

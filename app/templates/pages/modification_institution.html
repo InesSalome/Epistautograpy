@@ -5,30 +5,30 @@
 {% block corps %}
 
       <h1>Modifier une institution</h1>
-      <div>Modifier l'institution suivante : <select name="miseajour_institution">
+      <div>Modifier l'institution suivante : <select name="Institution_a_modifier">
       {% for institution in institutions %}
       <option value="{{institution.nom_institution_conservation}}">{{institution.nom_institution_conservation}}</option>
       {% endfor %}
     </select></div>
       <p>Complétez le formulaire et cliquez sur "Modifier" pour modifier les données relatives à l'institution.</p>
 
-<form class="form dropdown" method="POST" action="{{url_for('modification_institution', id_institution_conservation=miseajour_institution.id_institution_conservation)}}" style="text-align: center">
+<form class="form dropdown" method="POST" action="{{url_for('modification_institution', id_institution_conservation=Institution_a_modifier.id_institution_conservation)}}" style="text-align: center">
   <div class="form-group row flex-v-center">
     <label class="col-sm-2 col-form-label"><strong>Nom de l'institution* :</strong></label>
     <div class="col-md-6 col-xs-12">
-      <input type="text" class="form-control" name="nom" value="{{miseajour_institution.nom_institution_conservation}}">
+      <input type="text" class="form-control" name="nom" value="{{Institution_a_modifier.nom_institution_conservation}}">
     </div>
   </div>
   <div class="form-group row flex-v-center">
     <label class="col-sm-2 col-form-label"><strong>Latitude :</strong></label>
     <div class="col-md-6 col-xs-12">
-      <input type="text" class="form-control" name="latitude" value="{{miseajour_institution.latitude_institution_conservation}}">
+      <input type="text" class="form-control" name="latitude" value="{{Institution_a_modifier.latitude_institution_conservation}}">
     </div>
   </div>
   <div class="form-group row flex-v-center">
     <label class="col-sm-2 col-form-label"><strong>Longitude :</strong></label>
     <div class="col-md-6 col-xs-12">
-      <input type="text" class="form-control" name="longitude" value="{{miseajour_institution.longitude_institution_conservation}}">
+      <input type="text" class="form-control" name="longitude" value="{{Institution_a_modifier.longitude_institution_conservation}}">
     </div>
   </div>
 
@@ -40,5 +40,5 @@
     <button type="submit" class="btn btn-primary">Modifier</button>
   </div>
 </form>
-
+ <br/>
 {% endblock %}

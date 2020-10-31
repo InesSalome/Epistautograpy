@@ -312,14 +312,13 @@ def modification_lettre():
 	lettres = Lettre.query.all()
 
 	if request.method == "GET":
-		miseajour_lettre = Lettre.query.filter(Lettre.id_lettre)
-		return render_template("pages/modification_lettre.html", nom="Epistautograpy", miseajour_lettre=miseajour_lettre, lettres=lettres)
+		Lettre_a_modifier = Lettre.query.filter(Lettre.id_lettre)
+		return render_template("pages/modification_lettre.html", nom="Epistautograpy", Lettre_a_modifier=Lettre_a_modifier, lettres=lettres)
 	#Si on est en méthode HTTP POST
 	else:
 		# On applique la fonction miseajour_lettre définie dans le fichier donnees.py
 		status, donnees_lettre = Lettre.miseajour_lettre(
-			miseajour_lettre=request.form.get("Lettre_a_modifier", None),
-			id_lettre=request.form.filter(Lettre.id_lettre),
+			id_lettre=Lettre.query.filter(Lettre.id_lettre),
 			date=request.form.get("date", None),
 			lieu=request.form.get("lieu", None),
 			objet=request.form.get("objet", None),
@@ -336,8 +335,8 @@ def modification_lettre():
 			return redirect("/index_lettres")
 		else:
 			flash("Les erreurs suivantes ont été rencontrées : " + ", ".join(donnees_lettre), "danger")
-			miseajour_lettre = Lettre.query.get(id_lettre)
-			return render_template("pages/modification_lettre.html", nom="Epistautograpy", miseajour_lettre=miseajour_lettre, lettres=lettres)
+			Lettre_a_modifier = Lettre.query.filter(Lettre.id_lettre)
+			return render_template("pages/modification_lettre.html", nom="Epistautograpy", Lettre_a_modifier=Lettre_a_modifier, lettres=lettres)
 
 @app.route("/modification_destinataire", methods=["POST", "GET"])
 def modification_destinataire():
@@ -350,13 +349,12 @@ def modification_destinataire():
 	destinataires = Destinataire.query.all()
 	
 	if request.method == "GET":
-		miseajour_destinataire = Destinataire.query.filter(Destinataire.id_destinataire)
-		return render_template("pages/modification_destinataire.html", miseajour_destinataire=miseajour_destinataire, destinataires=destinataires)
+		Destinataire_a_modifier = Destinataire.query.filter(Destinataire.id_destinataire)
+		return render_template("pages/modification_destinataire.html", Destinataire_a_modifier=Destinataire_a_modifier, destinataires=destinataires)
 	#Si on est en méthode HTTP POST
 	else:
 		# On applique la fonction miseajour_destinataire définie dans le fichier donnees.py
 		status, donnees_destinataire = Destinataire.miseajour_destinataire(
-			miseajour_destinataire=request.form.get("Destinataire_a_modifier", None),
 			id_destinataire=Destinataire.query.filter(Destinataire.id_destinataire),
 			type_destinataire=request.form.get("type", None),
 			titre=request.form.get("titre", None),
@@ -371,8 +369,8 @@ def modification_destinataire():
 			return redirect("/index_destinataires")
 		else:
 			flash("Les erreurs suivantes ont été rencontrées : " + ", ".join(donnees_destinataire), "danger")
-			miseajour_destinataire = Destinataire.query.filter(Destinataire.id_destinataire)
-			return render_template("pages/modification_destinataire.html", nom="Epistautograpy", miseajour_destinataire=miseajour_destinataire, destinataires=destinataires)
+			Destinataire_a_modifier = Destinataire.query.filter(Destinataire.id_destinataire)
+			return render_template("pages/modification_destinataire.html", nom="Epistautograpy", Destinataire_a_modifier=Destinataire_a_modifier, destinataires=destinataires)
 
 @app.route("/modification_institution", methods=["POST", "GET"])
 def modification_institution():
@@ -384,14 +382,13 @@ def modification_institution():
 	institutions = Institution_Conservation.query.all()
 
 	if request.method == "GET":
-		miseajour_institution = Institution_Conservation.query.filter(Institution_Conservation.id_institution_conservation)
-		return render_template("pages/modification_institution.html", miseajour_institution=miseajour_institution, institutions=institutions)
+		Institution_a_modifier = Institution_Conservation.query.filter(Institution_Conservation.id_institution_conservation)
+		return render_template("pages/modification_institution.html", Institution_a_modifier=Institution_a_modifier, institutions=institutions)
 	#Si on est en méthode HTTP POST
 	else:
 		# On applique la fonction miseajour_institution définie dans le fichier donnees.py
 		status, donnees_institution = Institution_Conservation.miseajour_institution(
-			miseajour_institution=request.form.get("Institution_a_modifier", None),
-			id_institution_conservation=request.form.filter(Institution_Conservation.id_institution_conservation),
+			id_institution_conservation=Institution_Conservation.query.filter(Institution_Conservation.id_institution_conservation),
 			nom=request.form.get("nom", None),
 			latitude=request.form.get("latitude", None),
 			longitude=request.form.get("longitude", None)
@@ -402,8 +399,8 @@ def modification_institution():
 			return redirect("/index_institutions_conservations")
 		else:
 			flash("Les erreurs suivantes ont été rencontrées : " + ", ".join(donnees_institution), "danger")
-			miseajour_institution = Institution_Conservation.query.filter(Institution_Conservation.id_institution_conservation)
-			return render_template("pages/modification_institution.html", nom="Epistautograpy", miseajour_institution=miseajour_institution, institutions=institutions)
+			Institution_a_modifier = Institution_Conservation.query.filter(Institution_Conservation.id_institution_conservation)
+			return render_template("pages/modification_institution.html", nom="Epistautograpy", Institution_a_modifier=Institution_a_modifier, institutions=institutions)
 
 
 @app.route("/suppression_lettre", methods=["POST", "GET"])

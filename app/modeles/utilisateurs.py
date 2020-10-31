@@ -17,6 +17,15 @@ class User(UserMixin, db.Model):
 	password_user = db.Column(db.String(64), nullable=False)
 	authorships = db.relationship("Authorship", back_populates="user")
 
+	# Fonction qui retourne un utilisateur selon l'id donné.
+	def get_id(self):
+		"""
+		Retourne l'id de l'objet actuellement utilisé
+		:returns: ID de l'utilisateur
+		:rtype: int
+		"""
+		return self.id_user
+
 	#Méthode static pour appeler et enregistrer la fonction sous la responsabilité de la classe User
 	@staticmethod
 	#Fonction pour vérifier la validité de l'identification de l'utilisateur
@@ -91,16 +100,9 @@ class User(UserMixin, db.Model):
 		except Exception as erreur:
 			return False, [str(erreur)]
 
-	# Fonction qui retourne un utilisateur selon l'id donné.
-	def get_id(self):
-		"""
-		Retourne l'id de l'objet actuellement utilisé
-		:returns: ID de l'utilisateur
-		:rtype: int
-		"""
-		return self.id_user
 
 #Fonction pour récupérer un utilisateur selon son identifiant
+@staticmethod
 @login.user_loader
 def trouver_utilisateur_via_id(id_user):
 	"""

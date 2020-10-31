@@ -28,10 +28,10 @@
 						<ul class="navbar-nav mr-auto">
 						<!-- Fonctionnalités disponibles si l'utilisateur ou l'utilisatrice n'est pas connecté.e. -->
 						{% if not current_user.is_authenticated %}
-						<li class="nav-item">
+							<li class="nav-item">
 								<a id="link" class="nav-link" href="{{url_for('index_lettres')}}">Index des lettres</a>
 							</li>
-								<li class="nav-item">
+							<li class="nav-item">
 								<a id="link" class="nav-link" href="{{url_for('rechercheavancee')}}">Recherche avancée</a>
 							</li>
 							<li class="nav-item">
@@ -42,39 +42,54 @@
 							</li>
 						<!-- Fonctionnalités disponibles si l'utilisateur ou l'utilisatrice est connecté.e. -->
 						{% else %}
-								<li class="nav-item">
+							<li class="nav-item">
 								<a id="link" class="nav-link" href="{{url_for('rechercheavancee')}}">Recherche avancée</a>
 							</li>
-							<ul>
+							<!-- Code html pour menu déroulant :
+								<div class="dropdown">
+  <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown">
+    Action
+  </button>
+  <div class="dropdown-menu">
+    <a class="dropdown-item" href="#">Dompteurs</a>
+    <a class="dropdown-item" href="#">Zoos</a>
+    <a class="dropdown-item" href="#">Chasseurs</a>
+  </div>
+</div> -->
+							<ul class="navbar-nav mr-auto">
 							<li class="nav-item dropdown">
-					<a class="nav-link dropdown-toggle" data-toggle="dropdown" role="btn-outline-info" aria-haspopup="true" aria-expanded="false">Formulaires</a>
-							<ul>
+								<a class="nav-link dropdown-toggle" data-toggle="dropdown" role="btn-outline-info" aria-haspopup="true" aria-expanded="false">Formulaires</a>
+								<ul>
 								<li><a id="link" class="dropdown-item" href="{{url_for('formulaire_lettre')}}">Formulaire Lettre</a></li>
 								<li><a id="link" class="dropdown-item" href="{{url_for('formulaire_destinataire')}}">Formulaire Destinataire</a></li>
 								<li><a id="link" class="dropdown-item" href="{{url_for('formulaire_institution')}}">Formulaire Institution</a></li>
+								</ul>
+							</li>
 							</ul>
-			 				</li>
-			 <li class="nav-item dropdown">
-					<a class="nav-link dropdown-toggle" data-toggle="dropdown">Modifications</a>
-					<ul>
-								<li><a id="link" class="dropdown-item" href="{{url_for('modification_lettre')}}">Modifier Lettre</a></li>
-										<li><a id="link" class="dropdown-item" href="{{url_for('modification_destinataire')}}">Modifier Destinataire</a></li>
-								<li><a id="link" class="dropdown-item" href="{{url_for('modification_institution')}}">Modifier Institution</button></a></li>
+							<ul class="navbar-nav mr-auto">
+			 				<li class="nav-item dropdown">
+								<a class="nav-link dropdown-toggle" data-toggle="dropdown">Modifications</a>
+								<ul>
+									<li><a id="link" class="dropdown-item" href="{{url_for('modification_lettre')}}">Modifier Lettre</a></li>
+									<li><a id="link" class="dropdown-item" href="{{url_for('modification_destinataire')}}">Modifier Destinataire</a></li>
+									<li><a id="link" class="dropdown-item" href="{{url_for('modification_institution')}}">Modifier Institution</button></a></li>
+									</ul>
+							</li>
 							</ul>
-			 </li>
-			 <li class="nav-item dropdown">
-					<a class="nav-link dropdown-toggle" data-toggle="dropdown">Suppressions</a>
-					<ul>
+			 			<ul class="navbar-nav mr-auto">
+			 			<li class="nav-item dropdown">
+							<a class="nav-link dropdown-toggle" data-toggle="dropdown">Suppressions</a>
+							<ul>
 								<li><a id="link" class="dropdown-item" href="{{url_for('suppression_lettre')}}">Suppression Lettre</a></li>
-										<li><a id="link" class="dropdown-item" href="{{url_for('suppression_destinataire')}}">Suppression Destinataire</a></li>
+								<li><a id="link" class="dropdown-item" href="{{url_for('suppression_destinataire')}}">Suppression Destinataire</a></li>
 								<li><a id="link" class="dropdown-item" href="{{url_for('suppression_institution')}}">Suppression Institution</a></li>
+								</ul>
+							</li>
 							</ul>
-			 </li>
 							<li class="nav-item">
 								<a id="link" class="nav-link" href="{{url_for('deconnexion')}}">Déconnexion ({{current_user.user_nom}})</a>
 							</li>
 						{% endif %}
-						</ul>
 						<ul class="navbar-nav ml-auto">
 							<li class="nav-item">
 						<a id="link" class="nav-link" href="{{url_for('about')}}">À propos</a>

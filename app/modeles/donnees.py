@@ -151,7 +151,7 @@ class Destinataire(db.Model) :
 			return False, errors
 
 		# récupération du destinataire dans la base de données
-		miseajour_destinataire = Destinataire.query.filter(Destinataire.identite_destinataire)
+		Destinataire_a_modifier = Destinataire.query.filter(Destinataire.identite_destinataire)
 		
 		# vérification qu'au moins un champ est modifié
 		if  type_destinataire == Destinataire.type_destinataire\
@@ -176,10 +176,10 @@ class Destinataire(db.Model) :
 
 		try:
 			# On les ajoute au transport vers la base de données
-			db.session.add(miseajour_destinataire)
+			db.session.add(Destinataire_a_modifier)
 			# On envoie le paquet
 			db.session.commit()
-			return True, miseajour_destinataire
+			return True, Destinataire_a_modifier
 
 		except Exception as erreur:
 			# On annule les requêtes de la transaction en cours en cas d'erreurs
@@ -331,7 +331,7 @@ class Institution_Conservation(db.Model) :
 			return False, errors
 
 		# récupération de l'institution dans la base de données
-		miseajour_institution = Institution_Conservation.query.filter(Institution_Conservation.nom_institution_conservation)
+		Institution_a_modifier = Institution_Conservation.query.filter(Institution_Conservation.nom_institution_conservation)
 		
 		# vérification qu'au moins un champ est modifié
 		if  nom == Institution_Conservation.nom_institution_conservation \
@@ -351,10 +351,10 @@ class Institution_Conservation(db.Model) :
 
 		try:
 			# On les ajoute au transport vers la base de données
-			db.session.add(miseajour_institution)
+			db.session.add(Institution_a_modifier)
 			# On envoie le paquet
 			db.session.commit()
-			return True, miseajour_institution
+			return True, Institution_a_modifier
 
 		except Exception as erreur:
 			# On annule les requêtes de la transaction en cours en cas d'erreurs
@@ -600,10 +600,10 @@ class Lettre(db.Model) :
 
 		try:
 			# On l'ajoute au transport vers la base de données
-			db.session.add(miseajour_lettre)
+			db.session.add(Lettre_a_modifier)
 			# On envoie le paquet
 			db.session.commit()
-			return True, miseajour_lettre
+			return True, Lettre_a_modifier
 
 		except Exception as erreur:
 			# On annule les requêtes de la transaction en cours en cas d'erreurs
