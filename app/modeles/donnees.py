@@ -81,8 +81,8 @@ class Destinataire(db.Model) :
 			erreurs.append("Le champ type de destinataire est vide")
 		if not identite:
 			erreurs.append("Le champ identite est vide")
-		if type_destinataire!="institution" or type_destinataire!="noblesse":
-			erreurs.append("Le champ identite ne correspond pas aux données attendues : institution ou noblesse.")
+		#if type_destinataire!="institution" or type_destinataire!="noblesse":
+			#erreurs.append("Le champ Type de destinataire ne correspond pas aux données attendues : institution ou noblesse.")
 		#On vérifie que la longueur des caractères des dates ne dépasse pas la limite de 10 (format AAAA-MM-JJ)
 		if date_naissance==True and date_deces==True:
 			if not len(date_naissance)==10 and len(date_deces)==10:
@@ -107,6 +107,10 @@ class Destinataire(db.Model) :
 
 		try:
 			# On l'ajoute au transport vers la base de données
+			id_destinataire = Destinataire.id_destinataire
+			new_destinataire = Destinataire.query.filter_by(id_destinataire=id_destinataire).first()
+			if new_destinataire is not None:
+				new_destinataire.delete_flag = 1
 			db.session.add(new_destinataire)
 			# On envoie le paquet
 			db.session.commit()
@@ -176,9 +180,13 @@ class Destinataire(db.Model) :
 
 		try:
 			# On les ajoute au transport vers la base de données
-			db.session.add(Destinataire_a_modifier)
+			id_destinataire = Destinataire.id_destinataire
+			Destinataire_a_modifier = Destinataire.query.filter_by(id_destinataire=id_destinataire).first()
+			if Destinataire_a_modifier is not None:
+				Destinataire_a_modifier.delete_flag = 1
+				db.session.add(Destinataire_a_modifier)
 			# On envoie le paquet
-			db.session.commit()
+				db.session.commit()
 			return True, Destinataire_a_modifier
 
 		except Exception as erreur:
@@ -202,6 +210,10 @@ class Destinataire(db.Model) :
 
 		try:
 			#Suppression du destinataire dans la base de données
+			id_destinataire = Destinataire.id_destinataire
+			nom_destinataire = Destinataire.query.filter_by(id_destinataire=id_destinataire).first()
+			if nom_destinataire is not None:
+				nom_destinataire.delete_flag = 1
 			db.session.delete(nom_destinataire)
 			db.session.commit()
 			return True
