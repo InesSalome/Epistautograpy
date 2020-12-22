@@ -7,5 +7,5 @@ from app.app import app, init_db
 #une autre. Rajout d'une ligne d'appel pour créer la base de 
 #données au lancement de l'application.
 if __name__ == "__main__":
-	init_db
+	#init_db
 	app.run(debug=True)

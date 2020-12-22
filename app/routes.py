@@ -194,6 +194,8 @@ def formulaire_lettre():
 	:returns: création de la page
 	:rtype: page html du formulaire souhaité
 	"""
+
+	lettres = Lettre.query.all()
 	# Une fois le formulaire envoyé, on passe en méthode http POST
 	if request.method == "POST":
 		# On applique la fonction ajout_lettre définie dans le fichier donnees.py
@@ -206,8 +208,7 @@ def formulaire_lettre():
 			pronom=request.form.get("Pronom", None),
 			cote=request.form.get("Cote", None),
 			statut=request.form.get("Statut", None),
-			lien=request.form.get("Lien", None),
-			institution=request.form.get("Institution", None)
+			lien=request.form.get("Lien", None)
 		)
 
 		if status is True:
@@ -216,19 +217,8 @@ def formulaire_lettre():
 		else:
 			flash("Les erreurs suivantes ont été rencontrées : " + ",".join(donnees_lettre), "error")
 
-	listeobjetlettre = Lettre.query.with_entities(Lettre.objet_lettre).distinct()
-	listedatelettre = Lettre.query.with_entities(Lettre.date_envoie_lettre).distinct()
-	listelieulettre = Lettre.query.with_entities(Lettre.lieu_ecriture_lettre).distinct()
-	listecontresignataire = Lettre.query.with_entities(Lettre.contresignataire_lettre).distinct()
-	listelangue = Lettre.query.with_entities(Lettre.langue_lettre).distinct()
-	listepronom = Lettre.query.with_entities(Lettre.pronom_personnel_employe_lettre).distinct()
-	listecote = Lettre.query.with_entities(Lettre.cote_lettre).distinct()
-	listestatut = Lettre.query.with_entities(Lettre.statut_lettre).distinct()
-	listelien = Lettre.query.with_entities(Lettre.lien_image_lettre).distinct()
 
-	return render_template("pages/formulaire_lettre.html", nom="Epistautograpy", listeobjetlettre=listeobjetlettre, listedatelettre=listedatelettre,
-		listelieulettre=listelieulettre, listecontresignataire=listecontresignataire, listelangue=listelangue,
-		listepronom=listepronom, listecote= listecote, listestatut=listestatut)
+	return render_template("pages/formulaire_lettre.html", nom="Epistautograpy", lettres=lettres)
 
 
 @app.route("/formulaire_destinataire", methods=["GET", "POST"])
@@ -452,6 +442,7 @@ def suppression_destinataire():
 			return redirect("/index_destinataires")
 	else:
 		return render_template("pages/suppression_destinataire.html", nom="Epistautograpy", destinataires=destinataires)
+
 
 
 @app.route("/suppression_institution", methods=["POST", "GET"])

@@ -19,11 +19,6 @@ class Authorship(db.Model):
 	user = db.relationship("User", back_populates="authorships")
 	lettre = db.relationship("Lettre", back_populates="authorships_lettre")
 
-	def author_to_json(self):
-		return {
-			"author": self.user.to_jsonapi_dict(),
-			"on": self.authorship_date
-		}
 
 
 class Correspondance(db.Model):
@@ -109,8 +104,6 @@ class Destinataire(db.Model) :
 			# On l'ajoute au transport vers la base de données
 			id_destinataire = Destinataire.id_destinataire
 			new_destinataire = Destinataire.query.filter_by(id_destinataire=id_destinataire).first()
-			if new_destinataire is not None:
-				new_destinataire.delete_flag = 1
 			db.session.add(new_destinataire)
 			# On envoie le paquet
 			db.session.commit()
@@ -185,9 +178,9 @@ class Destinataire(db.Model) :
 			if Destinataire_a_modifier is not None:
 				Destinataire_a_modifier.delete_flag = 1
 				db.session.add(Destinataire_a_modifier)
-			# On envoie le paquet
+				# On envoie le paquet
 				db.session.commit()
-			return True, Destinataire_a_modifier
+				return True, Destinataire_a_modifier
 
 		except Exception as erreur:
 			# On annule les requêtes de la transaction en cours en cas d'erreurs
@@ -211,45 +204,18 @@ class Destinataire(db.Model) :
 		try:
 			#Suppression du destinataire dans la base de données
 			id_destinataire = Destinataire.id_destinataire
-			nom_destinataire = Destinataire.query.filter_by(id_destinataire=id_destinataire).first()
-			if nom_destinataire is not None:
-				nom_destinataire.delete_flag = 1
-			db.session.delete(nom_destinataire)
-			db.session.commit()
-			return True
+			identite_destinataire = Destinataire.query.filter_by(id_destinataire=id_destinataire).first()
+			if identite_destinataire is not None:
+				identite_destinataire.delete_flag = 1
+				db.session.delete(identite_destinataire)
+				db.session.commit()
+				return True
 
 		except Exception as erreur:
 			# raise erreur
 			return False, [str(erreur)]
 
-	def to_jsonapi_dict(self):
-		"""
-		It ressembles a little JSON API format but it is not completely compatible
-
-		:return:
-		"""
-		return {
-			"type": "destinataire",
-			"id": self.id_destinataire,
-			"attributes": {
-				"type": self.type_destinataire,
-				"titre": self.titre_destinataire,
-				"identite": self.identite_destinataire,
-				"naissance": self.date_naissance,
-				"deces": self.date_deces,
-				"lien_infos_destinataire": self.lien_infos_destinataire
-			},
-			"links": {
-				"self": url_for("destinataire", id_destinataire=self.id_destinataire, _external=True),
-				"json": url_for("api_destinataires_single", id_destinataire=self.id_destinataire, _external=True)
-			},
-			"relationships": {
-				 "editions": [
-					 author.author_to_json()
-					 for author in self.authorships
-				 ]
-			}
-		}
+	
 
 class Institution_Conservation(db.Model) :
 	__tablename__ = "institution_conservation"
@@ -298,7 +264,7 @@ class Institution_Conservation(db.Model) :
 		if len(erreurs) > 0:
 			return False, erreurs
 
-		# On crée une nouvelle lettre dans la base Lettre
+		# On crée une nouvelle institution dans la base Institution_Conservation
 		new_institution = Institution_Conservation(
 			nom_institution_conservation=nom,
 			latitude_institution_conservation=latitude,
@@ -306,7 +272,9 @@ class Institution_Conservation(db.Model) :
 		)
 
 		try:
-			# On l'ajoute au transport vers la base de données
+		# On les ajoute au transport vers la base de données
+			id_institution_conservation = Institution_Conservation.id_institution_conservation
+			new_institution = Institution_Conservation.query.filter_by(id_institution_conservation=id_institution_conservation).first()
 			db.session.add(new_institution)
 			# On envoie le paquet
 			db.session.commit()
@@ -363,10 +331,14 @@ class Institution_Conservation(db.Model) :
 
 		try:
 			# On les ajoute au transport vers la base de données
-			db.session.add(Institution_a_modifier)
+			id_institution_conservation = Institution_Conservation.id_institution_conservation
+			Institution_Conservation_a_modifier = Institution_Conservation.query.filter_by(id_institution_conservation=id_institution_conservation).first()
+			if Institution_Conservation_a_modifier is not None:
+				Institution_Conservation_a_modifier.delete_flag = 1
+				db.session.add(Institution_Conservation_a_modifier)
 			# On envoie le paquet
-			db.session.commit()
-			return True, Institution_a_modifier
+				db.session.commit()
+				return True, Institution_Conservation_a_modifier
 
 		except Exception as erreur:
 			# On annule les requêtes de la transaction en cours en cas d'erreurs
@@ -388,40 +360,19 @@ class Institution_Conservation(db.Model) :
 		nom_institution = Institution_Conservation.query.filter(Institution_Conservation.nom_institution_conservation)
 
 		try:
-			#Suppression de l'institution dans la base de données
-			db.session.delete(nom_institution)
-			db.session.commit()
-			return True
+			#Suppression d'une institution dans la base de données
+			id_institution_conservation = Institution_Conservation.id_institution_conservation
+			nom_institution_conservation = Institution_Conservation.query.filter_by(id_institution_conservation=id_institution_conservation).first()
+			if nom_institution_conservation is not None:
+				nom_institution_conservation.delete_flag = 1
+				db.session.delete(nom_institution_conservation)
+				db.session.commit()
+				return True
 
 		except Exception as erreur:
 			# raise erreur
 			return False, [str(erreur)]
 
-	def to_jsonapi_dict(self):
-		"""
-		It ressembles a little JSON API format but it is not completely compatible
-
-		:return:
-		"""
-		return {
-			"type": "institution_conservation",
-			"id": self.id_institution_conservation,
-			"attributes": {
-				"nom": self.nom_institution_conservation,
-				"latitude": self.latitude_institution_conservation,
-				"longitude": self.longitude_institution_conservation
-			},
-			"links": {
-				"self": url_for("institution_conservation", id_institution_conservation=self.id_institution_conservation, _external=True),
-				"json": url_for("api_institutions_single", id_institution_conservation=self.id_institution_conservation, _external=True)
-			},
-			"relationships": {
-				 "editions": [
-					 author.author_to_json()
-					 for author in self.authorships
-				 ]
-			}
-		}
 
 class Lettre(db.Model) :
 	__tablename__ = "lettre"
@@ -491,8 +442,8 @@ class Lettre(db.Model) :
 			erreurs.append("Le champ cote est vide.")
 		if not statut:
 			erreurs.append("Le champ statut est vide.")
-		if statut!="Orig." or statut!="Copie":
-			erreurs.append("Le champ statut ne correspond pas aux données attendues : Orig. ou Copie.")
+		#if statut!="Orig." or statut!="Copie":
+			#erreurs.append("Le champ statut ne correspond pas aux données attendues : Orig. ou Copie.")
 		#On vérifie que la lettre n'a pas déjà été enregistrée
 		if date==Lettre.date_envoie_lettre and cote==Lettre.cote_lettre:
 			erreurs.append("La lettre a déjà été renseignée dans notre base de données.")
@@ -503,16 +454,16 @@ class Lettre(db.Model) :
 
 		#On vérifie que l'instituion et le destinataire ont déjà été enregistrés dans la base
 		#En faisant les liens adéquats entre la lettre, son institution de conservation et son/sa destinataire
-		if institution == True :
-			if institution == Institution_Conservation.query.filter(Institution_Conservation.nom_institution_conservation):
-				Lettre.institution_id = Institution_Conservation.query.get(id_institution_conservation)
-			else:
-				return False,[str("L'institution de conservation n'a pas été enregistrée préalablement.")]
-		if destinataire == True :
-			if destinataire == Destinataire.query.filter(Destinataire.identite_destinataire):
-				Lettre.correspondance = Lettre.query.get(db.and_(Lettre.id_lettre==Correspondance.lettre_id, Correspondance.destinataire_id==Destinataire.id_destinataire))
-			else:
-				return False, [str("Le ou la destinataire n'a pas été enregistré préalablement.")]
+		#if institution == True :
+			#if institution == Institution_Conservation.query.filter(Institution_Conservation.nom_institution_conservation):
+				#Lettre.institution_id = Institution_Conservation.query.get(id_institution_conservation)
+			#else:
+				#return False,[str("L'institution de conservation n'a pas été enregistrée préalablement.")]
+		#if destinataire == True :
+			#if destinataire == Destinataire.query.filter(Destinataire.identite_destinataire):
+				#Lettre.correspondance = Lettre.query.get(db.and_(Lettre.id_lettre==Correspondance.lettre_id, Correspondance.destinataire_id==Destinataire.id_destinataire))
+			#else:
+				#return False, [str("Le ou la destinataire n'a pas été enregistré préalablement.")]
 
 		# On crée une nouvelle lettre dans la base Lettre
 		new_lettre = Lettre(
@@ -528,11 +479,13 @@ class Lettre(db.Model) :
 		)
 
 		try:
-			# On l'ajoute au transport vers la base de données
+		# On les ajoute au transport vers la base de données
+			id_lettre = Lettre.id_lettre
+			new_lettre = Lettre.query.filter_by(id_lettre=id_lettre).first()
 			db.session.add(new_lettre)
 			# On envoie le paquet
 			db.session.commit()
-			return( True, new_lettre)
+			return(True, new_lettre)
 
 		except Exception as erreur:
 			# On annule les requêtes de la transaction en cours en cas d'erreurs
@@ -611,11 +564,15 @@ class Lettre(db.Model) :
 			lien_lettre == Lettre.lien_image_lettre
 
 		try:
-			# On l'ajoute au transport vers la base de données
-			db.session.add(Lettre_a_modifier)
+			# On les ajoute au transport vers la base de données
+			id_lettre = Lettre.id_lettre
+			Lettre_a_modifier = Lettre.query.filter_by(id_lettre=id_lettre).first()
+			if Lettre_a_modifier is not None:
+				Lettre_a_modifier.delete_flag = 1
+				db.session.add(Lettre_a_modifier)
 			# On envoie le paquet
-			db.session.commit()
-			return True, Lettre_a_modifier
+				db.session.commit()
+				return True, Lettre_a_modifier
 
 		except Exception as erreur:
 			# On annule les requêtes de la transaction en cours en cas d'erreurs
@@ -636,47 +593,20 @@ class Lettre(db.Model) :
 		id_lettre = Lettre.query.filter(Lettre.id_lettre)
 
 		try:
-			# suppression de la lettre de la base de données
-			db.session.delete(id_lettre)
-			db.session.commit()
-			return True
+			#Suppression de la lettre dans la base de données
+			id_lettre = Lettre.id_lettre
+			id_lettre = Lettre.query.filter_by(id_lettre=id_lettre).first()
+			if id_lettre is not None:
+				id_lettre.delete_flag = 1
+				db.session.delete(id_lettre)
+				db.session.commit()
+				return True
 
 		except Exception as erreur:
 			# raise erreur
 			return False, [str(erreur)]
 
 
-	def to_jsonapi_dict(self):
-		"""
-		It ressembles a little JSON API format but it is not completely compatible
-
-		:return:
-		"""
-		return {
-			"type": "lettre",
-			"id": self.id_lettre,
-			"attributes": {
-				"date": self.date_envoie_lettre,
-				"lieu": self.lieu_ecriture_lettre,
-				"objet": self.objet_lettre,
-				"contresignataire": self.contresignataire_lettre,
-				"langue": self.langue_lettre,
-				"pronom": self.pronom_personnel_employe_lettre,
-				"cote": self.cote_lettre,
-				"statut": self.statut_lettre,
-				"lien_image_lettre": self.lien_image_lettre
-			},
-			"links": {
-				"self": url_for("lettre", id_lettre=self.id_lettre, _external=True),
-				"json": url_for("api_lettres_single", id_lettre=self.id_lettre, _external=True)
-			},
-			"relationships": {
-				 "editions": [
-					 author.author_to_json()
-					 for author in self.authorships
-				 ]
-			}
-		}
 
 class Image_Numerisee(db.Model):
 	__tablename__ = "image_numerisee"
@@ -693,27 +623,3 @@ class Image_Numerisee(db.Model):
 		"""
 		return(self.id_image_numerisee)
 
-	def to_jsonapi_dict(self):
-		"""
-		It ressembles a little JSON API format but it is not completely compatible
-
-		:return:
-		"""
-		return {
-			"type": "image_numerisee",
-			"id": self.id_image_numerisee,
-			"attributes": {
-				"lien": self.url_image_numerisee,
-				"reference": self.reference_bibliographique_image_numerisee
-			},
-			"links": {
-				"self": url_for("image_numerisee", id_image_numerisee=self.id_image_numerisee, _external=True),
-				"json": url_for("api_images_single", id_image_numerisee=self.id_image_numerisee, _external=True)
-			},
-			"relationships": {
-				 "editions": [
-					 author.author_to_json()
-					 for author in self.authorships
-				 ]
-			}
-		}
