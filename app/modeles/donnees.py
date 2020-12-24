@@ -252,10 +252,10 @@ class Institution_Conservation(db.Model) :
 		erreurs = []
 		if not nom:
 			erreurs.append("Le champ nom est vide.")
-		if not latitude:
-			erreurs.append("Le champ latitude est vide.")
-		if not longitude:
-			erreurs.append("Le champ longitude est vide.")
+		#if not latitude:
+			#erreurs.append("Le champ latitude est vide.")
+		#if not longitude:
+			#erreurs.append("Le champ longitude est vide.")
 		# On vérifie que l'institution n'a pas déjà été enregistrée
 		if nom==Institution_Conservation.nom_institution_conservation:
 			erreurs.append("L'institution a déjà été enregistrée dans la base de données.")
@@ -274,11 +274,11 @@ class Institution_Conservation(db.Model) :
 		try:
 		# On les ajoute au transport vers la base de données
 			id_institution_conservation = Institution_Conservation.id_institution_conservation
-			new_institution = Institution_Conservation.query.filter_by(id_institution_conservation=id_institution_conservation).first()
-			db.session.add(new_institution)
+			nom_institution_conservation = Institution_Conservation.query.filter_by(id_institution_conservation=id_institution_conservation).first()
+			db.session.add(nom_institution_conservation)
 			# On envoie le paquet
 			db.session.commit()
-			return(True, new_institution)
+			return(True, nom_institution_conservation)
 
 		except Exception as erreur:
 			# On annule les requêtes de la transaction en cours en cas d'erreurs
@@ -580,7 +580,7 @@ class Lettre(db.Model) :
 			return False, [str(erreur)]
 
 	@staticmethod
-	def supprimer_lettre(id_lettre):
+	def supprimer_lettre(lettre):
 		"""
 		Fonction qui supprime une lettre
 		:param id_lettre: id de la lettre
@@ -590,7 +590,7 @@ class Lettre(db.Model) :
 		"""
 
 		# récupération d'une lettre dans la base de données
-		id_lettre = Lettre.query.filter(Lettre.id_lettre)
+		lettre = Lettre.query.filter(Lettre.id_lettre)
 
 		try:
 			#Suppression de la lettre dans la base de données
