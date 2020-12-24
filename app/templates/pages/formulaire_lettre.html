@@ -9,141 +9,89 @@
 <p>Complétez le formulaire et cliquez sur Ajouter.</p>
 <form class="form dropdown " method="POST" action="{{url_for('formulaire_lettre')}}">
 
-            <div class="form-group row flex-v-center">
-                <div class="col-md-6 col-xs-12">
-                    <strong>Objet* :</strong>
-                    <input type="text" name="Objet" list="listeobjetlettre" class="form-control" value="" />
-                    <datalist id="listeobjetlettre">
-                {% for Objet in listeobjetlettre %}
-                    <option data-value="test" value="{{listeobjetlettre.Objet}}">
-                {% endfor %}
-                     </datalist>
-                </div>
-            </div>
-            <div class="form-group row flex-v-center">
-                <div class="col-md-6 col-xs-12">
-                    <strong>Date* :</strong>
-                    <input type="text" name="Date" list="listedatelettre" class="form-control" value="" />
-                    <datalist id="listedatelettre">
-                {% for Date in listedatelettre %}
-                    <option data-value="test" value="{{listedatelettre.Date}}">
-                {% endfor %}
-                     </datalist>
-                </div>
-            </div>
-            <div class="form-group row flex-v-center">
-                <div class="col-md-6 col-xs-12">
-                    <strong>Lieu* :</strong>
-                    <input type="text" name="Lieu" list="listelieulettre" class="form-control" value="" />
-                    <datalist id="listelieulettre">
-                {% for Lieu in listelieulettre %}
-                    <option data-value="test" value="{{listelieulettre.Lieu}}">
-                {% endfor %}
-                     </datalist>
-                </div>
-            </div>
-            <div class="form-group row flex-v-center">
-                <div class="col-md-6 col-xs-12">
-                    <strong>Contresignataire* :</strong>
-                    <input type="text" name="Contresignataire" list="listecontresignataire" class="form-control" value="" />
-                    <datalist id="listecontresignataire">
-                {% for Contresignataire in listecontresignataire %}
-                    <option data-value="test" value="{{listecontresignataire.Contresignataire}}">
-                {% endfor %}
-                     </datalist>
-                </div>
-            </div>
-            <div class="form-group row flex-v-center">
-                <div class="col-md-6 col-xs-12">
-                    <strong>Langue :</strong>
-                    <input type="text" name="Langue" list="listelangue" class="form-control" value="" />
-                    <datalist id="listelangue">
-                {% for Langue in listelangue %}
-                    <option data-value="test" value="{{listelangue.Langue}}">
-                {% endfor %}
-                     </datalist>
-                </div>
-            </div>
-            <div class="form-group row flex-v-center">
-                <div class="col-md-6 col-xs-12">
-                    <strong>Pronom :</strong>
-                    <input type="text" name="Pronom" list="listepronom" class="form-control" value="" />
-                    <datalist id="listepronom">
-                {% for Pronom in listepronom %}
-                    <option data-value="test" value="{{listepronom.Pronom}}">
-                {% endfor %}
-                     </datalist>
-                </div>
-            </div>
-            <div class="form-group row flex-v-center">
-                <div class="col-md-6 col-xs-12">
-                    <strong>Cote* :</strong>
-                    <input type="text" name="Cote" list="listecote" class="form-control" value="" />
-                     <datalist id="listecote">
-                {% for Cote in listecote %}
-                    <option data-value="test" value="{{listecote.Cote}}">
-                {% endfor %}
-                     </datalist>
-                </div>
-            </div>
-            <div class="form-group row flex-v-center">
-                <div class="col-md-6 col-xs-12">
-                    <strong>Statut* :</strong>
-                    <input type="text" name="Statut" list="listestatut" class="form-control" value="" />
-                    <datalist id="listestatut">
-                {% for Statut in listestatut %}
-                    <option data-value="test" value="{{listestatut.Statut}}">
-                {% endfor %}
-                     </datalist>
-                </div>
-            </div>
-            <div class="form-group row flex-v-center">
-                <div class="col-md-6 col-xs-12">
-                    <strong>Lien vers le texte :</strong>
-                    <input type="text" name="Lien" list="listelien" class="form-control" value="" />
-                    <datalist id="listelien">
-                {% for Lien in listelien %}
-                    <option data-value="test" value="{{listelien.Lien}}">
-                {% endfor %}
-                     </datalist>
-                </div>
-            </div>
+			<div class="form-group row flex-v-center">
+					 <label class="col-form-label" for="Objet">Objet :</label>
+					 <div class="form-control">
+					<input type="text" name="Objet" class="form-control" value="" />
+				</div>
+			</div>
+			<div class="form-group row flex-v-center">
+					<label for="Date" class="col-form-label">Date* :</label>
+					<div class="form-control">
+					<input type="text" name="Date" class="form-control" placeholder="AAAA/MM/JJ" value="" />
+				</div>
+			</div>
+			<div class="form-group row flex-v-center">
+					<label for="Lieu" class="col-form-label">Lieu :</label>
+					<div class="form-control">
+					<input type="text" name="Lieu" class="form-control" value="" />
+				</div>
+			</div>
+			<div class="form-group row flex-v-center">
+					<label for="Contresignataire" class="col-form-label">Contresignataire* :</label>
+					<div class="form-control">
+					<input type="text" name="Contresignataire" class="form-control" value="" />
+				</div>
+			</div>
+			<div class="form-group row flex-v-center">
+					 <label for="Langue" class="col-form-label">Langue :</label>
+					 <div class="form-control">
+					<input type="text" name="Langue" class="form-control" value="" />
+				</div>
+			</div>
+			<div class="form-group row flex-v-center">
+					<label for="Pronom" class="col-form-label">Pronom :</label>
+					<div class="form-control">
+					<input type="text" name="Pronom" class="form-control" value="" />
+				</div>
+			</div>
+			<div class="form-group row flex-v-center">
+					<label for="Cote" class="col-form-label">Cote :</label>
+					<div class="form-control">
+					<input type="text" name="Cote" class="form-control" value="" />
+				</div>
+			</div>
+			<div class="form-group row flex-v-center">
+					<label for="Statut" class="col-form-label">Statut :</label>
+					<div class="form-control">
+					<input type="text" name="Statut" class="form-control" placeholder="Orig. ou Copie" value="" />
+				</div>
+			</div>
+			<div class="form-group row flex-v-center">
+					<label for="Lien" class="col-form-label">Lien vers le texte :</label>
+					<div class="form-control">
+					<input type="text" name="Lien" class="form-control" value="" />
+				</div>
+			</div>
 
-            <div>
-            	<p>Les champs suivants -Institution de conservation et Destinataire- doivent être remplis avec des données déjà enregistrées dans la base. Il faut y inscrire le nom de l'institution de conservation et l'identité du destinataire. Si vous souhaitez ajouter une lettre avec une nouvelle institution et un nouveau destinataire, remplir au préalable les formulaires pour ajouter une institution et un destinataire.
-            </div>
+			<div>
+				<p>Les champs suivants -Institution de conservation et Destinataire- doivent être remplis avec des données déjà enregistrées dans la base. Il faut y inscrire le nom de l'institution de conservation et l'identité du destinataire. Si vous souhaitez ajouter une lettre avec une nouvelle institution et un nouveau destinataire, remplir au préalable les formulaires pour ajouter une institution et un destinataire.
+			</div>
 
-            <div class="form-group row flex-v-center">
-                <div class="col-md-6 col-xs-12">
-                    <strong>Institution de conservation :</strong>
-                    <input type="text" name="Institution" list="listeinstitution" class="form-control" value="" />
-                    <datalist id="listeinstitution">
-                {% for institution in listeinstitution %}
-                    <option data-value="test" value="{{listeinstitution.institution}}">
-                {% endfor %}
-                     </datalist>
-                </div>
-            </div>
-             <div class="form-group row flex-v-center">
-                <div class="col-md-6 col-xs-12">
-                    <strong>Destinataire :</strong>
-                    <input type="text" name="Destinataire" list="listedestinataire" class="form-control" value="" />
-                    <datalist id="listedestinataire">
-                {% for destinataire in listedestinataire %}
-                    <option data-value="test" value="{{listedestinataire.destinataire}}">
-                {% endfor %}
-                     </datalist>
-                </div>
-            </div>
-       
+				<div class="form-control">
+					<select name="Institution">
+					{% for institution in institutions %}
+					<option value="{{institution.nom_institution_conservation}}">{{institution.nom_institution_conservation}}</option>
+					{% endfor %}
+					</select>
+				</div>
+
+				<div class="form-control">
+					<select name="Destinataire">
+					{% for destinataire in destinataires %}
+					<option value="{{destinataire.identite_destinataire}}">{{destinataire.identite_destinataire}}</option>
+					{% endfor %}
+					</select>
+				</div>
+	   
 
 
-    <div>
-        <p>Les champs marqués d'une * sont obligatoires. Le champ Statut attend comme données "Orig." pour original ou "Copie". Le champ Date doit être rempli de la manière suivante : AAAA/MM/JJ.</p>
-    </div>
-    <div>
-        <button type="submit" class="btn btn-primary">Ajouter</button>
-    </div>
+	<div>
+		<p>Les champs marqués d'une * sont obligatoires. Le champ Statut attend comme données "Orig." pour original ou "Copie". Le champ Date doit être rempli de la manière suivante : AAAA/MM/JJ.</p>
+	</div>
+	<div>
+		<button type="submit" class="btn btn-primary">Ajouter</button>
+	</div>
 
 </form>
 <br/>

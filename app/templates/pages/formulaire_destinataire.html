@@ -11,69 +11,39 @@
             
 
             <div class="form-group row flex-v-center">
-                <div class="col-md-6 col-xs-12">
-                    <strong>Type de destinataire* :</strong>
-                   <input type="text" name="Type_destinataire" list="listetypedestinataire" class="form-control" value="" />
-                    <datalist id="listetypedestinataire">
-                {% for type in listetypedestinataire %}
-                    <option data-value="test" value="{{listetypedestinataire.type}}">
-                {% endfor %}
-                     </datalist>
+                   <label for="Type_destinataire" class="col-form-label">Type de destinataire* :</label>
+                <div class="form-control">
+                   <input type="text" name="Type_destinataire" class="form-control" value="" />
                 </div>
             </div>
             <div class="form-group row flex-v-center">
-                <div class="col-md-6 col-xs-12">
-                    <strong>Titre destinataire :</strong>
-                     <input type="text" name="Titre_destinataire" list="listetitredestinataire" class="form-control" value="" />
-                    <datalist id="listetitredestinataire">
-                {% for titre in listetitredestinataire %}
-                    <option data-value="test" value="{{listetitredestinataire.titre}}">
-                {% endfor %}
-                     </datalist>
+                   <label for="Titre_destinataire" class="col-form-label">Titre :</label>
+                   <div class="form-control">
+                     <input type="text" name="Titre_destinataire" class="form-control" value="" />
                 </div>
             </div>
             <div class="form-group row flex-v-center">
-                <div class="col-md-6 col-xs-12">
-                    <strong>Identité* :</strong>
-                    <input type="text" name="Identite_destinataire" list="listeidentitedestinataire" class="form-control" value="" />
-                    <datalist id="listeidentitedestinataire">
-                {% for identite in listeidentitedestinataire %}
-                    <option data-value="test" value="{{listeidentitedestinataire.identite}}">
-                {% endfor %}
-                     </datalist>
+                    <label for="Identite_destinataire" class="col-form-label">Identité* :</label>
+                    <div class="form-control">
+                        <input type="text" name="Identite_destinataire" class="form-control" value="" />
                 </div>
             </div>
             <div class="form-group row flex-v-center">
-                <div class="col-md-6 col-xs-12">
-                    <strong>Date de naissance :</strong>
-                    <input type="text" name="Date_Naissance" list="listedatenaissance" class="form-control" value="" />
-                    <datalist id="listedatenaissance">
-                {% for date in listedatenaissance %}
-                    <option data-value="test" value="{{listedatenaissance.date}}">
-                {% endfor %}
-                     </datalist>
+                    <label for="Date_Naissance" class="col-form-label">Date de naissance :</label>
+                    <div class="form-control">
+                        <input type="text" name="Date_Naissance" class="form-control" placeholder="AAAA/MM/JJ" value="" />
                 </div>
             </div>
             <div class="form-group row flex-v-center">
-                <div class="col-md-6 col-xs-12">
-                    <strong>Date de décès :</strong>
-                    <input type="text" name="Date_Décès" list="listedatedeces" class="form-control" value="" />
-                    <datalist id="listedatedeces">
-                {% for date in listedatedeces %}
-                    <option data-value="test" value="{{listedatedeces.date}}">
-                {% endfor %}
-                     </datalist>
+                    <label for="Date_Décès" class="col-form-label">Date de décès :</label>
+                    <div class="form-control">
+                        <input type="text" name="Date_Décès" class="form-control" placeholder="AAAA/MM/JJ" value="" />
                 </div>
             </div>
             <div class="form-group row flex-v-center">
-                <div class="col-md-6 col-xs-12">
-                    <strong>Lien vers une biographie :</strong>
-                    <input type="text" name="Lien_Bio" list="listelienbio" class="form-control" value="" />
-                    <datalist id="listelienbio">
-                {% for lien in listelienbio %}
-                    <option data-value="test" value="{{listelienbio.lien}}">
-                {% endfor %}
-                     </datalist>
+                    <label for="Lien_Bio" class="col-form-label">Lien vers une biographie :</label>
+                    <div class="form-control">
+                        <input type="text" name="Lien_Bio" class="form-control" value="" />
                 </div>
             </div>
         

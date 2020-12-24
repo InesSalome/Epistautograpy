@@ -15,56 +15,56 @@
 
 <form class="form dropdown" method="POST" action="{{url_for('modification_lettre', id_lettre=Lettre_a_modifier.id_lettre)}}" style="text-align: center">
   <div class="form-group row flex-v-center">
-    <label class="col-sm-2 col-form-label"><strong>Date d'envoie de la lettre* :</strong></label>
-    <div class="col-md-6 col-xs-12">
-      <input type="text" class="form-control" name="date" value="{{Lettre_a_modifier.date_envoie_lettre}}">
+    <label for="date" class="col-form-label">Date d'envoie de la lettre* :</label>
+    <div class="form-control">
+      <input type="text" class="form-control" name="date" placeholder="AAAA-MM-JJ" value="{{Lettre_a_modifier.date_envoie_lettre}}">
     </div>
   </div>
   <div class="form-group row flex-v-center">
-    <label class="col-sm-2 col-form-label"><strong>Lieu d'écriture de la lettre :</strong></label>
-    <div class="col-md-6 col-xs-12">
+    <label for="lieu" class="col-form-label">Lieu d'écriture de la lettre :</label>
+    <div class="form-control">
       <input type="text" class="form-control" name="lieu" value="{{Lettre_a_modifier.lieu_ecriture_lettre}}">
     </div>
   </div>
   <div class="form-group row flex-v-center">
-    <label class="col-sm-2 col-form-label"><strong>Objet de la lettre :</strong></label>
-    <div class="col-md-6 col-xs-12">
+    <label for="objet" class="col-form-label">Objet de la lettre :</label>
+    <div class="form-control">
       <input type="text" class="form-control" name="objet" value="{{Lettre_a_modifier.objet_lettre}}">
     </div>
   </div>
   <div class="form-group row flex-v-center">
-    <label class="col-sm-2 col-form-label"><strong>Nom du contresignataire* :</strong></label>
-    <div class="col-md-6 col-xs-12">
+    <label for="contresignataire" class="col-form-label">Nom du contresignataire* :</label>
+    <div class="form-control">
       <input type="text" class="form-control" name="contresignataire" value="{{Lettre_a_modifier.contresignataire_lettre}}">
     </div>
   </div>
   <div class="form-group row flex-v-center">
-    <label class="col-sm-2 col-form-label"><strong>Langue :</strong></label>
-    <div class="col-md-6 col-xs-12">
+    <label for="langue" class="col-form-label">Langue :</label>
+    <div class="form-control">
       <input type="text" class="form-control" name="langue" value="{{Lettre_a_modifier.langue_lettre}}">
     </div>
   </div>
   <div class="form-group row flex-v-center">
-    <label class="col-sm-2 col-form-label"><strong>Pronom personnel employé :</strong></label>
-    <div class="col-md-6 col-xs-12">
-      <input class="form-control" name="pronom"value="{{Lettre_a_modifier.pronom_personnel_employe_lettre}}">
+    <label for="pronom" class="col-form-label">Pronom personnel employé :</label>
+    <div class="form-control">
+      <input class="form-control" name="pronom" value="{{Lettre_a_modifier.pronom_personnel_employe_lettre}}">
     </div>
   </div>
   <div class="form-group row flex-v-center">
-    <label class="col-sm-2 col-form-label"><strong>Cote* :</strong></label>
-    <div class="col-md-6 col-xs-12">
-      <input class="form-control" name="cote"value="{{Lettre_a_modifier.cote_lettre}}">
+    <label for="cote" class="col-form-label">Cote* :</label>
+    <div class="form-control">
+      <input class="form-control" name="cote" value="{{Lettre_a_modifier.cote_lettre}}">
     </div>
   </div>
   <div class="form-group row flex-v-center">
-    <label class="col-sm-2 col-form-label"><strong>Statut :</strong></label>
-    <div class="col-md-6 col-xs-12">
-      <input class="form-control" name="Statut" value="{{Lettre_a_modifier.statut_lettre}}">
+    <label for="Statut" class="col-form-label">Statut :</label>
+    <div class="form-control">
+      <input class="form-control" name="Statut" placeholder="Orig./Copie" value="{{Lettre_a_modifier.statut_lettre}}">
     </div>
   </div>
   <div class="form-group row flex-v-center">
-    <label class="col-sm-2 col-form-label"><strong>URL vers la lettre numérisée :</strong></label>
-    <div class="col-md-6 col-xs-12">
+    <label for="url" class="col-form-label">URL vers la lettre numérisée :</label>
+    <div class="form-control">
       <input class="form-control" name="url" value="{{Lettre_a_modifier.lien_image_lettre}}">
     </div>
   </div>
