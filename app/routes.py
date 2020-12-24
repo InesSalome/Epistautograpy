@@ -196,6 +196,9 @@ def formulaire_lettre():
 	"""
 
 	lettres = Lettre.query.all()
+	destinataires = Destinataire.query.all()
+	institutions = Institution_Conservation.query.all()
+
 	# Une fois le formulaire envoyé, on passe en méthode http POST
 	if request.method == "POST":
 		# On applique la fonction ajout_lettre définie dans le fichier donnees.py
@@ -218,7 +221,7 @@ def formulaire_lettre():
 			flash("Les erreurs suivantes ont été rencontrées : " + ",".join(donnees_lettre), "error")
 
 
-	return render_template("pages/formulaire_lettre.html", nom="Epistautograpy", lettres=lettres)
+	return render_template("pages/formulaire_lettre.html", nom="Epistautograpy", lettres=lettres, destinataires=destinataires, institutions=institutions)
 
 
 @app.route("/formulaire_destinataire", methods=["GET", "POST"])
@@ -267,10 +270,8 @@ def formulaire_institution():
 	:returns: création de la page
 	:rtype: page html du formulaire souhaité
 	"""	
-	listenominstitution = Institution_Conservation.query.with_entities(Institution_Conservation.nom_institution_conservation).distinct()
-	listelatitude = Institution_Conservation.query.with_entities(Institution_Conservation.latitude_institution_conservation).distinct()
-	listelongitude = Institution_Conservation.query.with_entities(Institution_Conservation.longitude_institution_conservation).distinct()
 
+	institutions = Institution_Conservation.query.all()
 	#Une fois le formulaire envoyé, on passe en méthode http POST
 	if request.method=="POST":
 
@@ -288,7 +289,7 @@ def formulaire_institution():
 			flash("Les erreurs suivantes ont été rencontrées : " + ",".join(donnees_institution), "error")
 			return render_template("pages/formulaire_institution.html")
 
-	return render_template("pages/formulaire_institution.html", nom="Epistautograpy", listenominstitution=listenominstitution)
+	return render_template("pages/formulaire_institution.html", nom="Epistautograpy")
 
 
 @app.route("/modification_lettre", methods=["POST", "GET"])
@@ -406,7 +407,7 @@ def suppression_lettre():
 	if request.method == "POST":
 		# On applique la fonction supprimer_lettre définie dans le fichier donnees.py
 		status = Lettre.supprimer_lettre(
-			id_lettre=request.form.get("Lettre_a_supprimer", None)
+			lettre=request.form.get("Lettre_a_supprimer", None)
 		)
 
 		if status is True:
